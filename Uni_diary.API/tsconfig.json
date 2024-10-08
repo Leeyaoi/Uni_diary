@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {},
+  "include": [
+    "environment.d.ts",
+    "db/dbConnection.ts",
+    "db/dbContext.ts",
+    "models/user.ts",
+    "models/teacher.ts",
+    "models/admin.ts",
+    "models/student.ts",
+    "models/faculty.ts",
+    "models/profession.ts",
+    "models/group.ts",
+    "models/course.ts",
+    "models/group_course.ts",
+    "models/teacher_course.ts",
+    "models/attendance.ts",
+    "models/mark.ts",
+    "models/class.ts",
+    "models/timetable.ts"
+  ]
+}
