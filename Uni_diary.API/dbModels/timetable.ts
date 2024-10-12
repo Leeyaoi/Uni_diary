@@ -1,22 +1,18 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db/dbConnection";
 
-export const Teacher = sequelize.define("teacher", {
+export const Timetable = sequelize.define("timetable", {
   id: {
     type: DataTypes.UUID,
     primaryKey: true,
     allowNull: false,
   },
-  name: {
-    type: DataTypes.STRING,
+  day: {
+    type: DataTypes.SMALLINT,
     allowNull: false,
   },
-  surname: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  job_title: {
-    type: DataTypes.STRING,
+  fullGroup: {
+    type: DataTypes.BOOLEAN,
     allowNull: false,
   },
 });

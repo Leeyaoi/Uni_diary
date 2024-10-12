@@ -1,22 +1,101 @@
 {
   "compilerOptions": {},
   "include": [
+    //.env
     "environment.d.ts",
+
+    //database settings
     "db/dbConnection.ts",
     "db/dbContext.ts",
-    "models/user.ts",
-    "models/teacher.ts",
-    "models/admin.ts",
-    "models/student.ts",
-    "models/faculty.ts",
-    "models/profession.ts",
-    "models/group.ts",
-    "models/course.ts",
-    "models/group_course.ts",
-    "models/teacher_course.ts",
-    "models/attendance.ts",
-    "models/mark.ts",
-    "models/class.ts",
-    "models/timetable.ts"
+
+    //database models
+    "dbModels/user.ts",
+    "dbModels/teacher.ts",
+    "dbModels/admin.ts",
+    "dbModels/student.ts",
+    "dbModels/faculty.ts",
+    "dbModels/profession.ts",
+    "dbModels/group.ts",
+    "dbModels/course.ts",
+    "dbModels/group_course.ts",
+    "dbModels/teacher_course.ts",
+    "dbModels/attendance.ts",
+    "dbModels/mark.ts",
+    "dbModels/class.ts",
+    "dbModels/timetable.ts",
+
+    //api files
+    "app.ts",
+    "routes.ts",
+
+    //repositories
+    "repositories/GenericRepository.ts",
+
+    //Admin files
+    "DTOs/AdminDtos/CreateAdminDto.ts",
+    "DTOs/AdminDtos/UpdateAdminDto.ts",
+    "controllers/adminController.ts",
+
+    //Attendance files
+    "DTOs/AttendanceDtos/CreateAttendanceDto.ts",
+    "DTOs/AttendanceDtos/UpdateAttendanceDto.ts",
+    "controllers/attendanceController.ts",
+
+    //Class files
+    "DTOs/ClassDtos/CreateClassDto.ts",
+    "DTOs/ClassDtos/UpdateClassDto.ts",
+    "controllers/classController.ts",
+
+    //Course files
+    "DTOs/CourseDtos/CreateCourseDto.ts",
+    "controllers/courseController.ts",
+
+    //Faculty files
+    "DTOs/FacultyDtos/CreateFacultyDto.ts",
+    "controllers/facultyController.ts",
+
+    //m2m group_course files
+    "DTOs/GroupCourseDtos/CreateGroupCourseDto.ts",
+    "controllers/groupCourseController.ts",
+
+    //Group files
+    "DTOs/GroupDtos/CreateGroupDto.ts",
+    "DTOs/GroupDtos/UpdateGroupDto.ts",
+    "controllers/groupController.ts",
+
+    //Mark files
+    "DTOs/MarkDtos/CreateMarkDto.ts",
+    "DTOs/MarkDtos/UpdateMarkDto.ts",
+    "controllers/markController.ts",
+
+    //Profession files
+    "DTOs/ProfessionDtos/CreateProfessionDto.ts",
+    "DTOs/ProfessionDtos/UpdateProfessionDto.ts",
+    "controllers/professionControllers.ts",
+
+    //Student files
+    "DTOs/StudentDtos/CreateStudentDto.ts",
+    "DTOs/StudentDtos/UpdateStudentDto.ts",
+    "controllers/studentController.ts",
+
+    //m2m teacher_course files
+    "DTOs/TeacherCourseDtos/CreateTeacherCourseDto.ts",
+    "DTOs/TeacherCourseDtos/UpdateTeacherCourseDto.ts",
+    "controllers/teacherCourseController.ts",
+
+    //Teacher files
+    "DTOs/TeacherDtos/CreateTeacherDto.ts",
+    "DTOs/TeacherDtos/UpdateTeacherDto.ts",
+    "controllers/teacherController.ts",
+
+    //Timetable files
+    "DTOs/TimetableDtos/CreateTimetableDto.ts",
+    "DTOs/TimetableDtos/UpdateTimetableDto.ts",
+    "controllers/timetableController.ts",
+
+    //User files
+    "DTOs/UserDtos/CreateUserDto.ts",
+    "DTOs/UserDtos/UpdateUserDto.ts",
+    "controllers/userController.ts",
   ]
 }

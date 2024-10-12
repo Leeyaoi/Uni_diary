@@ -1,18 +1,18 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db/dbConnection";
 
-export const Timetable = sequelize.define("timetable", {
+export const Group = sequelize.define("group", {
   id: {
     type: DataTypes.UUID,
     primaryKey: true,
     allowNull: false,
   },
-  dateWhen: {
-    type: DataTypes.DATEONLY,
+  year: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
-  classNum: {
-    type: DataTypes.SMALLINT,
+  num: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
