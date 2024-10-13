@@ -28,8 +28,9 @@
     "app.ts",
     "routes.ts",
 
-    //repositories
+    //generics
     "repositories/GenericRepository.ts",
+    "controllers/genericController.ts",
 
     //Admin files
     "DTOs/AdminDtos/CreateAdminDto.ts",
