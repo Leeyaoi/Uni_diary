@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from "uuid";
 import GenericRepository from "../repositories/GenericRepository";
 import { ModelStatic, Model } from "sequelize";
 import { checkSchema, Schema, validationResult } from "express-validator";
+import * as createError from "http-errors";
+import createHttpError = require("http-errors");
 
 class GenericController<CreateDto, UpdateDto> {
   repo: GenericRepository;
@@ -27,11 +29,12 @@ class GenericController<CreateDto, UpdateDto> {
       checkSchema(this.createValidator),
       async (
         req: express.Request<{}, {}, CreateDto>,
-        res: express.Response
+        res: express.Response,
+        next
       ) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-          return res.status(400).json({ errors: errors.array() });
+          next(createHttpError(400, "Validation error"));
         }
 
         const newModel = {
@@ -53,14 +56,18 @@ class GenericController<CreateDto, UpdateDto> {
     //GET by id
     this.controller.get(
       "/:id",
-      async (req: express.Request<{}, uuidv4, {}>, res: express.Response) => {
+      async (
+        req: express.Request<{}, uuidv4, {}>,
+        res: express.Response,
+        next
+      ) => {
         const id = req.params.id;
 
         const data = await this.repo.getById(id);
         if (data != "null") {
           res.send(data);
         } else {
-          res.status(404).json({ message: "Resource not found" });
+          next(createHttpError(404, "Resourse have not been found"));
         }
       }
     );
@@ -68,14 +75,18 @@ class GenericController<CreateDto, UpdateDto> {
     //DELETE
     this.controller.delete(
       "/:id",
-      async (req: express.Request<{}, uuidv4, {}>, res: express.Response) => {
+      async (
+        req: express.Request<{}, uuidv4, {}>,
+        res: express.Response,
+        next
+      ) => {
         const id = req.params.id;
 
         const data = await this.repo.delete(id);
         if (data) {
           res.send({ message: "Resource deleted" });
         } else {
-          res.status(404).json({ message: "Resource not found" });
+          next(createHttpError(404, "Resourse have not been found"));
         }
       }
     );
@@ -87,11 +98,12 @@ class GenericController<CreateDto, UpdateDto> {
       checkSchema(this.updateValidator),
       async (
         req: express.Request<{}, uuidv4, UpdateDto>,
-        res: express.Response
+        res: express.Response,
+        next
       ) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-          return res.status(400).json({ errors: errors.array() });
+          next(createHttpError(400, "Validation error"));
         }
 
         const id = req.params.id;
@@ -101,7 +113,7 @@ class GenericController<CreateDto, UpdateDto> {
         if (data != "null") {
           res.send(data);
         } else {
-          res.status(404).json({ message: "Resource not found" });
+          next(createHttpError(404, "Resourse have not been found"));
         }
       }
     );
