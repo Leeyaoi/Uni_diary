@@ -1,15 +1,22 @@
 import * as express from "express";
 import { v4 as uuidv4 } from "uuid";
 import GenericRepository from "../repositories/GenericRepository";
-import { ModelStatic, Model, where } from "sequelize";
+import { ModelStatic, Model } from "sequelize";
+import { checkSchema, Schema, validationResult } from "express-validator";
 
 class GenericController<CreateDto, UpdateDto> {
-  repo = {} as GenericRepository;
-  controller = express.Router();
-  urlencodedParser = express.urlencoded({ extended: false });
+  repo: GenericRepository;
+  controller: express.Router;
+  urlencodedParser: express.urlencoded;
 
-  constructor(entity: ModelStatic<Model>) {
+  constructor(
+    entity: ModelStatic<Model>,
+    private createValidator: Schema,
+    private updateValidator: Schema
+  ) {
     this.repo = new GenericRepository(entity);
+    this.controller = express.Router();
+    this.urlencodedParser = express.urlencoded({ extended: false });
   }
 
   public GenerateController() {
@@ -17,10 +24,16 @@ class GenericController<CreateDto, UpdateDto> {
     this.controller.post(
       "/",
       this.urlencodedParser,
+      checkSchema(this.createValidator),
       async (
         req: express.Request<{}, {}, CreateDto>,
         res: express.Response
       ) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+        }
+
         const newModel = {
           ...req.body,
           id: uuidv4(),
@@ -44,7 +57,11 @@ class GenericController<CreateDto, UpdateDto> {
         const id = req.params.id;
 
         const data = await this.repo.getById(id);
-        res.send(data);
+        if (data != "null") {
+          res.send(data);
+        } else {
+          res.status(404).json({ message: "Resource not found" });
+        }
       }
     );
 
@@ -55,7 +72,11 @@ class GenericController<CreateDto, UpdateDto> {
         const id = req.params.id;
 
         const data = await this.repo.delete(id);
-        res.send(data);
+        if (data) {
+          res.send({ message: "Resource deleted" });
+        } else {
+          res.status(404).json({ message: "Resource not found" });
+        }
       }
     );
 
@@ -63,15 +84,25 @@ class GenericController<CreateDto, UpdateDto> {
     this.controller.put(
       "/:id",
       this.urlencodedParser,
+      checkSchema(this.updateValidator),
       async (
         req: express.Request<{}, uuidv4, UpdateDto>,
         res: express.Response
       ) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+        }
+
         const id = req.params.id;
         const newModel = req.body as object;
 
         const data = await this.repo.update(newModel, id);
-        res.send(JSON.stringify(data));
+        if (data != "null") {
+          res.send(data);
+        } else {
+          res.status(404).json({ message: "Resource not found" });
+        }
       }
     );
 

@@ -31,72 +31,100 @@
     //generics
     "repositories/GenericRepository.ts",
     "controllers/genericController.ts",
+    "validators/uuidValidate.ts",
 
     //Admin files
     "DTOs/AdminDtos/CreateAdminDto.ts",
     "DTOs/AdminDtos/UpdateAdminDto.ts",
+    "validators/AdminValidators/CreateAdminValidator.ts",
+    "validators/AdminValidators/UpdateAdminValidator.ts",
     "controllers/adminController.ts",
 
     //Attendance files
     "DTOs/AttendanceDtos/CreateAttendanceDto.ts",
     "DTOs/AttendanceDtos/UpdateAttendanceDto.ts",
+    "validators/AttendanceValidators/CreateAttendanceValidator.ts",
+    "validators/AttendanceValidators/UpdateAttendanceValidator.ts",
     "controllers/attendanceController.ts",
 
     //Class files
     "DTOs/ClassDtos/CreateClassDto.ts",
     "DTOs/ClassDtos/UpdateClassDto.ts",
+    "validators/ClassValidators/CreateClassValidator.ts",
+    "validators/ClassValidators/UpdateClassValidator.ts",
     "controllers/classController.ts",
 
     //Course files
     "DTOs/CourseDtos/CreateCourseDto.ts",
+    "validators/CourseValidators/CreateCourseValidator.ts",
     "controllers/courseController.ts",
 
     //Faculty files
     "DTOs/FacultyDtos/CreateFacultyDto.ts",
+    "validators/FacultyValidators/CreateFacultyValidator.ts",
     "controllers/facultyController.ts",
 
     //m2m group_course files
     "DTOs/GroupCourseDtos/CreateGroupCourseDto.ts",
+    "DTOs/GroupCourseDtos/UpdateGroupCourseDto.ts",
+    "validators/GroupCourseValidators/CreateGroupCourseValidator.ts",
+    "validators/GroupCourseValidators/UpdateGroupCourseValidator.ts",
     "controllers/groupCourseController.ts",
 
     //Group files
     "DTOs/GroupDtos/CreateGroupDto.ts",
     "DTOs/GroupDtos/UpdateGroupDto.ts",
+    "validators/GroupValidators/CreateGroupValidator.ts",
+    "validators/GroupValidators/UpdateGroupValidator.ts",
     "controllers/groupController.ts",
 
     //Mark files
     "DTOs/MarkDtos/CreateMarkDto.ts",
     "DTOs/MarkDtos/UpdateMarkDto.ts",
+    "validators/MarkValidators/CreateMarkValidator.ts",
+    "validators/MarkValidators/UpdateMarkValidator.ts",
     "controllers/markController.ts",
 
     //Profession files
     "DTOs/ProfessionDtos/CreateProfessionDto.ts",
     "DTOs/ProfessionDtos/UpdateProfessionDto.ts",
+    "validators/ProfessionValidators/CreateProfessionValidator.ts",
+    "validators/ProfessionValidators/UpdateProfeccionValidator.ts",
     "controllers/professionControllers.ts",
 
     //Student files
     "DTOs/StudentDtos/CreateStudentDto.ts",
     "DTOs/StudentDtos/UpdateStudentDto.ts",
+    "validators/StudentValidators/CreateStudentValidator.ts",
+    "validators/StudentValidators/UpdateStudentvalidator.ts",
     "controllers/studentController.ts",
 
     //m2m teacher_course files
     "DTOs/TeacherCourseDtos/CreateTeacherCourseDto.ts",
     "DTOs/TeacherCourseDtos/UpdateTeacherCourseDto.ts",
+    "validators/TeacherCourseValidators/CreateTeacherCourseValidator.ts",
+    "validators/TeacherCourseValidators/UpdateTeacherCourseValidator.ts",
     "controllers/teacherCourseController.ts",
 
     //Teacher files
     "DTOs/TeacherDtos/CreateTeacherDto.ts",
     "DTOs/TeacherDtos/UpdateTeacherDto.ts",
+    "validators/TeacherValidators/CreateTeacherValidator.ts",
+    "validators/TeacherValidators/UpdateTeacherValidator.ts",
     "controllers/teacherController.ts",
 
     //Timetable files
     "DTOs/TimetableDtos/CreateTimetableDto.ts",
     "DTOs/TimetableDtos/UpdateTimetableDto.ts",
+    "validators/TimetableValidators/CreateTimetableValidator.ts",
+    "validators/TimetableValidators/UpdateTimetableValidator.ts",
     "controllers/timetableController.ts",
 
     //User files
     "DTOs/UserDtos/CreateUserDto.ts",
     "DTOs/UserDtos/UpdateUserDto.ts",
+    "validators/UserValidators/CreateUserValidator.ts",
+    "validators/UserValidators/UpdateUserValidator.ts",
     "controllers/userController.ts",
   ]
 }

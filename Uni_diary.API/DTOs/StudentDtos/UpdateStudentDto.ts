@@ -5,5 +5,4 @@ export default class UpdateStudentDto {
   surname: string | undefined;
   budget: boolean | undefined;
   groupId: uuidv4 | undefined;
-  studentId: uuidv4 | undefined;
 }
