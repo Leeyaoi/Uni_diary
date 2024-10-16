@@ -5,5 +5,4 @@ export default class CreateStudentDto {
   surname: string;
   budget: boolean;
   groupId: uuidv4;
-  studentId: uuidv4;
 }

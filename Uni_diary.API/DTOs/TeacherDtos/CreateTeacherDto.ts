@@ -4,6 +4,4 @@ export default class CreateTeacherDto {
   name: string;
   surname: string;
   jobTitle: string;
-  groupId: uuidv4;
-  studentId: uuidv4;
 }

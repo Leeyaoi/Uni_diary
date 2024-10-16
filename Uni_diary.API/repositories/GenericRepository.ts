@@ -11,21 +11,18 @@ export default class GenericRepository {
   //POST
   async create(newEntity: any): Promise<string> {
     await this.model.create(newEntity);
-    console.log(JSON.stringify(newEntity));
     return JSON.stringify(newEntity);
   }
 
   //GET
   async getAll(): Promise<string> {
     const data = await this.model.findAll();
-    console.log(JSON.stringify(data));
     return JSON.stringify(data);
   }
 
   //GET by id
   async getById(id: uuidv4): Promise<string> {
     const data = await this.model.findOne({ where: { id: id } });
-    console.log(JSON.stringify(data));
     return JSON.stringify(data);
   }
 
@@ -33,14 +30,12 @@ export default class GenericRepository {
   async update(newEntity: any, id: uuidv4): Promise<string> {
     this.model.update(newEntity, { where: { id: id } });
     const data = await this.model.findOne({ where: { id: id } });
-    console.log(JSON.stringify(data));
     return JSON.stringify(data);
   }
 
   //DELETE
   async delete(id: uuidv4): Promise<string> {
     const data = await this.model.destroy({ where: { id: id } });
-    console.log(JSON.stringify(data));
     return JSON.stringify(data);
   }
 }
