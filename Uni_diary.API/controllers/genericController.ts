@@ -35,6 +35,7 @@ class GenericController<CreateDto, UpdateDto> {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
           next(createHttpError(400, "Validation error"));
+          return;
         }
 
         const newModel = {
@@ -68,6 +69,7 @@ class GenericController<CreateDto, UpdateDto> {
           res.send(data);
         } else {
           next(createHttpError(404, "Resourse have not been found"));
+          return;
         }
       }
     );
@@ -87,6 +89,7 @@ class GenericController<CreateDto, UpdateDto> {
           res.send({ message: "Resource deleted" });
         } else {
           next(createHttpError(404, "Resourse have not been found"));
+          return;
         }
       }
     );
@@ -104,6 +107,7 @@ class GenericController<CreateDto, UpdateDto> {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
           next(createHttpError(400, "Validation error"));
+          return;
         }
 
         const id = req.params.id;
@@ -114,6 +118,7 @@ class GenericController<CreateDto, UpdateDto> {
           res.send(data);
         } else {
           next(createHttpError(404, "Resourse have not been found"));
+          return;
         }
       }
     );
