@@ -3,13 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 import GenericRepository from "../repositories/GenericRepository";
 import { ModelStatic, Model } from "sequelize";
 import { checkSchema, Schema, validationResult } from "express-validator";
-import * as createError from "http-errors";
 import createHttpError = require("http-errors");
 
 class GenericController<CreateDto, UpdateDto> {
   repo: GenericRepository;
   controller: express.Router;
-  urlencodedParser: express.urlencoded;
+  urlencodedParser: any;
 
   constructor(
     entity: ModelStatic<Model>,
@@ -58,7 +57,7 @@ class GenericController<CreateDto, UpdateDto> {
     this.controller.get(
       "/:id",
       async (
-        req: express.Request<{}, uuidv4, {}>,
+        req: express.Request<{ id: uuidv4 }, uuidv4, {}>,
         res: express.Response,
         next
       ) => {
@@ -78,7 +77,7 @@ class GenericController<CreateDto, UpdateDto> {
     this.controller.delete(
       "/:id",
       async (
-        req: express.Request<{}, uuidv4, {}>,
+        req: express.Request<{ id: uuidv4 }, uuidv4, {}>,
         res: express.Response,
         next
       ) => {
@@ -100,7 +99,7 @@ class GenericController<CreateDto, UpdateDto> {
       this.urlencodedParser,
       checkSchema(this.updateValidator),
       async (
-        req: express.Request<{}, uuidv4, UpdateDto>,
+        req: express.Request<{ id: uuidv4 }, uuidv4, UpdateDto>,
         res: express.Response,
         next
       ) => {
