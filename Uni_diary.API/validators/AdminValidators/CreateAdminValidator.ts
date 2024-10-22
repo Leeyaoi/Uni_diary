@@ -9,7 +9,7 @@ export const CreateAdminValidator: Schema = {
     notEmpty: true,
     custom: {
       options: async (value) => {
-        await uuidValidate(value, User);
+        await uuidValidate(User, value);
       },
     },
   },
