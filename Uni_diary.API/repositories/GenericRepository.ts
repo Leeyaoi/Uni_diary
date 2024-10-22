@@ -1,4 +1,4 @@
-import { Model, ModelStatic } from "sequelize";
+import { Model, ModelStatic, WhereOptions } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
 
 export default class GenericRepository {
@@ -36,6 +36,18 @@ export default class GenericRepository {
   //DELETE
   async delete(id: uuidv4): Promise<string> {
     const data = await this.model.destroy({ where: { id: id } });
+    return JSON.stringify(data);
+  }
+
+  //GET BY PREDICATE
+  async getByPredicate(
+    predicate: WhereOptions<any>,
+    include: any
+  ): Promise<string> {
+    const data = await this.model.findAll({
+      where: predicate,
+      include: include,
+    });
     return JSON.stringify(data);
   }
 }
