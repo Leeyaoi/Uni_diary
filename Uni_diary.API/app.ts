@@ -32,4 +32,5 @@ var httpsServer = https.createServer(credentials, app);
 
 DbSynchronize().then(() => {
   httpsServer.listen(3002);
+  console.log("ready");
 });

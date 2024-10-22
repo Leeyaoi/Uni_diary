@@ -1,5 +1,6 @@
 import { client } from "./client";
 import { AxiosError, AxiosResponse } from "axios";
+import qs from "qs";
 import { RESTMethod } from "../shared/types/RESTMethodEnum";
 
 interface Props {
@@ -34,13 +35,13 @@ export const HttpRequest = async <V, E = AxiosError>({
         res = await client.get<V>(uri);
         break;
       case RESTMethod.Post:
-        res = await client.post<V>(uri, item);
+        res = await client.post<V>(uri, qs.stringify(item));
         break;
       case RESTMethod.Delete:
         res = await client.delete<V>(uri + "/" + id);
         break;
       case RESTMethod.Put:
-        res = await client.put<V>(uri + "/" + id, item);
+        res = await client.put<V>(uri + "/" + id, qs.stringify(item));
         break;
       default:
         throw "Bad request";

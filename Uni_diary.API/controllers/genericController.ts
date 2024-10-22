@@ -2,8 +2,18 @@ import * as express from "express";
 import { v4 as uuidv4 } from "uuid";
 import GenericRepository from "../repositories/GenericRepository";
 import { ModelStatic, Model } from "sequelize";
-import { checkSchema, Schema, validationResult } from "express-validator";
+import {
+  checkSchema,
+  ResultFactory,
+  Schema,
+  validationResult,
+} from "express-validator";
 import createHttpError = require("http-errors");
+
+export const myValidationResult: ResultFactory<string> =
+  validationResult.withDefaults({
+    formatter: (error) => error.msg as string,
+  });
 
 class GenericController<CreateDto, UpdateDto> {
   repo: GenericRepository;
@@ -23,7 +33,7 @@ class GenericController<CreateDto, UpdateDto> {
   public GenerateController() {
     //POST
     this.controller.post(
-      "/",
+      "/post",
       this.urlencodedParser,
       checkSchema(this.createValidator),
       async (
@@ -31,9 +41,9 @@ class GenericController<CreateDto, UpdateDto> {
         res: express.Response,
         next
       ) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-          next(createHttpError(400, "Validation error"));
+        const errors: string[] = myValidationResult(req).array();
+        if (errors.length != 0) {
+          next(createHttpError(400, JSON.stringify(errors)));
           return;
         }
 
@@ -103,9 +113,9 @@ class GenericController<CreateDto, UpdateDto> {
         res: express.Response,
         next
       ) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-          next(createHttpError(400, "Validation error"));
+        const errors: string[] = myValidationResult(req).array();
+        if (errors.length != 0) {
+          next(createHttpError(400, JSON.stringify(errors)));
           return;
         }
 
