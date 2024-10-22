@@ -1,11 +1,16 @@
 import React from "react";
-import { HttpRequest } from "./api/GenericApi";
-import { RESTMethod } from "./shared/types/RESTMethodEnum";
-
-console.log(HttpRequest<any>({ uri: "/admin", method: RESTMethod.Get }));
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import "./index.scss";
 
 const App = () => {
-  return <div>Hi</div>;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 };
 
 export default App;

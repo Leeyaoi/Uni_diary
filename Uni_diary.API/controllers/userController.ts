@@ -6,7 +6,7 @@ import CreateUserDto from "../DTOs/UserDtos/CreateUserDto";
 import UpdateUserDto from "../DTOs/UserDtos/UpdateUserDto";
 import { CreateUserValidator } from "../validators/UserValidators/CreateUserValidator";
 import { UpdateUserValidator } from "../validators/UserValidators/UpdateUserValidator";
-import GenericController from "./genericController";
+import GenericController, { myValidationResult } from "./genericController";
 import { checkSchema, validationResult } from "express-validator";
 import GenericRepository from "../repositories/GenericRepository";
 import { Teacher } from "../dbModels/teacher";
@@ -32,9 +32,9 @@ userController.post(
     res: express.Response,
     next
   ) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      next(createHttpError(400, "Validation error"));
+    const errors: string[] = myValidationResult(req).array();
+    if (errors.length != 0) {
+      next(createHttpError(400, JSON.stringify(errors)));
       return;
     }
 

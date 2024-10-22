@@ -113,9 +113,9 @@ class GenericController<CreateDto, UpdateDto> {
         res: express.Response,
         next
       ) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-          next(createHttpError(400, "Validation error"));
+        const errors: string[] = myValidationResult(req).array();
+        if (errors.length != 0) {
+          next(createHttpError(400, JSON.stringify(errors)));
           return;
         }
 

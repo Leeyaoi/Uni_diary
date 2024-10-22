@@ -1,0 +1,19 @@
+html, body{
+    margin: 0;
+    height: 100%;
+    background-color: #8a7e7e;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+.container{
+    margin: 0 auto;
+    background-color: #fff;
+    position: relative;
+    height: 100%;
+    display: flex;
+    text-align: center;
+}
+
+#root{
+    height: 100%;
+}
