@@ -3,10 +3,13 @@ import React from "react";
 import Header from "../../modules/Header/Header";
 import Footer from "../../modules/Footer/Footer";
 import "./LoginPage.scss";
-import { HttpRequest } from "../../api/GenericApi";
-import { RESTMethod } from "../../shared/types/RESTMethodEnum";
+import { useAppDispatch } from "../../shared/stores/store";
+import { useNavigate } from "react-router-dom";
+import { userActions } from "../../shared/stores/userSlice";
 
 const LoginPage = () => {
+  const dispatch = useAppDispatch();
+
   const [login, setLogin] = React.useState("");
   const [password, setPassword] = React.useState("");
 
@@ -21,6 +24,8 @@ const LoginPage = () => {
   ) => {
     setPassword(event.target.value);
   };
+
+  const navigate = useNavigate();
 
   return (
     <Container className="container">
@@ -41,15 +46,16 @@ const LoginPage = () => {
           />
           <Button
             variant="contained"
-            onClick={(event) => {
+            onClick={async (event) => {
               event.preventDefault();
-              if (login != "" && password != "") {
-                HttpRequest({
-                  uri: "/user/auth",
-                  method: RESTMethod.Post,
-                  item: { login: login, password: password },
-                });
+              if (login == "" || password == "") {
+                return;
               }
+              dispatch(
+                userActions.userLogin({ login: login, password: password })
+              ).then(() => {
+                navigate("/profile");
+              });
             }}
           >
             Войти
