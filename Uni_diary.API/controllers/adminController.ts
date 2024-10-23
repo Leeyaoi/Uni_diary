@@ -9,6 +9,7 @@ import GenericController, { myValidationResult } from "./genericController";
 import { checkSchema } from "express-validator";
 import createHttpError = require("http-errors");
 import GenericRepository from "../repositories/GenericRepository";
+import UserIsTaken from "../repositories/userRepository";
 
 const adminController = new GenericController<CreateAdminDto, UpdateAdminDto>(
   Admin,
@@ -38,10 +39,8 @@ adminController.post(
       id: uuidv4(),
     };
 
-    const search = await repo.getByPredicate({ userId: newModel.userId }, []);
-
-    if (search != "[]") {
-      next(createHttpError(400, "admin with this userId already exists"));
+    if (await UserIsTaken(newModel.userId, next)) {
+      next(createHttpError(400, "this user is already taken"));
       return;
     }
 
