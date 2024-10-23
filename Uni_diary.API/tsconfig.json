@@ -121,6 +121,7 @@
     "controllers/timetableController.ts",
 
     //User files
+    "repositories/userRepository.ts",
     "DTOs/UserDtos/CreateUserDto.ts",
     "DTOs/UserDtos/UpdateUserDto.ts",
     "validators/UserValidators/CreateUserValidator.ts",

@@ -12,6 +12,7 @@ import GenericRepository from "../repositories/GenericRepository";
 import { Teacher } from "../dbModels/teacher";
 import { Admin } from "../dbModels/admin";
 import { Student } from "../dbModels/student";
+import { UserExists } from "../repositories/userRepository";
 
 const urlencodedParser = express.urlencoded({ extended: false });
 const repo = new GenericRepository(User);
@@ -47,6 +48,38 @@ userController.post(
       next(createHttpError(404, "NotFound"));
       return;
     }
+    res.send(data);
+  }
+);
+
+userController.post(
+  "/",
+  express.urlencoded({ extended: false }),
+  checkSchema(CreateUserValidator),
+  async (
+    req: express.Request<{}, {}, CreateUserDto>,
+    res: express.Response,
+    next
+  ) => {
+    const errors: string[] = myValidationResult(req).array();
+    if (errors.length != 0) {
+      next(createHttpError(400, JSON.stringify(errors)));
+      return;
+    }
+
+    const repo = new GenericRepository(Teacher);
+
+    const newModel = {
+      ...req.body,
+      id: uuidv4(),
+    };
+
+    if (await UserExists(newModel.userId, next)) {
+      next(createHttpError(400, "this user is already exists"));
+      return;
+    }
+
+    const data = await repo.create(newModel);
     res.send(data);
   }
 );
