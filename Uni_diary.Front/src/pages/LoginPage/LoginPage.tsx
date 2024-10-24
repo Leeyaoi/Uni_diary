@@ -1,12 +1,22 @@
 import { Button, Container, TextField } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../modules/Header/Header";
 import Footer from "../../modules/Footer/Footer";
 import "./LoginPage.scss";
-import { HttpRequest } from "../../api/GenericApi";
-import { RESTMethod } from "../../shared/types/RESTMethodEnum";
+import { useAppDispatch, useAppSelector } from "../../shared/stores/store";
+import { useNavigate } from "react-router-dom";
+import { userActions } from "../../shared/stores/userSlice";
 
 const LoginPage = () => {
+  const dispatch = useAppDispatch();
+  let user = useAppSelector((state) => state.user.currentUser);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/profile");
+    }
+  }, [useAppSelector((state) => state.user.currentUser)]);
+
   const [login, setLogin] = React.useState("");
   const [password, setPassword] = React.useState("");
 
@@ -21,6 +31,8 @@ const LoginPage = () => {
   ) => {
     setPassword(event.target.value);
   };
+
+  const navigate = useNavigate();
 
   return (
     <Container className="container">
@@ -41,15 +53,14 @@ const LoginPage = () => {
           />
           <Button
             variant="contained"
-            onClick={(event) => {
+            onClick={async (event) => {
               event.preventDefault();
-              if (login != "" && password != "") {
-                HttpRequest({
-                  uri: "/user/auth",
-                  method: RESTMethod.Post,
-                  item: { login: login, password: password },
-                });
+              if (login == "" || password == "") {
+                return;
               }
+              dispatch(
+                userActions.userLogin({ login: login, password: password })
+              );
             }}
           >
             Войти
