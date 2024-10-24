@@ -1,14 +1,21 @@
 import { Button, Container, TextField } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../modules/Header/Header";
 import Footer from "../../modules/Footer/Footer";
 import "./LoginPage.scss";
-import { useAppDispatch } from "../../shared/stores/store";
+import { useAppDispatch, useAppSelector } from "../../shared/stores/store";
 import { useNavigate } from "react-router-dom";
 import { userActions } from "../../shared/stores/userSlice";
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
+  let user = useAppSelector((state) => state.user.currentUser);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/profile");
+    }
+  }, [useAppSelector((state) => state.user.currentUser)]);
 
   const [login, setLogin] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -53,9 +60,7 @@ const LoginPage = () => {
               }
               dispatch(
                 userActions.userLogin({ login: login, password: password })
-              ).then(() => {
-                navigate("/profile");
-              });
+              );
             }}
           >
             Войти

@@ -1,12 +1,16 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import UserType from "../types/user"; // Make sure UserType is properly defined
+import UserType from "../types/user";
 import { RESTMethod } from "../types/RESTMethodEnum";
 import { HttpRequest } from "../../api/GenericApi";
+import AdminType from "../types/admin";
+import TeacherType from "../types/teacher";
+import StudentType from "../types/student";
+import { userType } from "../types/userTypeEnum";
 
 const userLogin = createAsyncThunk<
   UserType[],
   { login: string; password: string }
->("users/auth", async (data, { rejectWithValue }) => {
+>("users/auth", async (data) => {
   try {
     const response = await HttpRequest<UserType[]>({
       uri: "/user/auth",
@@ -14,24 +18,26 @@ const userLogin = createAsyncThunk<
       item: data,
     });
     if (response.code === "error") {
-      return rejectWithValue(response.error.message || "Login failed");
+      return [];
     }
     return response.data;
   } catch (error) {
-    return rejectWithValue((error as Error).message || "An error occurred");
+    return [];
   }
 });
 
 interface UserState {
-  currentUser: {} | null;
+  currentUser: AdminType | TeacherType | StudentType | null;
   error: string | null;
   loading: boolean;
+  userType: userType | null;
 }
 
 const initialState: UserState = {
   currentUser: null,
   error: null,
   loading: false,
+  userType: null,
 };
 
 export const userSlice = createSlice({
@@ -39,16 +45,26 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<UserType[]>) => {
+      if (action.payload.length == 0) {
+        state.currentUser = null;
+        state.userType = null;
+        return;
+      }
+
       const { admin, teacher, student } = action.payload[0];
 
       if (admin) {
         state.currentUser = admin;
+        state.userType = userType.admin;
       } else if (teacher) {
         state.currentUser = teacher;
+        state.userType = userType.teacher;
       } else if (student) {
         state.currentUser = student;
+        state.userType = userType.student;
       } else {
-        state.currentUser = action.payload;
+        state.currentUser = null;
+        state.userType = null;
       }
     },
     clearUser: (state) => {
