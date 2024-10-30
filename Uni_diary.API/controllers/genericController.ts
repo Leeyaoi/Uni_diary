@@ -16,16 +16,14 @@ export const myValidationResult: ResultFactory<string> =
   });
 
 class GenericController<CreateDto, UpdateDto> {
-  repo: GenericRepository;
   controller: express.Router;
   urlencodedParser: any;
 
   constructor(
-    entity: ModelStatic<Model>,
     private createValidator: Schema,
-    private updateValidator: Schema
+    private updateValidator: Schema,
+    private repo: GenericRepository
   ) {
-    this.repo = new GenericRepository(entity);
     this.controller = express.Router();
     this.urlencodedParser = express.urlencoded({ extended: false });
   }

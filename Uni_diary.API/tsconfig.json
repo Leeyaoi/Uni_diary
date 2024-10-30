@@ -93,6 +93,7 @@
     "controllers/professionControllers.ts",
 
     //Student files
+    "repositories/studentRepository.ts",
     "DTOs/StudentDtos/CreateStudentDto.ts",
     "DTOs/StudentDtos/UpdateStudentDto.ts",
     "validators/StudentValidators/CreateStudentValidator.ts",

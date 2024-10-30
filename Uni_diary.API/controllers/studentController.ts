@@ -8,13 +8,15 @@ import { UpdateStudentValidator } from "../validators/StudentValidators/UpdateSt
 import GenericController, { myValidationResult } from "./genericController";
 import { checkSchema } from "express-validator";
 import createHttpError = require("http-errors");
-import GenericRepository from "../repositories/GenericRepository";
-import UserIsTaken from "../repositories/userRepository";
+import { UserIsTaken } from "../repositories/userRepository";
+import StudentRepository from "../repositories/studentRepository";
+
+const repo = new StudentRepository();
 
 const studentController = new GenericController<
   CreateStudentDto,
   UpdateStudentDto
->(Student, CreateStudentValidator, UpdateStudentValidator).GenerateController();
+>(CreateStudentValidator, UpdateStudentValidator, repo).GenerateController();
 
 studentController.post(
   "/",
@@ -31,12 +33,14 @@ studentController.post(
       return;
     }
 
-    const repo = new GenericRepository(Student);
-
     const newModel = {
       ...req.body,
       id: uuidv4(),
     };
+
+    newModel.budget == "true"
+      ? (newModel.budget = true)
+      : (newModel.budget = false);
 
     if (await UserIsTaken(newModel.userId, next)) {
       next(createHttpError(400, "this user is already taken"));

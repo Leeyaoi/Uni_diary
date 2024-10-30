@@ -21,11 +21,13 @@ export const DbSynchronize = (force = false): Promise<Sequelize> => {
 
   Group.hasMany(Student);
   Group.hasMany(Timetable);
+  Group.belongsTo(Profession);
 
   Profession.hasMany(Group);
 
   Student.hasMany(Attendance);
   Student.hasMany(Mark);
+  Student.belongsTo(Group);
 
   Teacher.hasMany(Class);
 

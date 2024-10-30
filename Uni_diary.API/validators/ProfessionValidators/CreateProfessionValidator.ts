@@ -3,8 +3,8 @@ import { Faculty } from "../../dbModels/faculty";
 import { uuidValidate } from "../uuidValidate";
 
 export const CreateProfessionValidator: Schema = {
-  dateWhen: { notEmpty: true, isDate: true },
-  mark: { notEmpty: true },
+  name: { notEmpty: true },
+  code: { notEmpty: true },
   jobTitle: { notEmpty: true },
   facultyId: {
     notEmpty: true,

@@ -8,7 +8,7 @@ import StudentType from "../types/student";
 import { userType } from "../types/userTypeEnum";
 
 const userLogin = createAsyncThunk<
-  UserType[],
+  UserType | null,
   { login: string; password: string }
 >("users/auth", async (data) => {
   try {
@@ -18,11 +18,11 @@ const userLogin = createAsyncThunk<
       item: data,
     });
     if (response.code === "error") {
-      return [];
+      return null;
     }
-    return response.data;
+    return response.data[0];
   } catch (error) {
-    return [];
+    return null;
   }
 });
 
@@ -44,14 +44,14 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<UserType[]>) => {
-      if (action.payload.length == 0) {
+    setUser: (state, action: PayloadAction<UserType | null>) => {
+      if (action.payload == null) {
         state.currentUser = null;
         state.userType = null;
         return;
       }
 
-      const { admin, teacher, student } = action.payload[0];
+      const { admin, teacher, student } = action.payload;
 
       if (admin) {
         state.currentUser = admin;
@@ -68,6 +68,7 @@ export const userSlice = createSlice({
       }
     },
     clearUser: (state) => {
+      state.userType = null;
       state.currentUser = null;
       state.error = null;
     },
