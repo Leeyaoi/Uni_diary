@@ -8,7 +8,13 @@ import { Admin } from "../dbModels/admin";
 
 const repo = new GenericRepository(User);
 
-const UserIsTaken = async (id: uuidv4, next) => {
+export default class UserRepository extends GenericRepository {
+  constructor() {
+    super(User);
+  }
+}
+
+export const UserIsTaken = async (id: uuidv4, next) => {
   const search = await repo.getByPredicate({ id: id }, [
     Admin,
     Teacher,
@@ -17,7 +23,7 @@ const UserIsTaken = async (id: uuidv4, next) => {
   if (search == "[]") {
     next(createHttpError(404, "user doesn't exists"));
   }
-  const { admin, student, teacher } = JSON.parse(search[0]);
+  const { admin, student, teacher } = JSON.parse(search)[0];
   if (admin || student || teacher) {
     return true;
   }
@@ -34,5 +40,3 @@ export const UserExists = async (login: string, password: string) => {
   }
   return false;
 };
-
-export default UserIsTaken;

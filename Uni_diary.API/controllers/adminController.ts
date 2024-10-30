@@ -9,12 +9,14 @@ import GenericController, { myValidationResult } from "./genericController";
 import { checkSchema } from "express-validator";
 import createHttpError = require("http-errors");
 import GenericRepository from "../repositories/GenericRepository";
-import UserIsTaken from "../repositories/userRepository";
+import { UserIsTaken } from "../repositories/userRepository";
+
+const repo = new GenericRepository(Admin);
 
 const adminController = new GenericController<CreateAdminDto, UpdateAdminDto>(
-  Admin,
   CreateAdminValidator,
-  UpdateAdminValidator
+  UpdateAdminValidator,
+  repo
 ).GenerateController();
 
 adminController.post(

@@ -9,12 +9,14 @@ import GenericController, { myValidationResult } from "./genericController";
 import { checkSchema } from "express-validator";
 import createHttpError = require("http-errors");
 import GenericRepository from "../repositories/GenericRepository";
-import UserIsTaken from "../repositories/userRepository";
+import { UserIsTaken } from "../repositories/userRepository";
+
+const repo = new GenericRepository(Teacher);
 
 const teacherController = new GenericController<
   CreateTeacherDto,
   UpdateTeacherDto
->(Teacher, CreateTeacherValidator, UpdateTeacherValidator).GenerateController();
+>(CreateTeacherValidator, UpdateTeacherValidator, repo).GenerateController();
 
 teacherController.post(
   "/",
@@ -30,8 +32,6 @@ teacherController.post(
       next(createHttpError(400, JSON.stringify(errors)));
       return;
     }
-
-    const repo = new GenericRepository(Teacher);
 
     const newModel = {
       ...req.body,

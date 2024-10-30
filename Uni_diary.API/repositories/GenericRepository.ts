@@ -2,7 +2,7 @@ import { Model, ModelStatic, WhereOptions } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
 
 export default class GenericRepository {
-  private model: ModelStatic<Model>;
+  protected model: ModelStatic<Model>;
 
   constructor(model: ModelStatic<Model>) {
     this.model = model;

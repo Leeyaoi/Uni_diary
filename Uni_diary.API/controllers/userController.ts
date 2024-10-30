@@ -12,15 +12,17 @@ import GenericRepository from "../repositories/GenericRepository";
 import { Teacher } from "../dbModels/teacher";
 import { Admin } from "../dbModels/admin";
 import { Student } from "../dbModels/student";
-import { UserExists } from "../repositories/userRepository";
+import UserRepository, { UserExists } from "../repositories/userRepository";
+import { Group } from "../dbModels/group";
+import { Profession } from "../dbModels/profession";
 
 const urlencodedParser = express.urlencoded({ extended: false });
-const repo = new GenericRepository(User);
+const repo = new UserRepository();
 
 const userController = new GenericController<CreateUserDto, UpdateUserDto>(
-  User,
   CreateUserValidator,
-  UpdateUserValidator
+  UpdateUserValidator,
+  repo
 ).GenerateController();
 
 //AUTH
@@ -43,7 +45,11 @@ userController.post(
       ...req.body,
     };
 
-    const data = await repo.getByPredicate(newModel, [Student, Teacher, Admin]);
+    const data = await repo.getByPredicate(newModel, [
+      { model: Student, include: { model: Group, include: Profession } },
+      Teacher,
+      Admin,
+    ]);
     if (data == "[]") {
       next(createHttpError(404, "NotFound"));
       return;

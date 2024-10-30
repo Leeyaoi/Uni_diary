@@ -19,6 +19,7 @@ const LoginPage = () => {
 
   const [login, setLogin] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [clicked, setIsClicked] = React.useState(false);
 
   const handleLoginChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -44,17 +45,31 @@ const LoginPage = () => {
             variant="outlined"
             value={login}
             onChange={handleLoginChange}
+            error={clicked && login === ""}
+            helperText={
+              clicked && login === "" ? "Логин не может быть пустым" : " "
+            }
           />
           <TextField
             label="Пароль"
             variant="outlined"
             value={password}
             onChange={handlePasswordChange}
+            error={clicked && password === ""}
+            helperText={
+              clicked && password === "" ? "Пароль не может быть пустым" : " "
+            }
           />
+          {clicked && user === null ? (
+            <p id="error">Логин или пароль введены неверно</p>
+          ) : (
+            <></>
+          )}
           <Button
             variant="contained"
             onClick={async (event) => {
               event.preventDefault();
+              setIsClicked(true);
               if (login == "" || password == "") {
                 return;
               }
