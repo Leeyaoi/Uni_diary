@@ -1,5 +1,6 @@
 import { Model, ModelStatic, WhereOptions } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
+import PaginatedDto from "../DTOs/PaginatedDto";
 
 export default class GenericRepository {
   protected model: ModelStatic<Model>;
@@ -36,6 +37,29 @@ export default class GenericRepository {
   //DELETE
   async delete(id: uuidv4): Promise<string> {
     const data = await this.model.destroy({ where: { id: id } });
+    return JSON.stringify(data);
+  }
+
+  //PAGINATE
+  async paginate(
+    predicate: WhereOptions<any>,
+    include: any,
+    limit: number,
+    pageNum: number
+  ): Promise<string> {
+    const { count, rows } = await this.model.findAndCountAll({
+      offset: (pageNum - 1) * limit,
+      limit: limit,
+      where: predicate,
+      include: include,
+    });
+    const data: PaginatedDto = {
+      limit: limit,
+      pageNum: pageNum,
+      pageCount: Math.floor(count / limit) + 1,
+      total: count,
+      items: rows,
+    };
     return JSON.stringify(data);
   }
 

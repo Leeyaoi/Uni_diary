@@ -32,6 +32,7 @@
     "repositories/GenericRepository.ts",
     "controllers/genericController.ts",
     "validators/uuidValidate.ts",
+    "DTOs/PaginatedDto.ts",
 
     //Admin files
     "DTOs/AdminDtos/CreateAdminDto.ts",
