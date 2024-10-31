@@ -44,19 +44,18 @@ export default class GenericRepository {
   async paginate(
     predicate: WhereOptions<any>,
     include: any,
-    limit: number,
-    pageNum: number
+    params: { limit: number; page: number }
   ): Promise<string> {
     const { count, rows } = await this.model.findAndCountAll({
-      offset: (pageNum - 1) * limit,
-      limit: limit,
       where: predicate,
       include: include,
+      offset: (params.page - 1) * params.limit,
+      limit: params.limit,
     });
     const data: PaginatedDto = {
-      limit: limit,
-      pageNum: pageNum,
-      pageCount: Math.floor(count / limit) + 1,
+      limit: params.limit,
+      pageNum: params.page,
+      pageCount: Math.floor(count / params.limit) + 1,
       total: count,
       items: rows,
     };

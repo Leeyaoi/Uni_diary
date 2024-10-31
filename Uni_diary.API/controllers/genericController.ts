@@ -68,12 +68,7 @@ class GenericController<CreateDto, UpdateDto> {
         res: express.Response
       ) => {
         if (req.body.limit && req.body.page) {
-          const data = await this.repo.paginate(
-            {},
-            [],
-            req.body.limit,
-            req.body.page
-          );
+          const data = await this.repo.paginate({}, [], req.body);
           res.send(data);
         } else {
           const data = await this.repo.getAll();

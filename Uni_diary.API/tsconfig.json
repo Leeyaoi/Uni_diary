@@ -89,6 +89,7 @@
     //Profession files
     "DTOs/ProfessionDtos/CreateProfessionDto.ts",
     "DTOs/ProfessionDtos/UpdateProfessionDto.ts",
+    "repositories/professionRepository.ts",
     "validators/ProfessionValidators/CreateProfessionValidator.ts",
     "validators/ProfessionValidators/UpdateProfeccionValidator.ts",
     "controllers/professionControllers.ts",
