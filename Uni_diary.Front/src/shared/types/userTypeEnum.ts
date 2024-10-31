@@ -1,4 +1,4 @@
-export enum userType {
+export enum userTypeEnum {
   admin,
   teacher,
   student,

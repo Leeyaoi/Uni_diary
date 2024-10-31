@@ -5,7 +5,7 @@ import { HttpRequest } from "../../api/GenericApi";
 import AdminType from "../types/admin";
 import TeacherType from "../types/teacher";
 import StudentType from "../types/student";
-import { userType } from "../types/userTypeEnum";
+import { userTypeEnum } from "../types/userTypeEnum";
 
 const userLogin = createAsyncThunk<
   UserType | null,
@@ -30,7 +30,7 @@ interface UserState {
   currentUser: AdminType | TeacherType | StudentType | null;
   error: string | null;
   loading: boolean;
-  userType: userType | null;
+  userType: userTypeEnum | null;
 }
 
 const initialState: UserState = {
@@ -55,13 +55,13 @@ export const userSlice = createSlice({
 
       if (admin) {
         state.currentUser = admin;
-        state.userType = userType.admin;
+        state.userType = userTypeEnum.admin;
       } else if (teacher) {
         state.currentUser = teacher;
-        state.userType = userType.teacher;
+        state.userType = userTypeEnum.teacher;
       } else if (student) {
         state.currentUser = student;
-        state.userType = userType.student;
+        state.userType = userTypeEnum.student;
       } else {
         state.currentUser = null;
         state.userType = null;

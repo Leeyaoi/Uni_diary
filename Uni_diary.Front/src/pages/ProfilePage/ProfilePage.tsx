@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../shared/stores/store";
 import { Button, Container } from "@mui/material";
 import Header from "../../modules/Header/Header";
 import Footer from "../../modules/Footer/Footer";
-import { userType } from "../../shared/types/userTypeEnum";
+import { userTypeEnum } from "../../shared/types/userTypeEnum";
 import AdminProfile from "../../modules/AdminProfile/AdminProfile";
 import { userActions } from "../../shared/stores/userSlice";
 import { useNavigate } from "react-router-dom";
@@ -20,13 +20,13 @@ const ProfilePage = () => {
 
   const renderProfile = () => {
     switch (type) {
-      case userType.admin: {
+      case userTypeEnum.admin: {
         return <AdminProfile />;
       }
-      case userType.student: {
+      case userTypeEnum.student: {
         return <StudentProfile />;
       }
-      case userType.teacher: {
+      case userTypeEnum.teacher: {
         return <TeacherProfile />;
       }
     }
