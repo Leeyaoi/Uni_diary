@@ -3,9 +3,9 @@ import { HttpRequest } from "../../api/GenericApi";
 import { RESTMethod } from "../types/RESTMethodEnum";
 import FacultyType from "../types/faculty";
 
-const fetchFaculty = createAsyncThunk("users/auth", async () => {
+const fetchFaculty = createAsyncThunk("faculty/fetch", async () => {
   try {
-    const response = await HttpRequest<[]>({
+    const response = await HttpRequest<FacultyType[]>({
       uri: "/faculty",
       method: RESTMethod.Get,
     });

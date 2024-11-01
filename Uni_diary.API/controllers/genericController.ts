@@ -59,6 +59,16 @@ class GenericController<CreateDto, UpdateDto> {
     this.controller.get(
       "/",
       this.urlencodedParser,
+      async (_, res: express.Response) => {
+        const data = await this.repo.getAll();
+        res.send(data);
+      }
+    );
+
+    //Paginate
+    this.controller.post(
+      "/paginate",
+      this.urlencodedParser,
       async (
         req: express.Request<
           {},

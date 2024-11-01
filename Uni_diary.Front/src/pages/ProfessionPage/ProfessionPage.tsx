@@ -11,16 +11,28 @@ import Footer from "../../modules/Footer/Footer";
 import "./ProfessionPage.scss";
 import { useAppDispatch, useAppSelector } from "../../shared/stores/store";
 import { facultyActions } from "../../shared/stores/facultySlice";
+import { professionActions } from "../../shared/stores/professionSlice";
 
 const ProfessionPage = () => {
+  const [faculty, setFaculty] = useState("");
+
   const dispatch = useAppDispatch();
   const faculties = useAppSelector((state) => state.faculty.faculties);
+  const professions = useAppSelector((state) => state.profession.professions);
 
   useEffect(() => {
     dispatch(facultyActions.fetchFaculty());
   }, []);
 
-  const [faculty, setFaculty] = useState("");
+  useEffect(() => {
+    dispatch(
+      professionActions.fetchProfession({
+        limit: 5,
+        page: 1,
+        facultyId: faculty,
+      })
+    );
+  }, [faculty]);
 
   const handleFacultyChange = (event: SelectChangeEvent) => {
     setFaculty(event.target.value);
@@ -61,6 +73,7 @@ const ProfessionPage = () => {
               </Select>
             </FormControl>
           </div>
+          {JSON.stringify(professions)}
         </div>
       </div>
       <Footer />
