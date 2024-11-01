@@ -1,3 +1,15 @@
 #profession{
     width: 100%;
 }
+
+#facultySelect{
+    display: flex;
+    margin-top: 1rem;
+    text-align: left;
+
+    & > p{
+        margin: 0;
+        margin-right: 1rem;
+        line-height: 2rem;
+    }
+}

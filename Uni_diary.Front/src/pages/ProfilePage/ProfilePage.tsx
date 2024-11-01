@@ -15,8 +15,10 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector((state) => state.user.currentUser) as any;
-  const type = useAppSelector((state) => state.user.userType);
+  const [user, type] = useAppSelector((state) => [
+    state.user.currentUser,
+    state.user.userType,
+  ]) as any;
 
   const renderProfile = () => {
     switch (type) {

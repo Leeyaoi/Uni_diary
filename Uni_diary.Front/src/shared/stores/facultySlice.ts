@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { HttpRequest } from "../../api/GenericApi";
 import { RESTMethod } from "../types/RESTMethodEnum";
+import FacultyType from "../types/faculty";
 
 const fetchFaculty = createAsyncThunk("users/auth", async () => {
   try {
@@ -20,7 +21,7 @@ const fetchFaculty = createAsyncThunk("users/auth", async () => {
 interface FacultyState {
   error: string | null;
   loading: boolean;
-  faculties: [];
+  faculties: FacultyType[];
 }
 
 const initialState: FacultyState = {
@@ -33,7 +34,7 @@ export const facultySlice = createSlice({
   name: "faculty",
   initialState,
   reducers: {
-    setFaculties: (state, action: PayloadAction<[]>) => {
+    setFaculties: (state, action: PayloadAction<FacultyType[]>) => {
       state.faculties = action.payload;
       state.error = null;
     },
@@ -48,7 +49,7 @@ export const facultySlice = createSlice({
         state.loading = false;
         facultySlice.caseReducers.setFaculties(
           state,
-          action as PayloadAction<[]>
+          action as PayloadAction<FacultyType[]>
         );
       })
       .addCase(fetchFaculty.rejected, (state, action) => {
@@ -59,4 +60,4 @@ export const facultySlice = createSlice({
 });
 
 export default facultySlice.reducer;
-export const userActions = { ...facultySlice.actions };
+export const facultyActions = { ...facultySlice.actions, fetchFaculty };
