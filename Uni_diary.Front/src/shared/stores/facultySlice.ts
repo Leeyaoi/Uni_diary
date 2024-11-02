@@ -22,12 +22,14 @@ interface FacultyState {
   error: string | null;
   loading: boolean;
   faculties: FacultyType[];
+  currentFacultyId: string;
 }
 
 const initialState: FacultyState = {
   error: null,
   loading: false,
   faculties: [],
+  currentFacultyId: "",
 };
 
 export const facultySlice = createSlice({
@@ -36,6 +38,10 @@ export const facultySlice = createSlice({
   reducers: {
     setFaculties: (state, action: PayloadAction<FacultyType[]>) => {
       state.faculties = action.payload;
+      state.error = null;
+    },
+    setCUrrentFacultyId: (state, action: PayloadAction<string>) => {
+      state.currentFacultyId = action.payload;
       state.error = null;
     },
   },
