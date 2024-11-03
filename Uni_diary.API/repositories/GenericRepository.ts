@@ -51,11 +51,18 @@ export default class GenericRepository {
       include: include,
       offset: (params.page - 1) * params.limit,
       limit: params.limit,
+      order: [["id", "DESC"]],
     });
+    let pageCount = 0;
+    if (count % params.limit == 0) {
+      pageCount = Math.floor(count / params.limit);
+    } else {
+      pageCount = Math.floor(count / params.limit) + 1;
+    }
     const data: PaginatedDto = {
       limit: params.limit,
       pageNum: params.page,
-      pageCount: Math.floor(count / params.limit) + 1,
+      pageCount: pageCount,
       total: count,
       items: rows,
     };

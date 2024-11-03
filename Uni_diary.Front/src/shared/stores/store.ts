@@ -3,6 +3,8 @@ import { persistStore, persistReducer } from "redux-persist";
 import storageSession from "redux-persist/lib/storage/session";
 import { userSlice } from "./userSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { facultySlice } from "./facultySlice";
+import { professionSlice } from "./professionSlice";
 
 const persistConfig = {
   key: "root",
@@ -13,6 +15,8 @@ const persistedReducer = persistReducer(
   persistConfig,
   combineReducers({
     user: userSlice.reducer,
+    faculty: facultySlice.reducer,
+    profession: professionSlice.reducer,
   })
 );
 export const store = configureStore({
