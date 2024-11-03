@@ -132,19 +132,7 @@ const initialState: ProfessionState = {
 export const professionSlice = createSlice({
   name: "profession",
   initialState,
-  reducers: {
-    setProfessions: (
-      state,
-      action: PayloadAction<PaginatedType<ProfessionType>>
-    ) => {
-      state.professions = action.payload;
-      state.error = null;
-    },
-    setProfession: (state, action: PayloadAction<ProfessionType>) => {
-      state.fetchedProfession = action.payload;
-      state.error = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       //fetchProfession
@@ -154,10 +142,8 @@ export const professionSlice = createSlice({
       })
       .addCase(fetchProfession.fulfilled, (state, action) => {
         state.loading = false;
-        professionSlice.caseReducers.setProfessions(
-          state,
-          action as PayloadAction<PaginatedType<ProfessionType>>
-        );
+        state.professions = action.payload;
+        state.error = null;
       })
       .addCase(fetchProfession.rejected, (state, action) => {
         state.loading = false;
@@ -183,10 +169,8 @@ export const professionSlice = createSlice({
       })
       .addCase(getProfessionById.fulfilled, (state, action) => {
         state.loading = false;
-        professionSlice.caseReducers.setProfession(
-          state,
-          action as PayloadAction<ProfessionType>
-        );
+        state.fetchedProfession = action.payload;
+        state.error = null;
       })
       .addCase(getProfessionById.rejected, (state, action) => {
         state.loading = false;

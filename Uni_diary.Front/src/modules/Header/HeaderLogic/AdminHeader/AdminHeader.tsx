@@ -9,7 +9,7 @@ const AdminHeader = () => {
       variant="outlined"
       id="headerLogicButton"
       onClick={() => {
-        navigate("/profession");
+        navigate("/professions");
       }}
     >
       Специальности

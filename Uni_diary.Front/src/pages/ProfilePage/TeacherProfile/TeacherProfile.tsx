@@ -1,7 +1,7 @@
 import React from "react";
 import "./TeacherProfile.scss";
-import { useAppSelector } from "../../shared/stores/store";
-import TeacherType from "../../shared/types/teacher";
+import { useAppSelector } from "../../../shared/stores/store";
+import TeacherType from "../../../shared/types/teacher";
 
 const TeacherProfile = () => {
   const user = useAppSelector((state) => state.user.currentUser) as TeacherType;

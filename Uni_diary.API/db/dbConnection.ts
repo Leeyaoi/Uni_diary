@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
-import { configDotenv } from "dotenv";
+import { config } from "dotenv";
 
-configDotenv({ path: "./Uni_diary.API/.env" });
+config();
 
 export const sequelize = new Sequelize(
   process.env.DB_NAME,

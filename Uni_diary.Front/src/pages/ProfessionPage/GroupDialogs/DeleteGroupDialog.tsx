@@ -1,16 +1,10 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import React from "react";
 import { useAppDispatch } from "../../../shared/stores/store";
 import { professionActions } from "../../../shared/stores/professionSlice";
+import { groupActions } from "../../../shared/stores/groupSlice";
 
-const DeleteProfessionDialog = ({
+const DeleteGroupDialog = ({
   open,
   handleClose,
   id,
@@ -25,6 +19,7 @@ const DeleteProfessionDialog = ({
     <Dialog
       open={open}
       onClose={handleClose}
+      closeAfterTransition={false}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -34,7 +29,7 @@ const DeleteProfessionDialog = ({
       <DialogActions>
         <Button
           onClick={async () => {
-            await dispatch(professionActions.deleteProfession(id));
+            await dispatch(groupActions.deleteGroup(id));
             handleClose();
           }}
         >
@@ -48,4 +43,4 @@ const DeleteProfessionDialog = ({
   );
 };
 
-export default DeleteProfessionDialog;
+export default DeleteGroupDialog;

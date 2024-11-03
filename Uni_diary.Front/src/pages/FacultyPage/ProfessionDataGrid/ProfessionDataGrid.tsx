@@ -12,10 +12,12 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import ProfessionType from "../../shared/types/profession";
-import PaginatedType from "../../shared/types/paginatedModel";
+import ProfessionType from "../../../shared/types/profession";
+import PaginatedType from "../../../shared/types/paginatedModel";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   professions: PaginatedType<ProfessionType>;
@@ -36,6 +38,8 @@ const ProfessionDataGrid = ({
   handleEdit,
   handleDelete,
 }: Props) => {
+  const navigate = useNavigate();
+
   const columns: GridColDef<ProfessionType[][number]>[] = [
     {
       field: "id",
@@ -64,7 +68,7 @@ const ProfessionDataGrid = ({
     {
       field: "actions",
       headerName: "Действия",
-      width: 240,
+      width: 300,
       renderCell: (params) => (
         <>
           <Button
@@ -86,6 +90,15 @@ const ProfessionDataGrid = ({
             id="actionButton"
           >
             <DeleteIcon />
+          </Button>
+          <Button
+            variant="contained"
+            id="actionButton"
+            onClick={() => {
+              navigate(`/profession/${params.id}`);
+            }}
+          >
+            <VisibilityIcon />
           </Button>
         </>
       ),

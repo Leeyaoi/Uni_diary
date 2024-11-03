@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./StudentProfile.scss";
-import StudentType from "../../shared/types/student";
-import { useAppSelector } from "../../shared/stores/store";
+import StudentType from "../../../shared/types/student";
+import { useAppSelector } from "../../../shared/stores/store";
 
 const StudentProfile = () => {
   const user = useAppSelector((state) => state.user.currentUser) as StudentType;

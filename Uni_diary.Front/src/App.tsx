@@ -4,15 +4,29 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import "./index.scss";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import ProfessionPage from "./pages/ProfessionPage/ProfessionPage";
+import Header from "./modules/Header/Header";
+import { Container } from "@mui/material";
+import Footer from "./modules/Footer/Footer";
+import FacultyPage from "./pages/FacultyPage/FacultyPage";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/profession" element={<ProfessionPage />} />
-      </Routes>
+      <Container className="container">
+        <Header />
+        <div id="content">
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/professions" element={<FacultyPage />} />
+            <Route
+              path="/profession/:professionId"
+              element={<ProfessionPage />}
+            />
+          </Routes>
+        </div>
+        <Footer />
+      </Container>
     </BrowserRouter>
   );
 };

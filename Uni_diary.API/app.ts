@@ -3,8 +3,8 @@ import { DbSynchronize } from "./db/dbContext";
 import * as fs from "fs";
 import router from "./routes";
 import * as https from "https";
-var privateKey = fs.readFileSync("./certs/cert.key", "utf8");
-var certificate = fs.readFileSync("./certs/cert.crt", "utf8");
+var privateKey = fs.readFileSync("../certs/cert.key", "utf8");
+var certificate = fs.readFileSync("../certs/cert.crt", "utf8");
 import * as cors from "cors";
 
 var credentials = { key: privateKey, cert: certificate };

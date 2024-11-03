@@ -5,6 +5,7 @@ import { userSlice } from "./userSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { facultySlice } from "./facultySlice";
 import { professionSlice } from "./professionSlice";
+import { groupSlice } from "./groupSlice";
 
 const persistConfig = {
   key: "root",
@@ -17,6 +18,7 @@ const persistedReducer = persistReducer(
     user: userSlice.reducer,
     faculty: facultySlice.reducer,
     profession: professionSlice.reducer,
+    group: groupSlice.reducer,
   })
 );
 export const store = configureStore({
