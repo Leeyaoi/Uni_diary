@@ -67,6 +67,54 @@ const fetchProfession = createAsyncThunk(
   }
 );
 
+const updateProfession = createAsyncThunk(
+  "profession/update",
+  async (newProfession: {
+    id: string;
+    name: string;
+    code: string;
+    jobTitle: string;
+  }) => {
+    try {
+      const response = await HttpRequest<ProfessionType>({
+        uri: `/profession/${newProfession.id}`,
+        method: RESTMethod.Put,
+        item: newProfession,
+      });
+      if (response.code === "error") {
+        return {} as ProfessionType;
+      }
+      return response.data;
+    } catch (error) {
+      return {} as ProfessionType;
+    }
+  }
+);
+
+const createProfession = createAsyncThunk(
+  "profession/create",
+  async (newProfession: {
+    facultyId: string;
+    name: string;
+    code: string;
+    jobTitle: string;
+  }) => {
+    try {
+      const response = await HttpRequest<ProfessionType>({
+        uri: `/profession/post`,
+        method: RESTMethod.Post,
+        item: newProfession,
+      });
+      if (response.code === "error") {
+        return {} as PaginatedType<ProfessionType>;
+      }
+      return response.data;
+    } catch (error) {
+      return {} as PaginatedType<ProfessionType>;
+    }
+  }
+);
+
 interface ProfessionState {
   error: string | null;
   loading: boolean;
@@ -143,6 +191,32 @@ export const professionSlice = createSlice({
       .addCase(getProfessionById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      //updateProfession
+      .addCase(updateProfession.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfession.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(updateProfession.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      //createProfession
+      .addCase(createProfession.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createProfession.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(createProfession.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
@@ -153,4 +227,6 @@ export const professionActions = {
   fetchProfession,
   deleteProfession,
   getProfessionById,
+  updateProfession,
+  createProfession,
 };

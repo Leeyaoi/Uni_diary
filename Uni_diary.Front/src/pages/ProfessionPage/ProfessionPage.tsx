@@ -63,7 +63,7 @@ const ProfessionPage = () => {
         facultyId: facultyId,
       })
     );
-  }, [facultyId, limit, page, openDelete, openEdit]);
+  }, [facultyId, limit, page, openDelete, openEdit, openCreate]);
 
   const handleLimitChange = (event: SelectChangeEvent) => {
     setLimit(event.target.value as unknown as number);
@@ -126,7 +126,11 @@ const ProfessionPage = () => {
             handleEdit={handleOpenEdit}
             handleDelete={handleOpenDelete}
           />
-          <CreateProfessionDialog open={openCreate} handleClose={handleClose} />
+          <CreateProfessionDialog
+            open={openCreate}
+            handleClose={handleClose}
+            facultyId={facultyId}
+          />
           <EditProfessionDialog
             open={openEdit}
             handleClose={handleClose}

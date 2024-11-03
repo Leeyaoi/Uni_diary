@@ -117,6 +117,12 @@ const ProfessionDataGrid = ({
             </MenuItem>
           </Select>
         </FormControl>
+        <p id="total_data">
+          Всего записей:{" "}
+          {professions == ({} as PaginatedType<ProfessionType>)
+            ? 0
+            : professions.total}
+        </p>
         <div id="pagination-control">
           <Button
             variant="contained"
@@ -142,7 +148,7 @@ const ProfessionDataGrid = ({
             {professions == ({} as PaginatedType<ProfessionType>)
               ? 0
               : professions.pageNum}{" "}
-            из{" "}
+            ..{" "}
             {professions == ({} as PaginatedType<ProfessionType>)
               ? 0
               : professions.pageCount}

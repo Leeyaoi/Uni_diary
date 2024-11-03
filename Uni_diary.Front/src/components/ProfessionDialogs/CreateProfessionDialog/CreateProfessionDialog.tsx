@@ -7,52 +7,84 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import { useAppDispatch } from "../../../shared/stores/store";
+import { professionActions } from "../../../shared/stores/professionSlice";
 
 const CreateProfessionDialog = ({
   open,
   handleClose,
+  facultyId,
 }: {
   open: boolean;
   handleClose: () => void;
+  facultyId: string;
 }) => {
+  const dispatch = useAppDispatch();
+
+  const [name, setName] = useState("");
+  const [code, setCode] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+
   return (
     <Dialog
       open={open}
       onClose={handleClose}
       PaperProps={{
         component: "form",
-        onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+        onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
-          const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries((formData as any).entries());
-          const email = formJson.email;
-          console.log(email);
+          await dispatch(
+            professionActions.createProfession({
+              name: name,
+              code: code,
+              jobTitle: jobTitle,
+              facultyId: facultyId,
+            })
+          );
           handleClose();
         },
       }}
     >
-      <DialogTitle>Subscribe</DialogTitle>
+      <DialogTitle>Создать</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          To subscribe to this website, please enter your email address here. We
-          will send updates occasionally.
-        </DialogContentText>
         <TextField
-          autoFocus
           required
           margin="dense"
-          id="name"
-          name="email"
-          label="Email Address"
-          type="email"
           fullWidth
           variant="standard"
+          label="Название"
+          value={name}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setName(event.target.value);
+          }}
+        />
+        <TextField
+          required
+          margin="dense"
+          fullWidth
+          variant="standard"
+          label="Код специальности"
+          value={code}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setCode(event.target.value);
+          }}
+        />
+        <TextField
+          required
+          margin="dense"
+          fullWidth
+          variant="standard"
+          label="Профессия"
+          value={jobTitle}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setJobTitle(event.target.value);
+          }}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button type="submit">Subscribe</Button>
+        <Button onClick={handleClose}>Отмена</Button>
+        <Button type="submit">Сохранить</Button>
       </DialogActions>
     </Dialog>
   );

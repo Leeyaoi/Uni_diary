@@ -21,9 +21,6 @@ const EditProfessionDialog = ({
   id: string;
 }) => {
   const dispatch = useAppDispatch();
-  const fetchedProfession = useAppSelector(
-    (state) => state.profession.fetchedProfession
-  );
 
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
@@ -50,10 +47,14 @@ const EditProfessionDialog = ({
         component: "form",
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
-          const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries((formData as any).entries());
-          const email = formJson.email;
-          console.log(email);
+          dispatch(
+            professionActions.updateProfession({
+              id: id,
+              code: code,
+              name: name,
+              jobTitle: jobTitle,
+            })
+          );
           handleClose();
         },
       }}
