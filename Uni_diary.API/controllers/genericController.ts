@@ -1,7 +1,6 @@
 import * as express from "express";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4, validate } from "uuid";
 import GenericRepository from "../repositories/GenericRepository";
-import { ModelStatic, Model } from "sequelize";
 import {
   checkSchema,
   ResultFactory,
@@ -91,12 +90,15 @@ class GenericController<CreateDto, UpdateDto> {
     this.controller.get(
       "/:id",
       async (
-        req: express.Request<{ id: uuidv4 }, uuidv4, {}>,
+        req: express.Request<{ id: string }, uuidv4, {}>,
         res: express.Response,
         next
       ) => {
         const id = req.params.id;
-
+        if (!validate(id)) {
+          res.sendStatus(400);
+          return;
+        }
         const data = await this.repo.getById(id);
         if (data != "null") {
           res.send(data);
@@ -111,11 +113,15 @@ class GenericController<CreateDto, UpdateDto> {
     this.controller.delete(
       "/:id",
       async (
-        req: express.Request<{ id: uuidv4 }, uuidv4, {}>,
+        req: express.Request<{ id: string }, uuidv4, {}>,
         res: express.Response,
         next
       ) => {
         const id = req.params.id;
+        if (!validate(id)) {
+          res.sendStatus(400);
+          return;
+        }
 
         const data = await this.repo.delete(id);
         if (data) {
@@ -133,17 +139,22 @@ class GenericController<CreateDto, UpdateDto> {
       this.urlencodedParser,
       checkSchema(this.updateValidator),
       async (
-        req: express.Request<{ id: uuidv4 }, uuidv4, UpdateDto>,
+        req: express.Request<{ id: string }, uuidv4, UpdateDto>,
         res: express.Response,
         next
       ) => {
+        const id = req.params.id;
+        if (!validate(id)) {
+          res.sendStatus(400);
+          return;
+        }
+
         const errors: string[] = myValidationResult(req).array();
         if (errors.length != 0) {
           next(createHttpError(400, JSON.stringify(errors)));
           return;
         }
 
-        const id = req.params.id;
         const newModel = req.body as object;
 
         const data = await this.repo.update(newModel, id);

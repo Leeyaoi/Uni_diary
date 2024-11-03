@@ -2,7 +2,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   TextField,
   DialogActions,
   Button,
@@ -30,6 +29,7 @@ const CreateProfessionDialog = ({
     <Dialog
       open={open}
       onClose={handleClose}
+      closeAfterTransition={false}
       PaperProps={{
         component: "form",
         onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {

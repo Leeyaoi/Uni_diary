@@ -1,6 +1,6 @@
 import React from "react";
-import { useAppSelector } from "../../shared/stores/store";
-import AdminType from "../../shared/types/admin";
+import { useAppSelector } from "../../../shared/stores/store";
+import AdminType from "../../../shared/types/admin";
 import "./AdminProfile.scss";
 
 const AdminProfile = () => {

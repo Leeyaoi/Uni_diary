@@ -1,22 +1,13 @@
-import {
-  Button,
-  Container,
-  FormControl,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Header from "../../modules/Header/Header";
-import Footer from "../../modules/Footer/Footer";
-import "./ProfessionPage.scss";
+import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../shared/stores/store";
-import { facultyActions } from "../../shared/stores/facultySlice";
 import { professionActions } from "../../shared/stores/professionSlice";
-import CreateProfessionDialog from "../../components/ProfessionDialogs/CreateProfessionDialog/CreateProfessionDialog";
-import ProfessionDataGrid from "../../components/ProfessionDataGrid/ProfessionDataGrid";
-import EditProfessionDialog from "../../components/ProfessionDialogs/EditProfessionDialog/EditProfessionDialog";
-import DeleteProfessionDialog from "../../components/ProfessionDialogs/DeleteProfessionDialog/DeleteProfessionDialog";
+import { Button, SelectChangeEvent } from "@mui/material";
+import { groupActions } from "../../shared/stores/groupSlice";
+import GroupDataGrid from "./GroupDataGrid/GroupDataGrid";
+import CreateGroupDialog from "./GroupDialogs/CreateGroupDialog";
+import EditGroupDialog from "./GroupDialogs/EditDeleteDialog";
+import DeleteGroupDialog from "./GroupDialogs/DeleteGroupDialog";
 
 const ProfessionPage = () => {
   const [limit, setLimit] = useState(5);
@@ -46,105 +37,63 @@ const ProfessionPage = () => {
     setOpenEdit(false);
   };
 
+  const { professionId } = useParams();
   const dispatch = useAppDispatch();
-  const faculties = useAppSelector((state) => state.faculty.faculties);
-  const facultyId = useAppSelector((state) => state.faculty.currentFacultyId);
-  const professions = useAppSelector((state) => state.profession.professions);
+  const fetchedProfession = useAppSelector(
+    (state) => state.profession.fetchedProfession
+  );
+  const groups = useAppSelector((state) => state.group.groups);
 
   useEffect(() => {
-    dispatch(facultyActions.fetchFaculty());
+    dispatch(professionActions.getProfessionById(professionId ?? ""));
   }, []);
 
   useEffect(() => {
     dispatch(
-      professionActions.fetchProfession({
+      groupActions.fetchGroups({
         limit: limit,
         page: page,
-        facultyId: facultyId,
+        professionId: professionId ?? "",
       })
     );
-  }, [facultyId, limit, page, openDelete, openEdit, openCreate]);
+  }, [limit, page, openDelete, openEdit, openCreate]);
 
   const handleLimitChange = (event: SelectChangeEvent) => {
     setLimit(event.target.value as unknown as number);
     setPage(1);
   };
 
-  const handleFacultyChange = (event: SelectChangeEvent) => {
-    dispatch(facultyActions.setCUrrentFacultyId(event.target.value));
-  };
-
-  const renderFaculties = () => {
-    const items: any[] = [];
-    for (let i in faculties) {
-      let value = faculties[i];
-      if (value == null) {
-        continue;
-      }
-      items.push(
-        <MenuItem
-          key={`${value.id}`}
-          value={value.id}
-        >{`${value.name}`}</MenuItem>
-      );
-    }
-    return items;
-  };
-
   return (
-    <Container className="container">
-      <Header />
-      <div id="content">
-        <div id="profession">
-          <div id="facultySelect">
-            <p>Факультет:</p>
-            <FormControl fullWidth variant="standard">
-              <Select
-                className="text-input"
-                value={facultyId}
-                onChange={handleFacultyChange}
-              >
-                {renderFaculties()}
-              </Select>
-            </FormControl>
-          </div>
-          <Button
-            id="add-profession"
-            variant="contained"
-            onClick={() => {
-              handleOpenCreate();
-            }}
-          >
-            Добавить специальность
-          </Button>
-          <ProfessionDataGrid
-            professions={professions}
-            limit={limit}
-            handleLimitChange={handleLimitChange}
-            page={page}
-            setPage={setPage}
-            handleEdit={handleOpenEdit}
-            handleDelete={handleOpenDelete}
-          />
-          <CreateProfessionDialog
-            open={openCreate}
-            handleClose={handleClose}
-            facultyId={facultyId}
-          />
-          <EditProfessionDialog
-            open={openEdit}
-            handleClose={handleClose}
-            id={id}
-          />
-          <DeleteProfessionDialog
-            open={openDelete}
-            handleClose={handleClose}
-            id={id}
-          />
-        </div>
-      </div>
-      <Footer />
-    </Container>
+    <div id="profession">
+      <p>
+        {fetchedProfession.code} {fetchedProfession.name}
+      </p>
+      <Button
+        id="add-profession"
+        variant="contained"
+        onClick={() => {
+          handleOpenCreate();
+        }}
+      >
+        Добавить группу
+      </Button>
+      <GroupDataGrid
+        groups={groups}
+        limit={limit}
+        handleLimitChange={handleLimitChange}
+        page={page}
+        setPage={setPage}
+        handleEdit={handleOpenEdit}
+        handleDelete={handleOpenDelete}
+      />
+      <CreateGroupDialog
+        open={openCreate}
+        handleClose={handleClose}
+        professionId={professionId ?? ""}
+      />
+      <EditGroupDialog open={openEdit} handleClose={handleClose} id={id} />
+      <DeleteGroupDialog open={openDelete} handleClose={handleClose} id={id} />
+    </div>
   );
 };
 

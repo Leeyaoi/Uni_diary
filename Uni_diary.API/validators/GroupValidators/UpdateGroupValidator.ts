@@ -5,7 +5,7 @@ import { uuidValidate } from "../uuidValidate";
 export const UpdateGroupValidator: Schema = {
   year: { notEmpty: true, optional: true },
   num: { notEmpty: true, optional: true },
-  proffesionId: {
+  professionId: {
     notEmpty: true,
     optional: true,
     custom: {

@@ -75,6 +75,7 @@
     //Group files
     "DTOs/GroupDtos/CreateGroupDto.ts",
     "DTOs/GroupDtos/UpdateGroupDto.ts",
+    "repositories/groupRepository.ts",
     "validators/GroupValidators/CreateGroupValidator.ts",
     "validators/GroupValidators/UpdateGroupValidator.ts",
     "controllers/groupController.ts",

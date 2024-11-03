@@ -8,8 +8,9 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 module.exports = {
   entry: "./src/index.tsx",
   output: {
-    filename: "bundle.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
+    publicPath: "/",
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".css", ".scss"],
@@ -40,6 +41,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",
+      title: "Дневник БРУ",
     }),
     new webpack.DefinePlugin({
       "process.env": JSON.stringify(dotenv.parsed),
