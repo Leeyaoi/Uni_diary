@@ -14,12 +14,13 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import PaginatedType from "../../../shared/types/paginatedModel";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
 import { useNavigate } from "react-router-dom";
-import GroupType from "../../../shared/types/group";
+import StudentType from "../../../shared/types/student";
 
 interface Props {
-  groups: PaginatedType<GroupType>;
+  students: PaginatedType<StudentType>;
   limit: number;
   handleLimitChange: (event: SelectChangeEvent) => void;
   page: number;
@@ -28,8 +29,8 @@ interface Props {
   handleDelete: (id: string) => void;
 }
 
-const GroupDataGrid = ({
-  groups,
+const StudentDataGrid = ({
+  students,
   limit,
   handleLimitChange,
   page,
@@ -39,29 +40,51 @@ const GroupDataGrid = ({
 }: Props) => {
   const navigate = useNavigate();
 
-  const columns: GridColDef<GroupType[][number]>[] = [
+  const columns: GridColDef<StudentType[][number]>[] = [
     {
-      field: "id",
-      headerName: "ID",
-      width: 300,
-      editable: false,
-    },
-    {
-      field: "year",
-      headerName: "Год",
+      field: "login",
+      headerName: "Логин",
       width: 130,
       editable: false,
+      renderCell: (params) => {
+        return <>{params.row.user.login}</>;
+      },
     },
     {
-      field: "num",
-      headerName: "Номер",
+      field: "password",
+      headerName: "Пароль",
+      width: 130,
+      editable: false,
+      renderCell: (params) => {
+        return <>{params.row.user.password}</>;
+      },
+    },
+    {
+      field: "name",
+      headerName: "Имя",
       width: 150,
       editable: false,
     },
     {
+      field: "surname",
+      headerName: "Фамилия",
+      width: 150,
+      editable: false,
+    },
+    {
+      field: "budget",
+      headerName: "Бюджет",
+      width: 100,
+      editable: false,
+      renderCell: (params) => {
+        return <>{params.row.budget ? <CheckIcon /> : <CloseIcon />}</>;
+      },
+      cellClassName: "budgetCell",
+    },
+    {
       field: "actions",
       headerName: "Действия",
-      width: 300,
+      width: 200,
       renderCell: (params) => (
         <>
           <Button
@@ -84,15 +107,6 @@ const GroupDataGrid = ({
           >
             <DeleteIcon />
           </Button>
-          <Button
-            variant="contained"
-            id="actionButton"
-            onClick={() => {
-              navigate(`/profession/${params.id}`);
-            }}
-          >
-            <VisibilityIcon />
-          </Button>
         </>
       ),
     },
@@ -101,7 +115,7 @@ const GroupDataGrid = ({
     <>
       <div>
         <DataGrid
-          rows={groups ? groups.items : []}
+          rows={students ? students.items : []}
           columns={columns}
           disableRowSelectionOnClick
           hideFooter={true}
@@ -125,7 +139,7 @@ const GroupDataGrid = ({
         </FormControl>
         <p id="total_data">
           Всего записей:{" "}
-          {groups == ({} as PaginatedType<GroupType>) ? 0 : groups.total}
+          {students == ({} as PaginatedType<StudentType>) ? 0 : students.total}
         </p>
         <div id="pagination-control">
           <Button
@@ -149,14 +163,19 @@ const GroupDataGrid = ({
             <KeyboardArrowLeftIcon />
           </Button>
           <p>
-            {groups == ({} as PaginatedType<GroupType>) ? 0 : groups.pageNum} ..{" "}
-            {groups == ({} as PaginatedType<GroupType>) ? 0 : groups.pageCount}
+            {students == ({} as PaginatedType<StudentType>)
+              ? 0
+              : students.pageNum}{" "}
+            ..{" "}
+            {students == ({} as PaginatedType<StudentType>)
+              ? 0
+              : students.pageCount}
           </p>
           <Button
             variant="contained"
             onClick={() => {
-              if (page + 1 > groups.pageCount) {
-                setPage(groups.pageCount);
+              if (page + 1 > students.pageCount) {
+                setPage(students.pageCount);
               } else {
                 setPage(page + 1);
               }
@@ -167,7 +186,7 @@ const GroupDataGrid = ({
           <Button
             variant="contained"
             onClick={() => {
-              setPage(groups.pageCount);
+              setPage(students.pageCount);
             }}
           >
             <KeyboardDoubleArrowRightIcon />
@@ -178,4 +197,4 @@ const GroupDataGrid = ({
   );
 };
 
-export default GroupDataGrid;
+export default StudentDataGrid;

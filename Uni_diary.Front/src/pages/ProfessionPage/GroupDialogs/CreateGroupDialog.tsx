@@ -55,7 +55,11 @@ const CreateGroupDialog = ({
           label="Год"
           value={year}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setYear(Number(event.target.value));
+            let newValue = event.target.value as unknown as number;
+            if (newValue < 0) {
+              newValue = 0;
+            }
+            setYear(newValue);
           }}
         />
         <TextField
@@ -67,7 +71,11 @@ const CreateGroupDialog = ({
           label="Номер"
           value={num}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setNum(Number(event.target.value));
+            let newValue = event.target.value as unknown as number;
+            if (newValue < 0) {
+              newValue = 0;
+            }
+            setNum(newValue);
           }}
         />
       </DialogContent>
