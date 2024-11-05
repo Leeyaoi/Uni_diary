@@ -1,9 +1,9 @@
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import React from "react";
 import { useAppDispatch } from "../../../shared/stores/store";
-import { groupActions } from "../../../shared/stores/groupSlice";
+import { studentActions } from "../../../shared/stores/studentSlice";
 
-const DeleteGroupDialog = ({
+const DeleteStudentDialog = ({
   open,
   handleClose,
   id,
@@ -28,7 +28,7 @@ const DeleteGroupDialog = ({
       <DialogActions>
         <Button
           onClick={async () => {
-            await dispatch(groupActions.deleteGroup(id));
+            await dispatch(studentActions.deleteStudent(id));
             handleClose();
           }}
         >
@@ -42,4 +42,4 @@ const DeleteGroupDialog = ({
   );
 };
 
-export default DeleteGroupDialog;
+export default DeleteStudentDialog;
