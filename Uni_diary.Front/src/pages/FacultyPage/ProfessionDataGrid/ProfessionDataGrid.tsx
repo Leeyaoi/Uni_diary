@@ -42,12 +42,6 @@ const ProfessionDataGrid = ({
 
   const columns: GridColDef<ProfessionType[][number]>[] = [
     {
-      field: "id",
-      headerName: "ID",
-      width: 300,
-      editable: false,
-    },
-    {
       field: "name",
       headerName: "Название",
       width: 130,

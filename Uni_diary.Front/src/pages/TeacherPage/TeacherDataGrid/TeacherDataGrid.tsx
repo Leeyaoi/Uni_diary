@@ -1,5 +1,5 @@
 import React from "react";
-import "./StudentDataGrid.scss";
+import "./TeacherDataGrid.scss";
 import {
   Button,
   FormControl,
@@ -15,13 +15,11 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import PaginatedType from "../../../shared/types/paginatedModel";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CloseIcon from "@mui/icons-material/Close";
-import CheckIcon from "@mui/icons-material/Check";
 import { useNavigate } from "react-router-dom";
-import StudentType from "../../../shared/types/student";
+import TeacherType from "../../../shared/types/teacher";
 
 interface Props {
-  students: PaginatedType<StudentType>;
+  teachers: PaginatedType<TeacherType>;
   limit: number;
   handleLimitChange: (event: SelectChangeEvent) => void;
   page: number;
@@ -30,8 +28,8 @@ interface Props {
   handleDelete: (id: string) => void;
 }
 
-const StudentDataGrid = ({
-  students,
+const TeacherDataGrid = ({
+  teachers,
   limit,
   handleLimitChange,
   page,
@@ -39,9 +37,7 @@ const StudentDataGrid = ({
   handleEdit,
   handleDelete,
 }: Props) => {
-  const navigate = useNavigate();
-
-  const columns: GridColDef<StudentType[][number]>[] = [
+  const columns: GridColDef<TeacherType[][number]>[] = [
     {
       field: "login",
       headerName: "Логин",
@@ -73,19 +69,15 @@ const StudentDataGrid = ({
       editable: false,
     },
     {
-      field: "budget",
-      headerName: "Бюджет",
-      width: 100,
+      field: "jobTitle",
+      headerName: "Должность",
+      width: 200,
       editable: false,
-      renderCell: (params) => {
-        return <>{params.row.budget ? <CheckIcon /> : <CloseIcon />}</>;
-      },
-      cellClassName: "budgetCell",
     },
     {
       field: "actions",
       headerName: "Действия",
-      width: 200,
+      width: 300,
       renderCell: (params) => (
         <>
           <Button
@@ -116,7 +108,7 @@ const StudentDataGrid = ({
     <>
       <div>
         <DataGrid
-          rows={students ? students.items : []}
+          rows={teachers ? teachers.items : []}
           columns={columns}
           disableRowSelectionOnClick
           hideFooter={true}
@@ -140,7 +132,7 @@ const StudentDataGrid = ({
         </FormControl>
         <p id="total_data">
           Всего записей:{" "}
-          {students == ({} as PaginatedType<StudentType>) ? 0 : students.total}
+          {teachers == ({} as PaginatedType<TeacherType>) ? 0 : teachers.total}
         </p>
         <div id="pagination-control">
           <Button
@@ -164,19 +156,19 @@ const StudentDataGrid = ({
             <KeyboardArrowLeftIcon />
           </Button>
           <p>
-            {students == ({} as PaginatedType<StudentType>)
+            {teachers == ({} as PaginatedType<TeacherType>)
               ? 0
-              : students.pageNum}{" "}
+              : teachers.pageNum}{" "}
             ..{" "}
-            {students == ({} as PaginatedType<StudentType>)
+            {teachers == ({} as PaginatedType<TeacherType>)
               ? 0
-              : students.pageCount}
+              : teachers.pageCount}
           </p>
           <Button
             variant="contained"
             onClick={() => {
-              if (page + 1 > students.pageCount) {
-                setPage(students.pageCount);
+              if (page + 1 > teachers.pageCount) {
+                setPage(teachers.pageCount);
               } else {
                 setPage(page + 1);
               }
@@ -187,7 +179,7 @@ const StudentDataGrid = ({
           <Button
             variant="contained"
             onClick={() => {
-              setPage(students.pageCount);
+              setPage(teachers.pageCount);
             }}
           >
             <KeyboardDoubleArrowRightIcon />
@@ -198,4 +190,4 @@ const StudentDataGrid = ({
   );
 };
 
-export default StudentDataGrid;
+export default TeacherDataGrid;

@@ -31,6 +31,7 @@ export const DbSynchronize = (force = false): Promise<Sequelize> => {
   Student.belongsTo(User);
 
   Teacher.hasMany(Class);
+  Teacher.belongsTo(User);
 
   Course.hasMany(Attendance);
   Course.hasMany(Mark);

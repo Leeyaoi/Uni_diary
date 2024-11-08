@@ -1,6 +1,5 @@
 import * as express from "express";
 import { v4 as uuidv4 } from "uuid";
-import { Teacher } from "../dbModels/teacher";
 import CreateTeacherDto from "../DTOs/TeacherDtos/CreateTeacherDto";
 import UpdateTeacherDto from "../DTOs/TeacherDtos/UpdateTeacherDto";
 import { CreateTeacherValidator } from "../validators/TeacherValidators/CreateTeacherValidator";
@@ -8,10 +7,10 @@ import { UpdateTeacherValidator } from "../validators/TeacherValidators/UpdateTe
 import GenericController, { myValidationResult } from "./genericController";
 import { checkSchema } from "express-validator";
 import createHttpError = require("http-errors");
-import GenericRepository from "../repositories/GenericRepository";
 import { UserIsTaken } from "../repositories/userRepository";
+import TeacherRepository from "../repositories/teacherRepository";
 
-const repo = new GenericRepository(Teacher);
+const repo = new TeacherRepository();
 
 const teacherController = new GenericController<
   CreateTeacherDto,

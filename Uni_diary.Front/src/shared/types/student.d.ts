@@ -8,7 +8,7 @@ type StudentType = {
   surname: string;
   budget: boolean;
   group: GroupType;
-  user: { login: string; password: string };
+  user: { id: string; login: string; password: string };
 };
 
 export default StudentType;

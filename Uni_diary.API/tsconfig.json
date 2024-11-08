@@ -113,6 +113,7 @@
     //Teacher files
     "DTOs/TeacherDtos/CreateTeacherDto.ts",
     "DTOs/TeacherDtos/UpdateTeacherDto.ts",
+    "repositories/teacherRepository.ts",
     "validators/TeacherValidators/CreateTeacherValidator.ts",
     "validators/TeacherValidators/UpdateTeacherValidator.ts",
     "controllers/teacherController.ts",

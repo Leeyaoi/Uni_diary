@@ -67,14 +67,21 @@ const fetchStudents = createAsyncThunk(
 const updateStudent = createAsyncThunk(
   "student/update",
   async (newStudent: {
+    id: string;
     name: string;
     surname: string;
     budget: boolean;
-    login: string;
-    password: string;
-    id: string;
+    user: { id: string; login: string; password: string };
   }) => {
     try {
+      const userResponse = await HttpRequest<StudentType>({
+        uri: `/user/${newStudent.user.id}`,
+        method: RESTMethod.Put,
+        item: newStudent.user,
+      });
+      if (userResponse.code === "error") {
+        return {} as StudentType;
+      }
       const response = await HttpRequest<StudentType>({
         uri: `/student/${newStudent.id}`,
         method: RESTMethod.Put,
@@ -139,7 +146,7 @@ const initialState: StudentState = {
 };
 
 export const studentSlice = createSlice({
-  name: "group",
+  name: "student",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
