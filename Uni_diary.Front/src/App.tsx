@@ -8,6 +8,7 @@ import Header from "./modules/Header/Header";
 import { Container } from "@mui/material";
 import Footer from "./modules/Footer/Footer";
 import FacultyPage from "./pages/FacultyPage/FacultyPage";
+import TeacherPage from "./pages/TeacherPage/TeacherPage";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/professions" element={<FacultyPage />} />
+            <Route path="/teachers" element={<TeacherPage />} />
             <Route
               path="/profession/:professionId"
               element={<ProfessionPage />}

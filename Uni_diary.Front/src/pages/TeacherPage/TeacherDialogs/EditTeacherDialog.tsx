@@ -5,15 +5,13 @@ import {
   TextField,
   DialogActions,
   Button,
-  Checkbox,
-  FormControlLabel,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../shared/stores/store";
-import { studentActions } from "../../../shared/stores/studentSlice";
-import StudentType from "../../../shared/types/student";
+import { teacherActions } from "../../../shared/stores/teacherSlice";
+import TeacherType from "../../../shared/types/teacher";
 
-const EditStudentDialog = ({
+const EditTeacherDialog = ({
   open,
   handleClose,
   id,
@@ -26,19 +24,19 @@ const EditStudentDialog = ({
 
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
-  const [budget, setBudget] = useState(true);
+  const [jobTitle, setJobTitle] = useState("");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [userid, setUserid] = useState("");
 
   useEffect(() => {
     if (id != "") {
-      dispatch(studentActions.getStudentById(id)).then((value) => {
-        const item = value.payload as StudentType;
-        if (item != ({} as StudentType)) {
+      dispatch(teacherActions.getTeacherById(id)).then((value) => {
+        const item = value.payload as TeacherType;
+        if (item != ({} as TeacherType)) {
           setName(item.name);
           setSurname(item.surname);
-          setBudget(item.budget);
+          setJobTitle(item.jobTitle);
           setLogin(item.user.login);
           setPassword(item.user.password);
           setUserid(item.user.id);
@@ -57,11 +55,11 @@ const EditStudentDialog = ({
         onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
           await dispatch(
-            studentActions.updateStudent({
+            teacherActions.updateTeacher({
               id: id,
               name: name,
               surname: surname,
-              budget: budget,
+              jobTitle: jobTitle,
               user: {
                 login: login,
                 password: password,
@@ -97,16 +95,16 @@ const EditStudentDialog = ({
             setSurname(event.target.value);
           }}
         />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={budget}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setBudget(event.target.checked);
-              }}
-            />
-          }
-          label="Бюджет"
+        <TextField
+          required
+          margin="dense"
+          fullWidth
+          variant="standard"
+          label="Должность"
+          value={jobTitle}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setJobTitle(event.target.value);
+          }}
         />
         <TextField
           required
@@ -139,4 +137,4 @@ const EditStudentDialog = ({
   );
 };
 
-export default EditStudentDialog;
+export default EditTeacherDialog;

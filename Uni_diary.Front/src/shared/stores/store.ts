@@ -7,6 +7,7 @@ import { facultySlice } from "./facultySlice";
 import { professionSlice } from "./professionSlice";
 import { groupSlice } from "./groupSlice";
 import { studentSlice } from "./studentSlice";
+import { teacherSlice } from "./teacherSlice";
 
 const persistConfig = {
   key: "root",
@@ -21,6 +22,7 @@ const persistedReducer = persistReducer(
     profession: professionSlice.reducer,
     group: groupSlice.reducer,
     student: studentSlice.reducer,
+    teacher: teacherSlice.reducer,
   })
 );
 export const store = configureStore({
