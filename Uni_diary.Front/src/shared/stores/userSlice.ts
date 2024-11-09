@@ -31,6 +31,7 @@ interface UserState {
   error: string | null;
   loading: boolean;
   userType: userTypeEnum | null;
+  loggedIn: boolean;
 }
 
 const initialState: UserState = {
@@ -38,6 +39,7 @@ const initialState: UserState = {
   error: null,
   loading: false,
   userType: null,
+  loggedIn: false,
 };
 
 export const userSlice = createSlice({
@@ -52,6 +54,7 @@ export const userSlice = createSlice({
       }
 
       const { admin, teacher, student } = action.payload;
+      state.loggedIn = true;
 
       if (admin) {
         state.currentUser = admin;
@@ -65,12 +68,14 @@ export const userSlice = createSlice({
       } else {
         state.currentUser = null;
         state.userType = null;
+        state.loggedIn = false;
       }
     },
     clearUser: (state) => {
       state.userType = null;
       state.currentUser = null;
       state.error = null;
+      state.loggedIn = false;
     },
   },
   extraReducers: (builder) => {
