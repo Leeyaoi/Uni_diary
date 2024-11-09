@@ -1,5 +1,5 @@
 import { Admin } from "../dbModels/admin";
-import { v4 as uuidv4, validate } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import GenericRepository from "./GenericRepository";
 import { WhereOptions } from "sequelize";
 import { User } from "../dbModels/user";
