@@ -37,6 +37,7 @@
     //Admin files
     "DTOs/AdminDtos/CreateAdminDto.ts",
     "DTOs/AdminDtos/UpdateAdminDto.ts",
+    "repositories/adminRepository.ts",
     "validators/AdminValidators/CreateAdminValidator.ts",
     "validators/AdminValidators/UpdateAdminValidator.ts",
     "controllers/adminController.ts",

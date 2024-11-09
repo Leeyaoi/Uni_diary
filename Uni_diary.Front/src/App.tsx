@@ -61,7 +61,7 @@ const App = () => {
             onClose={toggleDrawer(false)}
           >
             <ListItem>
-              <ListItemButton onClick={toggleDrawer(false)}>
+              <ListItemButton id="closeDrawer" onClick={toggleDrawer(false)}>
                 <CloseIcon />
               </ListItemButton>
             </ListItem>
