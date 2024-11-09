@@ -1,20 +1,47 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import "./index.scss";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import ProfessionPage from "./pages/ProfessionPage/ProfessionPage";
 import Header from "./modules/Header/Header";
-import { Container } from "@mui/material";
+import {
+  Box,
+  Container,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import Drawer from "@mui/material/Drawer";
 import Footer from "./modules/Footer/Footer";
 import FacultyPage from "./pages/FacultyPage/FacultyPage";
 import TeacherPage from "./pages/TeacherPage/TeacherPage";
+import CloseIcon from "@mui/icons-material/Close";
+import DrawerMenuLogic from "./modules/DrawerMenuLogic/DrawerMenuLogic";
+import { useAppSelector } from "./shared/stores/store";
 
 const App = () => {
+  const [open, setOpen] = React.useState(true);
+
+  const loggedIn = useAppSelector((state) => state.user.loggedIn);
+
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
+  };
+  useEffect(() => {
+    if (window.location.pathname == "/profile") {
+      setOpen(true);
+    }
+  }, [window.location]);
+
   return (
     <BrowserRouter>
       <Container className="container">
-        <Header />
+        <Header setOpen={setOpen} open={open} />
         <div id="content">
           <Routes>
             <Route path="/login" element={<LoginPage />} />
@@ -26,6 +53,21 @@ const App = () => {
               element={<ProfessionPage />}
             />
           </Routes>
+          <Drawer
+            variant="persistent"
+            anchor="left"
+            id="menu"
+            open={loggedIn && open}
+            onClose={toggleDrawer(false)}
+          >
+            <ListItem>
+              <ListItemButton onClick={toggleDrawer(false)}>
+                <CloseIcon />
+              </ListItemButton>
+            </ListItem>
+            <Divider />
+            <DrawerMenuLogic />
+          </Drawer>
         </div>
         <Footer />
       </Container>
