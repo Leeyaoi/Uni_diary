@@ -23,6 +23,7 @@ import TeacherPage from "./pages/TeacherPage/TeacherPage";
 import CloseIcon from "@mui/icons-material/Close";
 import DrawerMenuLogic from "./modules/DrawerMenuLogic/DrawerMenuLogic";
 import { useAppSelector } from "./shared/stores/store";
+import AdminPage from "./pages/AdminPage/AdminPage";
 
 const App = () => {
   const [open, setOpen] = React.useState(true);
@@ -48,6 +49,7 @@ const App = () => {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/professions" element={<FacultyPage />} />
             <Route path="/teachers" element={<TeacherPage />} />
+            <Route path="/admins" element={<AdminPage />} />
             <Route
               path="/profession/:professionId"
               element={<ProfessionPage />}
@@ -61,12 +63,12 @@ const App = () => {
             onClose={toggleDrawer(false)}
           >
             <ListItem>
-              <ListItemButton onClick={toggleDrawer(false)}>
+              <ListItemButton id="closeDrawer" onClick={toggleDrawer(false)}>
                 <CloseIcon />
               </ListItemButton>
             </ListItem>
             <Divider />
-            <DrawerMenuLogic />
+            <DrawerMenuLogic setOpen={setOpen} />
           </Drawer>
         </div>
         <Footer />

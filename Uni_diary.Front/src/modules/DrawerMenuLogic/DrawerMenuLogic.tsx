@@ -1,13 +1,17 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useAppSelector } from "../../shared/stores/store";
 import { userTypeEnum } from "../../shared/types/userTypeEnum";
 import AdminDrawerMenu from "./AdminDrawerMenu";
 
-const DrawerMenuLogic = () => {
+const DrawerMenuLogic = ({
+  setOpen,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   const userType = useAppSelector((state) => state.user.userType);
   switch (userType) {
     case userTypeEnum.admin:
-      return <AdminDrawerMenu />;
+      return <AdminDrawerMenu setOpen={setOpen} />;
     case userTypeEnum.student:
       return <></>;
     case userTypeEnum.teacher:

@@ -1,15 +1,24 @@
 import { List, ListItem, ListItemButton, ListItemText } from "@mui/material";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 
-const AdminDrawerMenu = () => {
+const AdminDrawerMenu = ({
+  setOpen,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   const navigate = useNavigate();
+
+  const handleClick = (path: string) => {
+    navigate(path);
+    setOpen(false);
+  };
   return (
     <List>
       <ListItem key={"professions"} disablePadding>
         <ListItemButton
           onClick={() => {
-            navigate("/professions");
+            handleClick("/professions");
           }}
         >
           <ListItemText primary={"Специальности"} />
@@ -18,10 +27,19 @@ const AdminDrawerMenu = () => {
       <ListItem key={"teachers"} disablePadding>
         <ListItemButton
           onClick={() => {
-            navigate("/teachers");
+            handleClick("/teachers");
           }}
         >
           <ListItemText primary={"Преподаватели"} />
+        </ListItemButton>
+      </ListItem>
+      <ListItem key={"admins"} disablePadding>
+        <ListItemButton
+          onClick={() => {
+            handleClick("/admins ");
+          }}
+        >
+          <ListItemText primary={"Администраторы"} />
         </ListItemButton>
       </ListItem>
     </List>

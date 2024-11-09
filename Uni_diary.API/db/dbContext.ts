@@ -16,6 +16,8 @@ import { Timetable } from "../dbModels/timetable";
 import { Sequelize } from "sequelize";
 
 export const DbSynchronize = (force = false): Promise<Sequelize> => {
+  Admin.belongsTo(User);
+
   Faculty.hasOne(Admin);
   Faculty.hasMany(Profession);
 

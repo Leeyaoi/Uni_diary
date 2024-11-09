@@ -1,6 +1,5 @@
 import * as express from "express";
 import { v4 as uuidv4 } from "uuid";
-import { Admin } from "../dbModels/admin";
 import CreateAdminDto from "../DTOs/AdminDtos/CreateAdminDto";
 import UpdateAdminDto from "../DTOs/AdminDtos/UpdateAdminDto";
 import { CreateAdminValidator } from "../validators/AdminValidators/CreateAdminValidator";
@@ -8,10 +7,10 @@ import { UpdateAdminValidator } from "../validators/AdminValidators/UpdateAdminV
 import GenericController, { myValidationResult } from "./genericController";
 import { checkSchema } from "express-validator";
 import createHttpError = require("http-errors");
-import GenericRepository from "../repositories/GenericRepository";
 import { UserIsTaken } from "../repositories/userRepository";
+import AdminRepository from "../repositories/adminRepository";
 
-const repo = new GenericRepository(Admin);
+const repo = new AdminRepository();
 
 const adminController = new GenericController<CreateAdminDto, UpdateAdminDto>(
   CreateAdminValidator,
@@ -33,8 +32,6 @@ adminController.post(
       next(createHttpError(400, JSON.stringify(errors)));
       return;
     }
-
-    const repo = new GenericRepository(Admin);
 
     const newModel = {
       ...req.body,
