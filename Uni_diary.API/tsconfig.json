@@ -107,6 +107,7 @@
     //m2m teacher_course files
     "DTOs/TeacherCourseDtos/CreateTeacherCourseDto.ts",
     "DTOs/TeacherCourseDtos/UpdateTeacherCourseDto.ts",
+    "repositories/teacherCourseRepository.ts",
     "validators/TeacherCourseValidators/CreateTeacherCourseValidator.ts",
     "validators/TeacherCourseValidators/UpdateTeacherCourseValidator.ts",
     "controllers/teacherCourseController.ts",
