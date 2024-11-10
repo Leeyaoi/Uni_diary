@@ -1,3 +1,4 @@
+import ProfessionType from "./profession";
 import StudentType from "./student";
 
 declare module "GroupType";
@@ -6,7 +7,7 @@ type GroupType = {
   id: string;
   year: number;
   num: number;
-  profession: any;
+  profession: ProfessionType;
   students: StudentType[];
 };
 

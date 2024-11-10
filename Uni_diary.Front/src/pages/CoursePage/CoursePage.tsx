@@ -13,7 +13,7 @@ import TeacherCourseDataGrid from "./TeacherCourseDataGrid/TeacherCourseDataGrid
 import PaginatedType from "../../shared/types/paginatedModel";
 import TeacherCourseType from "../../shared/types/teacherCourse";
 import GroupCourseDataGrid from "./GroupCourseDataGrid/GroupCourseDataGrid";
-import { GroupCourseType } from "../../shared/types/groupCourse";
+import GroupCourseType from "../../shared/types/groupCourse";
 
 const CoursePage = () => {
   const [TeacherLimit, setTeacherLimit] = useState(5);
