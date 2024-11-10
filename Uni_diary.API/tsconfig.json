@@ -69,6 +69,7 @@
     //m2m group_course files
     "DTOs/GroupCourseDtos/CreateGroupCourseDto.ts",
     "DTOs/GroupCourseDtos/UpdateGroupCourseDto.ts",
+    "repositories/groupCourseRepository.ts",
     "validators/GroupCourseValidators/CreateGroupCourseValidator.ts",
     "validators/GroupCourseValidators/UpdateGroupCourseValidator.ts",
     "controllers/groupCourseController.ts",
