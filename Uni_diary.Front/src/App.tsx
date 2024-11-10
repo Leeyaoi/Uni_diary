@@ -24,6 +24,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DrawerMenuLogic from "./modules/DrawerMenuLogic/DrawerMenuLogic";
 import { useAppSelector } from "./shared/stores/store";
 import AdminPage from "./pages/AdminPage/AdminPage";
+import CoursePage from "./pages/CoursePage/CoursePage";
 
 const App = () => {
   const [open, setOpen] = React.useState(true);
@@ -50,6 +51,7 @@ const App = () => {
             <Route path="/professions" element={<FacultyPage />} />
             <Route path="/teachers" element={<TeacherPage />} />
             <Route path="/admins" element={<AdminPage />} />
+            <Route path="/cources" element={<CoursePage />} />
             <Route
               path="/profession/:professionId"
               element={<ProfessionPage />}

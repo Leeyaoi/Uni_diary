@@ -42,6 +42,15 @@ const AdminDrawerMenu = ({
           <ListItemText primary={"Администраторы"} />
         </ListItemButton>
       </ListItem>
+      <ListItem key={"cources"} disablePadding>
+        <ListItemButton
+          onClick={() => {
+            handleClick("/cources ");
+          }}
+        >
+          <ListItemText primary={"Курсы"} />
+        </ListItemButton>
+      </ListItem>
     </List>
   );
 };
