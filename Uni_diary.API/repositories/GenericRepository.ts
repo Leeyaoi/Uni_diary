@@ -1,4 +1,4 @@
-import { Model, ModelStatic, WhereOptions } from "sequelize";
+import { Model, ModelStatic, Op, WhereOptions } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
 import PaginatedDto from "../DTOs/PaginatedDto";
 

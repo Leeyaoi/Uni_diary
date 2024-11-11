@@ -4,6 +4,21 @@ import { RESTMethod } from "../types/RESTMethodEnum";
 import GroupType from "../types/group";
 import PaginatedType from "../types/paginatedModel";
 
+const findGroup = createAsyncThunk("group/search", async (query: string) => {
+  try {
+    const response = await HttpRequest<GroupType[]>({
+      uri: `/group/query/${query}`,
+      method: RESTMethod.Get,
+    });
+    if (response.code === "error") {
+      return [] as GroupType[];
+    }
+    return response.data;
+  } catch (error) {
+    return [] as GroupType[];
+  }
+});
+
 const deleteGroup = createAsyncThunk("group/delete", async (id: string) => {
   try {
     const response = await HttpRequest<GroupType>({
@@ -104,6 +119,7 @@ interface GroupState {
   loading: boolean;
   groups: PaginatedType<GroupType>;
   fetchedGroup: GroupType;
+  foundGroups: GroupType[];
 }
 
 const initialState: GroupState = {
@@ -111,6 +127,7 @@ const initialState: GroupState = {
   loading: false,
   groups: {} as PaginatedType<GroupType>,
   fetchedGroup: {} as GroupType,
+  foundGroups: [],
 };
 
 export const groupSlice = createSlice({
@@ -185,6 +202,20 @@ export const groupSlice = createSlice({
       .addCase(createGroup.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      //findGroup
+      .addCase(findGroup.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(findGroup.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.foundGroups = action.payload;
+      })
+      .addCase(findGroup.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
@@ -197,4 +228,5 @@ export const groupActions = {
   getGroupById,
   updateGroup,
   createGroup,
+  findGroup,
 };

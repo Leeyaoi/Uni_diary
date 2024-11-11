@@ -4,6 +4,24 @@ import { RESTMethod } from "../types/RESTMethodEnum";
 import TeacherType from "../types/teacher";
 import PaginatedType from "../types/paginatedModel";
 
+const findTeacher = createAsyncThunk(
+  "teacher/search",
+  async (query: string) => {
+    try {
+      const response = await HttpRequest<TeacherType[]>({
+        uri: `/teacher/query/${query}`,
+        method: RESTMethod.Get,
+      });
+      if (response.code === "error") {
+        return [] as TeacherType[];
+      }
+      return response.data;
+    } catch (error) {
+      return [] as TeacherType[];
+    }
+  }
+);
+
 const deleteTeacher = createAsyncThunk("teacher/delete", async (id: string) => {
   try {
     const response = await HttpRequest<TeacherType>({
@@ -126,12 +144,14 @@ interface TeacherState {
   error: string | null;
   loading: boolean;
   Teachers: PaginatedType<TeacherType>;
+  foundTeachers: TeacherType[];
   fetchedTeacher: TeacherType;
 }
 
 const initialState: TeacherState = {
   error: null,
   loading: false,
+  foundTeachers: [],
   Teachers: {} as PaginatedType<TeacherType>,
   fetchedTeacher: {} as TeacherType,
 };
@@ -208,6 +228,20 @@ export const teacherSlice = createSlice({
       .addCase(createTeacher.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      //findTeacher
+      .addCase(findTeacher.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(findTeacher.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.foundTeachers = action.payload;
+      })
+      .addCase(findTeacher.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
@@ -220,4 +254,5 @@ export const teacherActions = {
   getTeacherById,
   updateTeacher,
   createTeacher,
+  findTeacher,
 };

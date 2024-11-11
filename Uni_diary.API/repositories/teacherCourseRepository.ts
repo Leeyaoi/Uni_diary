@@ -1,19 +1,19 @@
-import { Admin } from "../dbModels/admin";
+import { Teacher_Course } from "../dbModels/teacher_course";
 import { v4 as uuidv4 } from "uuid";
 import GenericRepository from "./GenericRepository";
 import { WhereOptions } from "sequelize";
-import { User } from "../dbModels/user";
+import { Teacher } from "../dbModels/teacher";
 
-export default class AdminRepository extends GenericRepository {
+export default class TeacherCourseRepository extends GenericRepository {
   constructor() {
-    super(Admin);
+    super(Teacher_Course);
   }
 
   //GET by id
   async getById(id: uuidv4): Promise<string> {
     const data = await this.model.findOne({
       where: { id: id },
-      include: [User],
+      include: [Teacher],
     });
     return JSON.stringify(data);
   }
@@ -22,9 +22,13 @@ export default class AdminRepository extends GenericRepository {
   async paginate(
     predicate: WhereOptions<any>,
     include: any,
-    params: { limit: number; page: number }
+    params: { limit: number; page: number; courseId: uuidv4 }
   ): Promise<string> {
-    const data = await super.paginate({}, [User], params);
+    const data = await super.paginate(
+      { courseId: params.courseId ?? uuidv4() },
+      [Teacher],
+      params
+    );
     return data;
   }
 }

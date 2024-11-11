@@ -9,6 +9,7 @@ import { checkSchema } from "express-validator";
 import createHttpError = require("http-errors");
 import { UserIsTaken } from "../repositories/userRepository";
 import TeacherRepository from "../repositories/teacherRepository";
+import { Op } from "sequelize";
 
 const repo = new TeacherRepository();
 
@@ -16,6 +17,35 @@ const teacherController = new GenericController<
   CreateTeacherDto,
   UpdateTeacherDto
 >(CreateTeacherValidator, UpdateTeacherValidator, repo).GenerateController();
+
+teacherController.get(
+  "/query/:query",
+  async (
+    req: express.Request<{ id: string }, {}, {}>,
+    res: express.Response,
+    next
+  ) => {
+    const query = req.params.query;
+    const searchWords = query.split(" ").filter((word) => word.length > 0);
+    const data = await repo.getByPredicate(
+      {
+        [Op.and]: searchWords.map((word) => ({
+          [Op.or]: [
+            { name: { [Op.iLike]: `%${word}%` } },
+            { surname: { [Op.iLike]: `%${word}%` } },
+          ],
+        })),
+      },
+      []
+    );
+    if (data != "null") {
+      res.send(data);
+    } else {
+      next(createHttpError(404, "Resourse have not been found"));
+      return;
+    }
+  }
+);
 
 teacherController.post(
   "/",
