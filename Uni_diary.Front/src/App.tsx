@@ -5,17 +5,7 @@ import "./index.scss";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import ProfessionPage from "./pages/ProfessionPage/ProfessionPage";
 import Header from "./modules/Header/Header";
-import {
-  Box,
-  Container,
-  Divider,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+import { Container, Divider, ListItem, ListItemButton } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import Footer from "./modules/Footer/Footer";
 import FacultyPage from "./pages/FacultyPage/FacultyPage";
@@ -27,7 +17,7 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import CoursePage from "./pages/CoursePage/CoursePage";
 
 const App = () => {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const loggedIn = useAppSelector((state) => state.user.loggedIn);
 

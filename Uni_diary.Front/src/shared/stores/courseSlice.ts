@@ -38,17 +38,20 @@ const getCourseById = createAsyncThunk(
 );
 
 const fetchCourses = createAsyncThunk("course/fetch", async (query: string) => {
+  if (query == "") {
+    return [];
+  }
   try {
-    const response = await HttpRequest<PaginatedType<CourseType>>({
+    const response = await HttpRequest<CourseType[]>({
       uri: `/course/query/${query}`,
       method: RESTMethod.Get,
     });
     if (response.code === "error") {
-      return {} as PaginatedType<CourseType>;
+      return {} as CourseType[];
     }
     return response.data;
   } catch (error) {
-    return {} as PaginatedType<CourseType>;
+    return {} as CourseType[];
   }
 });
 
@@ -93,14 +96,14 @@ const createCourse = createAsyncThunk(
 interface CourseState {
   error: string | null;
   loading: boolean;
-  Courses: PaginatedType<CourseType>;
+  courses: CourseType[];
   fetchedCourse: CourseType;
 }
 
 const initialState: CourseState = {
   error: null,
   loading: false,
-  Courses: {} as PaginatedType<CourseType>,
+  courses: [],
   fetchedCourse: {} as CourseType,
 };
 
@@ -117,7 +120,7 @@ export const courseSlice = createSlice({
       })
       .addCase(fetchCourses.fulfilled, (state, action) => {
         state.loading = false;
-        state.Courses = action.payload;
+        state.courses = action.payload;
         state.error = null;
       })
       .addCase(fetchCourses.rejected, (state, action) => {
