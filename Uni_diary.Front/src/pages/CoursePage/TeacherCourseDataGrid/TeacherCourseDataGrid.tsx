@@ -42,18 +42,27 @@ const TeacherCourseDataGrid = ({
       headerName: "Имя",
       width: 150,
       editable: false,
+      renderCell: (params) => {
+        return <>{params.row.teacher.name}</>;
+      },
     },
     {
       field: "surname",
       headerName: "Фамилия",
       width: 150,
       editable: false,
+      renderCell: (params) => {
+        return <>{params.row.teacher.surname}</>;
+      },
     },
     {
       field: "jobTitle",
       headerName: "Должность",
       width: 200,
       editable: false,
+      renderCell: (params) => {
+        return <>{params.row.teacher.jobTitle}</>;
+      },
     },
     {
       field: "hours",

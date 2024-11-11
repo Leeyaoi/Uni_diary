@@ -51,5 +51,11 @@ export const DbSynchronize = (force = false): Promise<Sequelize> => {
   Course.belongsToMany(Teacher, { through: Teacher_Course });
   Teacher.belongsToMany(Course, { through: Teacher_Course });
 
+  Group_Course.belongsTo(Course);
+  Group_Course.belongsTo(Group);
+
+  Teacher_Course.belongsTo(Course);
+  Teacher_Course.belongsTo(Teacher);
+
   return sequelize.sync({ force: force });
 };

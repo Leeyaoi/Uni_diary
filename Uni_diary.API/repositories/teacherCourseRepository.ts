@@ -25,7 +25,7 @@ export default class TeacherCourseRepository extends GenericRepository {
     params: { limit: number; page: number; courseId: uuidv4 }
   ): Promise<string> {
     const data = await super.paginate(
-      { courseId: params.courseId },
+      { courseId: params.courseId ?? uuidv4() },
       [Teacher],
       params
     );

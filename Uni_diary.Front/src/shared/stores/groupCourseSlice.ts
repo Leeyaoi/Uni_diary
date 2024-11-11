@@ -51,6 +51,9 @@ const fetchGroupCourses = createAsyncThunk(
     page: number;
     courseId: string;
   }) => {
+    if (courseId == "") {
+      return {} as PaginatedType<GroupCourseType>;
+    }
     try {
       const response = await HttpRequest<PaginatedType<GroupCourseType>>({
         uri: `/groupCourse/paginate`,

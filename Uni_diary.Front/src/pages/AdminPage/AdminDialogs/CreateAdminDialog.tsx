@@ -21,7 +21,6 @@ const CreateAdminDialog = ({
 
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
-  const [jobTitle, setJobTitle] = useState("");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
@@ -38,7 +37,6 @@ const CreateAdminDialog = ({
             AdminActions.createAdmin({
               name: name,
               surname: surname,
-              jobTitle: jobTitle,
               login: login,
               password: password,
             })

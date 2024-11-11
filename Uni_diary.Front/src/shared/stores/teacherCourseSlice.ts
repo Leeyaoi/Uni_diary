@@ -52,6 +52,9 @@ const fetchTeacherCourses = createAsyncThunk(
     courseId: string;
   }) => {
     try {
+      if (courseId == "") {
+        return {} as PaginatedType<TeacherCourseType>;
+      }
       const response = await HttpRequest<PaginatedType<TeacherCourseType>>({
         uri: `/teacherCourse/paginate`,
         method: RESTMethod.Post,
@@ -71,7 +74,7 @@ const updateTeacherCourse = createAsyncThunk(
   "teacherCourse/update",
   async (newTeacherCourse: {
     id: string;
-    TeacherId: string;
+    teacherId: string;
     courseId: string;
     hours: number;
   }) => {
@@ -94,11 +97,14 @@ const updateTeacherCourse = createAsyncThunk(
 const createTeacherCourse = createAsyncThunk(
   "teacherCourse/create",
   async (newTeacherCourse: {
-    TeacherId: string;
+    teacherId: string;
     courseId: string;
     hours: number;
   }) => {
     try {
+      if (!newTeacherCourse.teacherId || !newTeacherCourse.courseId) {
+        return {} as PaginatedType<TeacherCourseType>;
+      }
       const response = await HttpRequest<TeacherCourseType>({
         uri: `/teacherCourse/post`,
         method: RESTMethod.Post,

@@ -14,7 +14,7 @@ export default class GroupCourseRepository extends GenericRepository {
   async getById(id: uuidv4): Promise<string> {
     const data = await this.model.findOne({
       where: { id: id },
-      include: [Group, Profession],
+      include: [{ model: Group, include: [Profession] }],
     });
     return JSON.stringify(data);
   }
@@ -26,8 +26,8 @@ export default class GroupCourseRepository extends GenericRepository {
     params: { limit: number; page: number; courseId: uuidv4 }
   ): Promise<string> {
     const data = await super.paginate(
-      { courseId: params.courseId },
-      [Group, Profession],
+      { courseId: params.courseId ?? uuidv4() },
+      [{ model: Group, include: [Profession] }],
       params
     );
     return data;

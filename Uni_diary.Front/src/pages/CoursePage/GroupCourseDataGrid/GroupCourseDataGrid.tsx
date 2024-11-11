@@ -15,10 +15,10 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import PaginatedType from "../../../shared/types/paginatedModel";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { GroupCourseType } from "../../../shared/types/groupCourse";
+import GroupCourseType from "../../../shared/types/groupCourse";
 
 interface Props {
-  teachers: PaginatedType<GroupCourseType>;
+  groups: PaginatedType<GroupCourseType>;
   limit: number;
   handleLimitChange: (event: SelectChangeEvent) => void;
   page: number;
@@ -28,7 +28,7 @@ interface Props {
 }
 
 const GroupCourseDataGrid = ({
-  teachers,
+  groups,
   limit,
   handleLimitChange,
   page,
@@ -42,6 +42,14 @@ const GroupCourseDataGrid = ({
       headerName: "Название",
       width: 150,
       editable: false,
+      renderCell: (params) => (
+        <>
+          {params.row.group.profession.name +
+            "-" +
+            (params.row.group.year % 100) +
+            params.row.group.num}
+        </>
+      ),
     },
     {
       field: "hours",
@@ -83,7 +91,7 @@ const GroupCourseDataGrid = ({
     <>
       <div id="datagrid">
         <DataGrid
-          rows={teachers ? teachers.items : []}
+          rows={groups ? groups.items : []}
           columns={columns}
           disableRowSelectionOnClick
           hideFooter={true}
@@ -107,9 +115,7 @@ const GroupCourseDataGrid = ({
         </FormControl>
         <p id="total_data">
           Всего записей:{" "}
-          {teachers == ({} as PaginatedType<GroupCourseType>)
-            ? 0
-            : teachers.total}
+          {groups == ({} as PaginatedType<GroupCourseType>) ? 0 : groups.total}
         </p>
         <div id="pagination-control">
           <Button
@@ -133,19 +139,19 @@ const GroupCourseDataGrid = ({
             <KeyboardArrowLeftIcon />
           </Button>
           <p>
-            {teachers == ({} as PaginatedType<GroupCourseType>)
+            {groups == ({} as PaginatedType<GroupCourseType>)
               ? 0
-              : teachers.pageNum}{" "}
+              : groups.pageNum}{" "}
             ..{" "}
-            {teachers == ({} as PaginatedType<GroupCourseType>)
+            {groups == ({} as PaginatedType<GroupCourseType>)
               ? 0
-              : teachers.pageCount}
+              : groups.pageCount}
           </p>
           <Button
             variant="contained"
             onClick={() => {
-              if (page + 1 > teachers.pageCount) {
-                setPage(teachers.pageCount);
+              if (page + 1 > groups.pageCount) {
+                setPage(groups.pageCount);
               } else {
                 setPage(page + 1);
               }
@@ -156,7 +162,7 @@ const GroupCourseDataGrid = ({
           <Button
             variant="contained"
             onClick={() => {
-              setPage(teachers.pageCount);
+              setPage(groups.pageCount);
             }}
           >
             <KeyboardDoubleArrowRightIcon />

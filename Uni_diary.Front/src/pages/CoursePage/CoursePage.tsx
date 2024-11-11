@@ -1,6 +1,5 @@
 import {
   Autocomplete,
-  AutocompleteChangeReason,
   Button,
   debounce,
   SelectChangeEvent,
@@ -12,13 +11,20 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import TeacherCourseDataGrid from "./TeacherCourseDataGrid/TeacherCourseDataGrid";
-import PaginatedType from "../../shared/types/paginatedModel";
-import TeacherCourseType from "../../shared/types/teacherCourse";
 import GroupCourseDataGrid from "./GroupCourseDataGrid/GroupCourseDataGrid";
-import GroupCourseType from "../../shared/types/groupCourse";
-import CourseType from "../../shared/types/course";
 import { useAppDispatch, useAppSelector } from "../../shared/stores/store";
 import { CourseActions } from "../../shared/stores/courseSlice";
+import CreateCourseDialog from "./CourseDialogs/CreateCourseDialog";
+import EditCourseDialog from "./CourseDialogs/EditCourseDialog";
+import DeleteCourseDialog from "./CourseDialogs/DeleteCourseDialog";
+import { TeacherCourseActions } from "../../shared/stores/teacherCourseSlice";
+import CreateTeacherCourseDialog from "./TeacherCourseDialogs/CreateTeacherCourseDialog";
+import EditTeacherCourseDialog from "./TeacherCourseDialogs/EditTeacherCourseDialog";
+import DeleteTeacherCourseDialog from "./TeacherCourseDialogs/DeleteTeacherCourseDialog";
+import { GroupCourseActions } from "../../shared/stores/groupCourseSlice";
+import CreateGroupCourseDialog from "./GroupCourseDialogs/CreateGroupCourseDialog";
+import EditGroupCourseDialog from "./GroupCourseDialogs/EditGroupCourseDialog";
+import DeleteGroupCourseDialog from "./GroupCourseDialogs/DeleteGroupCourseDialog";
 
 const CoursePage = () => {
   const dispatch = useAppDispatch();
@@ -28,12 +34,31 @@ const CoursePage = () => {
 
   const [TeacherLimit, setTeacherLimit] = useState(5);
   const [TeacherPage, setTeacherPage] = useState(1);
-  const [id, setId] = useState("");
+  const [GroupLimit, setGroupLimit] = useState(5);
+  const [GroupPage, setGroupPage] = useState(1);
+
+  const [teacherId, setTeacherId] = useState("");
+  const [groupId, setGroupId] = useState("");
+
   const [openTeacherCreate, setOpenTeacherCreate] = useState(false);
   const [openTeacherDelete, setOpenTeacherDelete] = useState(false);
   const [openTeacherEdit, setOpenTeacherEdit] = useState(false);
 
+  const [openGroupCreate, setOpenGroupCreate] = useState(false);
+  const [openGroupDelete, setOpenGroupDelete] = useState(false);
+  const [openGroupEdit, setOpenGroupEdit] = useState(false);
+
+  const [openCourseCreate, setOpenCourseCreate] = useState(false);
+  const [openCourseDelete, setOpenCourseDelete] = useState(false);
+  const [openCourseEdit, setOpenCourseEdit] = useState(false);
+
   const courses = useAppSelector((state) => state.course.courses);
+  const teacherCourses = useAppSelector(
+    (state) => state.teacherCourse.TeacherCourses
+  );
+  const groupCourses = useAppSelector(
+    (state) => state.groupCourse.GroupCourses
+  );
 
   const handleOpenTeacherCreate = () => {
     setOpenTeacherCreate(true);
@@ -41,23 +66,53 @@ const CoursePage = () => {
 
   const handleOpenTeacherDelete = (id: string) => {
     setOpenTeacherDelete(true);
-    setId(id);
+    setTeacherId(id);
   };
 
   const handleOpenTeacherEdit = (id: string) => {
     setOpenTeacherEdit(true);
-    setId(id);
+    setTeacherId(id);
+  };
+
+  const handleOpenGroupCreate = () => {
+    setOpenGroupCreate(true);
+  };
+
+  const handleOpenGroupDelete = (id: string) => {
+    setOpenGroupDelete(true);
+    setGroupId(id);
+  };
+
+  const handleOpenGroupEdit = (id: string) => {
+    setOpenGroupEdit(true);
+    setGroupId(id);
   };
 
   const handleClose = () => {
     setOpenTeacherCreate(false);
     setOpenTeacherDelete(false);
     setOpenTeacherEdit(false);
+    setOpenGroupCreate(false);
+    setOpenGroupDelete(false);
+    setOpenGroupEdit(false);
+    setOpenCourseCreate(false);
+    setOpenCourseDelete(false);
+    setOpenCourseEdit(false);
   };
 
   const handleTeacherLimitChange = (event: SelectChangeEvent) => {
     setTeacherLimit(event.target.value as unknown as number);
     setTeacherPage(1);
+  };
+
+  const handleGroupLimitChange = (event: SelectChangeEvent) => {
+    setGroupLimit(event.target.value as unknown as number);
+    setGroupPage(1);
+  };
+
+  const setSearch = (newValue: string) => {
+    setCourse(null);
+    setQuery(newValue);
   };
 
   const getOptionsDelayed = useCallback(
@@ -67,10 +122,36 @@ const CoursePage = () => {
     []
   );
 
+  useEffect(() => {
+    dispatch(
+      TeacherCourseActions.fetchTeacherCourses({
+        limit: TeacherLimit,
+        page: TeacherPage,
+        courseId: course ?? "",
+      })
+    );
+  }, [
+    TeacherPage,
+    openTeacherCreate,
+    openTeacherEdit,
+    openTeacherDelete,
+    course,
+  ]);
+
+  useEffect(() => {
+    dispatch(
+      GroupCourseActions.fetchGroupCourses({
+        limit: GroupLimit,
+        page: GroupPage,
+        courseId: course ?? "",
+      })
+    );
+  }, [GroupPage, openGroupCreate, openGroupDelete, openGroupEdit, course]);
+
   return (
     <div id="course">
       <Autocomplete
-        options={courses ? courses.map((option) => option.name) : []}
+        options={courses.length ? courses.map((option) => option.name) : []}
         onChange={(event: any, newValue: null | string) => {
           if (newValue == null) {
             setCourse(null);
@@ -89,20 +170,50 @@ const CoursePage = () => {
       />
 
       <div id="course_button_group">
-        <Button variant="contained">
+        <Button variant="contained" onClick={() => setOpenCourseCreate(true)}>
           <AddIcon />
         </Button>
-        <Button variant="contained" color="success" disabled={course == null}>
+        <Button
+          variant="contained"
+          color="success"
+          disabled={course == null}
+          onClick={() => setOpenCourseEdit(true)}
+        >
           <EditIcon />
         </Button>
-        <Button variant="contained" color="error" disabled={course == null}>
+        <Button
+          variant="contained"
+          color="error"
+          disabled={course == null}
+          onClick={() => setOpenCourseDelete(true)}
+        >
           <DeleteIcon />
         </Button>
       </div>
 
-      <Button variant="contained">Add teacher</Button>
+      <CreateCourseDialog open={openCourseCreate} handleClose={handleClose} />
+      <EditCourseDialog
+        open={openCourseEdit}
+        handleClose={handleClose}
+        id={course ?? ""}
+        setSearch={setSearch}
+      />
+      <DeleteCourseDialog
+        open={openCourseDelete}
+        handleClose={handleClose}
+        id={course ?? ""}
+        setSearch={setSearch}
+      />
+
+      <Button
+        variant="contained"
+        onClick={handleOpenTeacherCreate}
+        disabled={course == null}
+      >
+        Назначить преподавателя на предмет
+      </Button>
       <TeacherCourseDataGrid
-        teachers={{} as PaginatedType<TeacherCourseType>}
+        teachers={teacherCourses}
         limit={TeacherLimit}
         handleLimitChange={handleTeacherLimitChange}
         page={TeacherPage}
@@ -111,27 +222,55 @@ const CoursePage = () => {
         handleDelete={handleOpenTeacherDelete}
       />
 
-      {/*<CreateTeacherDialog open={openTeacherCreate} handleClose={handleClose} />
-      <EditTeacherDialog
+      <CreateTeacherCourseDialog
+        open={openTeacherCreate}
+        handleClose={handleClose}
+        courseId={course ?? ""}
+      />
+      <EditTeacherCourseDialog
         open={openTeacherEdit}
         handleClose={handleClose}
-        id={id}
+        courseId={course ?? ""}
+        id={teacherId}
       />
-      <DeleteTeacherDialog
+      <DeleteTeacherCourseDialog
         open={openTeacherDelete}
         handleClose={handleClose}
-        id={id}
-      />*/}
+        id={teacherId}
+      />
 
-      <Button variant="contained">Add group</Button>
+      <Button
+        variant="contained"
+        disabled={course == null}
+        onClick={handleOpenGroupCreate}
+      >
+        Назначить группе предмет
+      </Button>
       <GroupCourseDataGrid
-        teachers={{} as PaginatedType<GroupCourseType>}
-        limit={TeacherLimit}
-        handleLimitChange={handleTeacherLimitChange}
-        page={TeacherPage}
-        setPage={setTeacherPage}
-        handleEdit={handleOpenTeacherEdit}
-        handleDelete={handleOpenTeacherDelete}
+        groups={groupCourses}
+        limit={GroupLimit}
+        handleLimitChange={handleGroupLimitChange}
+        page={GroupPage}
+        setPage={setGroupPage}
+        handleEdit={handleOpenGroupEdit}
+        handleDelete={handleOpenGroupDelete}
+      />
+
+      <CreateGroupCourseDialog
+        open={openGroupCreate}
+        handleClose={handleClose}
+        courseId={course ?? ""}
+      />
+      <EditGroupCourseDialog
+        open={openGroupEdit}
+        handleClose={handleClose}
+        courseId={course ?? ""}
+        id={groupId}
+      />
+      <DeleteGroupCourseDialog
+        open={openGroupDelete}
+        handleClose={handleClose}
+        id={groupId}
       />
     </div>
   );

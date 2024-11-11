@@ -77,7 +77,7 @@ const EditAdminDialog = ({
         },
       }}
     >
-      <DialogTitle>Создать</DialogTitle>
+      <DialogTitle>Изменить</DialogTitle>
       <DialogContent>
         <TextField
           required
