@@ -28,26 +28,56 @@ groupController.get(
     next
   ) => {
     const query = req.params.query;
-    const profName = query.split("-")[0];
+    const match = query.match(/([A-ZА-ЯЁ]+)-(\d{2})(\d+)/);
 
-    const professions = await profRepo.getByPredicate(
-      {
-        name: { [Op.iLike]: `%${profName}%` },
-      },
-      []
-    );
+    if (!match) {
+      const profName = query.split("-")[0];
 
-    const professionIds = JSON.parse(professions).map((prof) => prof.id);
+      const professions = await profRepo.getByPredicate(
+        {
+          name: { [Op.iLike]: `%${profName}%` },
+        },
+        []
+      );
+
+      const professionIds = JSON.parse(professions).map((prof) => prof.id);
+
+      const data = await repo.getByPredicate(
+        {
+          professionId: {
+            [Op.in]: professionIds, // Находим группы по ID профессий
+          },
+        },
+        [
+          {
+            model: Profession,
+          },
+        ]
+      );
+      if (data != "null") {
+        res.send(data);
+      } else {
+        next(createHttpError(404, "Resourse have not been found"));
+      }
+      return;
+    }
+
+    const professionName = match[1];
+    const yearDigits = parseInt(match[2], 10); // Получаем последние две цифры года
+    const year = yearDigits < 50 ? 2000 + yearDigits : 1900 + yearDigits; // Условие для года
+    const num = parseInt(match[3], 10);
 
     const data = await repo.getByPredicate(
       {
-        professionId: {
-          [Op.in]: professionIds, // Находим группы по ID профессий
-        },
+        year,
+        num,
       },
       [
         {
           model: Profession,
+          where: {
+            name: professionName,
+          },
         },
       ]
     );
