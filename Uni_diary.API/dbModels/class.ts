@@ -15,4 +15,16 @@ export const Class = sequelize.define("class", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  fullGroup: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+  },
+  firstHalf: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+  },
+  number: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });

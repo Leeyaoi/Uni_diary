@@ -15,6 +15,7 @@ import DrawerMenuLogic from "./modules/DrawerMenuLogic/DrawerMenuLogic";
 import { useAppSelector } from "./shared/stores/store";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import CoursePage from "./pages/CoursePage/CoursePage";
+import TimetablePage from "./pages/TimetablePage/TimetablePage";
 
 const App = () => {
   const [open, setOpen] = React.useState(false);
@@ -42,6 +43,7 @@ const App = () => {
             <Route path="/teachers" element={<TeacherPage />} />
             <Route path="/admins" element={<AdminPage />} />
             <Route path="/cources" element={<CoursePage />} />
+            <Route path="/timetable" element={<TimetablePage />} />
             <Route
               path="/profession/:professionId"
               element={<ProfessionPage />}

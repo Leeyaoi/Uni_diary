@@ -1,0 +1,15 @@
+#timetable{
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.weekDay{
+    border: 0.1rem solid black;
+}
+
+.class{
+    width: 100%;
+    min-height: 2rem;
+    height: fit-content;
+    border-top: 0.1rem solid black;
+}
