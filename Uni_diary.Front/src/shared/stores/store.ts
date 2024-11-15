@@ -12,6 +12,8 @@ import { adminSlice } from "./adminSlice";
 import { courseSlice } from "./courseSlice";
 import { groupCourseSlice } from "./groupCourseSlice";
 import { teacherCourseSlice } from "./teacherCourseSlice";
+import { timetableSlice } from "./timetableSlice";
+import { classSlice } from "./classSlice";
 
 const persistConfig = {
   key: "root",
@@ -31,6 +33,8 @@ const persistedReducer = persistReducer(
     course: courseSlice.reducer,
     groupCourse: groupCourseSlice.reducer,
     teacherCourse: teacherCourseSlice.reducer,
+    timetable: timetableSlice.reducer,
+    class: classSlice.reducer,
   })
 );
 export const store = configureStore({

@@ -11,8 +11,4 @@ export const Timetable = sequelize.define("timetable", {
     type: DataTypes.SMALLINT,
     allowNull: false,
   },
-  fullGroup: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  },
 });

@@ -9,7 +9,6 @@ import GenericController from "./genericController";
 import { Op, Sequelize } from "sequelize";
 import { Profession } from "../dbModels/profession";
 import ProfessionRepository from "../repositories/professionRepository";
-import { Json } from "sequelize/types/utils";
 
 const repo = new GroupRepository();
 const profRepo = new ProfessionRepository();

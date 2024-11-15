@@ -1,4 +1,4 @@
-import { Model, ModelStatic, Op, WhereOptions } from "sequelize";
+import { Model, ModelStatic, Op, or, WhereOptions } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
 import PaginatedDto from "../DTOs/PaginatedDto";
 
@@ -72,11 +72,13 @@ export default class GenericRepository {
   //GET BY PREDICATE
   async getByPredicate(
     predicate: WhereOptions<any>,
-    include: any
+    include: any,
+    order?: any[]
   ): Promise<string> {
     const data = await this.model.findAll({
       where: predicate,
       include: include,
+      order: order,
     });
     return JSON.stringify(data);
   }
