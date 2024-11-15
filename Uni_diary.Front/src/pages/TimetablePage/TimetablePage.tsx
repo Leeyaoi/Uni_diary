@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./TimetablePage.scss";
 import {
   Autocomplete,
@@ -10,14 +10,49 @@ import {
 } from "@mui/material";
 import { groupActions } from "../../shared/stores/groupSlice";
 import { useAppDispatch, useAppSelector } from "../../shared/stores/store";
+import { timetableActions } from "../../shared/stores/timetableSlice";
+import WeekDay from "./WeekDay";
+import CreateClassDialog from "./ClassDialogs/CreateClassDialog";
+import EditClassDialog from "./ClassDialogs/EditClassDialog";
+import DeleteClassDialog from "./ClassDialogs/DeleteClassDialog";
 
 const TimetablePage = () => {
   const dispatch = useAppDispatch();
   const foundGroups = useAppSelector((state) => state.group.foundGroups);
+  const timetables = useAppSelector((state) => state.timetable.Timetables);
 
-  const [GroupId, setGroupId] = useState<string | null>(null);
+  const [classId, setClassId] = useState("");
+  const [timetableId, setTimetableId] = useState("");
+  const [number, setNumber] = useState(1);
+  const [groupId, setGroupId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = useState(false);
+  const [openCreate, setOpenCreate] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+
+  const handleClose = () => {
+    setOpenCreate(false);
+    setOpenEdit(false);
+    setOpenDelete(false);
+  };
+
+  const handleOpenCreate = (timetableId: string, number: number) => {
+    setTimetableId(timetableId);
+    setNumber(number);
+    setOpenCreate(true);
+  };
+
+  const handleOpenEdit = (
+    timetableId: string,
+    number: number,
+    classId: string
+  ) => {
+    setTimetableId(timetableId);
+    setClassId(classId);
+    setNumber(number);
+    setOpenEdit(true);
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
@@ -29,6 +64,15 @@ const TimetablePage = () => {
     }, 400),
     []
   );
+
+  useEffect(() => {
+    dispatch(
+      timetableActions.fetchTimetables({
+        groupId: groupId ?? "",
+        bottomWeek: checked,
+      })
+    );
+  }, [checked, groupId, openCreate, openEdit, openDelete]);
 
   return (
     <div id="timetable">
@@ -70,67 +114,34 @@ const TimetablePage = () => {
         <Typography>Нижняя неделя</Typography>
       </Stack>
       <Stack spacing={2}>
-        <div className="weekDay">
-          <strong>Понедельник</strong>
-          <Stack>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-          </Stack>
-        </div>
-        <div className="weekDay">
-          <strong>Вторник</strong>
-          <Stack>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-          </Stack>
-        </div>
-        <div className="weekDay">
-          <strong>Среда</strong>
-          <Stack>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-          </Stack>
-        </div>
-        <div className="weekDay">
-          <strong>Четверг</strong>
-          <Stack>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-          </Stack>
-        </div>
-        <div className="weekDay">
-          <strong>Пятница</strong>
-          <Stack>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-          </Stack>
-        </div>
-        <div className="weekDay">
-          <strong>Суббота</strong>
-          <Stack>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-            <div className="class"></div>
-          </Stack>
-        </div>
+        {timetables.map((value) => (
+          <WeekDay
+            timetable={value}
+            handleOpenCreate={handleOpenCreate}
+            handleOpenEdit={handleOpenEdit}
+            key={value.id}
+          />
+        ))}
       </Stack>
+      <CreateClassDialog
+        open={openCreate}
+        handleClose={handleClose}
+        number={number}
+        timetableId={timetableId}
+      />
+      <EditClassDialog
+        open={openEdit}
+        handleClose={handleClose}
+        id={classId}
+        timetableId={timetableId}
+        number={number}
+        setOpenDelete={setOpenDelete}
+      />
+      <DeleteClassDialog
+        id={classId}
+        open={openDelete}
+        handleClose={handleClose}
+      />
     </div>
   );
 };

@@ -6,7 +6,9 @@ export default class CreateClassDto {
   fullGroup: boolean;
   firstHalf: boolean;
   number: number;
+  forBothWeeks: string;
   teacherId: uuidv4;
   courseId: uuidv4;
   timetableId: uuidv4;
+  id?: any;
 }

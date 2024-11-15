@@ -52,6 +52,7 @@
     //Class files
     "DTOs/ClassDtos/CreateClassDto.ts",
     "DTOs/ClassDtos/UpdateClassDto.ts",
+    "repositories/classRepository.ts",
     "validators/ClassValidators/CreateClassValidator.ts",
     "validators/ClassValidators/UpdateClassValidator.ts",
     "controllers/classController.ts",
@@ -124,6 +125,7 @@
     //Timetable files
     "DTOs/TimetableDtos/CreateTimetableDto.ts",
     "DTOs/TimetableDtos/UpdateTimetableDto.ts",
+    "repositories/timetableRepository.ts",
     "validators/TimetableValidators/CreateTimetableValidator.ts",
     "validators/TimetableValidators/UpdateTimetableValidator.ts",
     "controllers/timetableController.ts",
