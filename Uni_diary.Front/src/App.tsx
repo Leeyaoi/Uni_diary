@@ -16,6 +16,9 @@ import { useAppSelector } from "./shared/stores/store";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import CoursePage from "./pages/CoursePage/CoursePage";
 import TimetablePage from "./pages/TimetablePage/TimetablePage";
+import TeacherTimetablePage from "./pages/TeacherTimetablePage/TeacherTimetablePage";
+import AttendancePage from "./pages/AttendancePage/AttendancePage";
+import MarksPage from "./pages/MarksPage/MarksPage";
 
 const App = () => {
   const [open, setOpen] = React.useState(false);
@@ -44,6 +47,12 @@ const App = () => {
             <Route path="/admins" element={<AdminPage />} />
             <Route path="/cources" element={<CoursePage />} />
             <Route path="/timetable" element={<TimetablePage />} />
+            <Route path="/attendance" element={<AttendancePage />} />
+            <Route path="/marks" element={<MarksPage />} />
+            <Route
+              path="/teacher/timetable"
+              element={<TeacherTimetablePage />}
+            />
             <Route
               path="/profession/:professionId"
               element={<ProfessionPage />}

@@ -4,20 +4,29 @@ import { RESTMethod } from "../types/RESTMethodEnum";
 import ClassType from "../types/class";
 import PaginatedType from "../types/paginatedModel";
 
-const findClass = createAsyncThunk("class/search", async (query: string) => {
-  try {
-    const response = await HttpRequest<ClassType[]>({
-      uri: `/class/query/${query}`,
-      method: RESTMethod.Get,
-    });
-    if (response.code === "error") {
-      return [] as ClassType[];
+const fetchTeachersClasses = createAsyncThunk(
+  "class/teacher",
+  async ({
+    teacherId,
+    bottomWeek,
+  }: {
+    teacherId: string;
+    bottomWeek: boolean;
+  }) => {
+    try {
+      const response = await HttpRequest<ClassType[][]>({
+        uri: `/class/teacher/${teacherId}/${bottomWeek}`,
+        method: RESTMethod.Get,
+      });
+      if (response.code === "error") {
+        return [] as ClassType[][];
+      }
+      return response.data;
+    } catch (error) {
+      return [] as ClassType[][];
     }
-    return response.data;
-  } catch (error) {
-    return [] as ClassType[];
   }
-});
+);
 
 const deleteClass = createAsyncThunk("class/delete", async (id: string) => {
   try {
@@ -48,25 +57,6 @@ const getClassById = createAsyncThunk("class/fetchOne", async (id: string) => {
     return {} as ClassType;
   }
 });
-
-const fetchClasss = createAsyncThunk(
-  "class/fetch",
-  async ({ limit, page }: { limit: number; page: number }) => {
-    try {
-      const response = await HttpRequest<PaginatedType<ClassType>>({
-        uri: `/class/paginate`,
-        method: RESTMethod.Post,
-        item: { limit: limit, page: page },
-      });
-      if (response.code === "error") {
-        return {} as PaginatedType<ClassType>;
-      }
-      return response.data;
-    } catch (error) {
-      return {} as PaginatedType<ClassType>;
-    }
-  }
-);
 
 const updateClass = createAsyncThunk(
   "class/update",
@@ -119,7 +109,10 @@ const createClass = createAsyncThunk(
       if (conflictResponse.code === "error") {
         return {} as PaginatedType<ClassType>;
       }
-      if (conflictResponse.data.length > 0) {
+      if (
+        conflictResponse.data[0] != null &&
+        conflictResponse.data[1] != null
+      ) {
         return conflictResponse.data;
       }
       const response = await HttpRequest<ClassType>({
@@ -140,39 +133,29 @@ const createClass = createAsyncThunk(
 interface ClassState {
   error: string | null;
   loading: boolean;
-  Classs: PaginatedType<ClassType>;
-  foundClasss: ClassType[];
+  teachersClasses: ClassType[][];
   fetchedClass: ClassType;
+  selectedClass: ClassType;
 }
 
 const initialState: ClassState = {
   error: null,
   loading: false,
-  foundClasss: [],
-  Classs: {} as PaginatedType<ClassType>,
+  teachersClasses: [],
   fetchedClass: {} as ClassType,
+  selectedClass: {} as ClassType,
 };
 
 export const classSlice = createSlice({
   name: "class",
   initialState,
-  reducers: {},
+  reducers: {
+    setClass: (state, action: PayloadAction<ClassType>) => {
+      state.selectedClass = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      //fetchClasss
-      .addCase(fetchClasss.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchClasss.fulfilled, (state, action) => {
-        state.loading = false;
-        state.Classs = action.payload;
-        state.error = null;
-      })
-      .addCase(fetchClasss.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
       //deleteClass
       .addCase(deleteClass.pending, (state) => {
         state.loading = true;
@@ -226,17 +209,17 @@ export const classSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      //findClass
-      .addCase(findClass.pending, (state) => {
+      //fetchTeachersClasses
+      .addCase(fetchTeachersClasses.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(findClass.fulfilled, (state, action) => {
+      .addCase(fetchTeachersClasses.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.foundClasss = action.payload;
+        state.teachersClasses = action.payload;
       })
-      .addCase(findClass.rejected, (state, action) => {
+      .addCase(fetchTeachersClasses.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
@@ -246,10 +229,9 @@ export const classSlice = createSlice({
 export default classSlice.reducer;
 export const classActions = {
   ...classSlice.actions,
-  fetchClasss,
   deleteClass,
   getClassById,
   updateClass,
   createClass,
-  findClass,
+  fetchTeachersClasses,
 };
