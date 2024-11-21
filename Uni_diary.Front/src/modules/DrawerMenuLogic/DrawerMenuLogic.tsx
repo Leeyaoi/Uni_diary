@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import { useAppSelector } from "../../shared/stores/store";
 import { userTypeEnum } from "../../shared/types/userTypeEnum";
 import AdminDrawerMenu from "./AdminDrawerMenu";
+import TeacherDrawerMenu from "./TeacherDrawerMenu";
 
 const DrawerMenuLogic = ({
   setOpen,
@@ -15,7 +16,7 @@ const DrawerMenuLogic = ({
     case userTypeEnum.student:
       return <></>;
     case userTypeEnum.teacher:
-      return <></>;
+      return <TeacherDrawerMenu setOpen={setOpen} />;
     default:
       return <></>;
   }

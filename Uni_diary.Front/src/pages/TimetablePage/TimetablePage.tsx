@@ -26,7 +26,7 @@ const TimetablePage = () => {
   const [number, setNumber] = useState(1);
   const [groupId, setGroupId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-  const [checked, setChecked] = useState(false);
+  const [bottomWeek, setBottomWeek] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -55,7 +55,7 @@ const TimetablePage = () => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
+    setBottomWeek(event.target.checked);
   };
 
   const getOptionsDelayed = useCallback(
@@ -69,10 +69,10 @@ const TimetablePage = () => {
     dispatch(
       timetableActions.fetchTimetables({
         groupId: groupId ?? "",
-        bottomWeek: checked,
+        bottomWeek: bottomWeek,
       })
     );
-  }, [checked, groupId, openCreate, openEdit, openDelete]);
+  }, [bottomWeek, groupId, openCreate, openEdit, openDelete]);
 
   return (
     <div id="timetable">
@@ -110,7 +110,7 @@ const TimetablePage = () => {
       />
       <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
         <Typography>Верхняя неделя</Typography>
-        <Switch checked={checked} onChange={handleChange} />
+        <Switch checked={bottomWeek} onChange={handleChange} />
         <Typography>Нижняя неделя</Typography>
       </Stack>
       <Stack spacing={2}>

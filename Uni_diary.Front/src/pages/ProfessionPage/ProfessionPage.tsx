@@ -10,7 +10,6 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import { groupActions } from "../../shared/stores/groupSlice";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import StudentDataGrid from "./StudentDataGrid/StudentDataGrid";
 import CreateGroupDialog from "./GroupDialogs/CreateGroupDialog";
