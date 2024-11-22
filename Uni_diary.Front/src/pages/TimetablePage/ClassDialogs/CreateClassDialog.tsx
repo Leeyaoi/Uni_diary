@@ -10,11 +10,12 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../shared/stores/store";
 import { classActions } from "../../../shared/stores/classSlice";
 import { teacherActions } from "../../../shared/stores/teacherSlice";
 import { CourseActions } from "../../../shared/stores/courseSlice";
+import ConflictsDialog from "./ConflictsDialog";
 
 const CreateClassDialog = ({
   open,
@@ -30,11 +31,13 @@ const CreateClassDialog = ({
   const dispatch = useAppDispatch();
   const foundTeachers = useAppSelector((state) => state.teacher.foundTeachers);
   const courses = useAppSelector((state) => state.course.courses);
+  const conflicts = useAppSelector((state) => state.class.conflicts);
 
   const [teacherId, setTeacherId] = useState<string | null>(null);
   const [teacherQuery, setTeacherQuery] = useState("");
   const [courseId, setCourseId] = useState<string | null>(null);
   const [courseQuery, setCourseQuery] = useState("");
+  const [openConflicts, setOpenConflicts] = useState(false);
 
   const [fullGroup, setFullGroup] = useState(true);
   const [firstHalf, setFirstHalf] = useState(false);
@@ -55,6 +58,20 @@ const CreateClassDialog = ({
     }, 400),
     []
   );
+
+  const handleConflicts = () => {
+    if (
+      Array.isArray(conflicts) &&
+      (conflicts[0] != null || conflicts[1] != null)
+    ) {
+      console.log(conflicts);
+      setOpenConflicts(true);
+    } else {
+      handleClose();
+    }
+  };
+
+  useEffect(handleConflicts, [conflicts]);
 
   return (
     <Dialog
@@ -77,66 +94,64 @@ const CreateClassDialog = ({
               timetableId: timetableId,
               courseId: courseId ?? "",
             })
-          ).then((value) => {
-            // alert(value);
-            // if (Array.isArray(value)) {
-            //   alert(value);
-            // }
-          });
-          handleClose();
+          );
         },
       }}
     >
       <DialogTitle>Создать</DialogTitle>
       <DialogContent>
-        <Autocomplete //teacher
-          aria-required
-          options={
-            foundTeachers && foundTeachers.length
-              ? foundTeachers.map(
-                  (option) => option.name + " " + option.surname
-                )
-              : []
-          }
-          onChange={(event: any, newValue: null | string) => {
-            if (newValue == null) {
-              setTeacherId(null);
-            } else {
-              let found = foundTeachers.find(
-                (i) => i.name + " " + i.surname == newValue
-              );
-              setTeacherId(found ? found.id : null);
+        <div id="textField">
+          <Autocomplete //teacher
+            aria-required
+            options={
+              foundTeachers && foundTeachers.length
+                ? foundTeachers.map(
+                    (option) => option.name + " " + option.surname
+                  )
+                : []
             }
-          }}
-          inputValue={teacherQuery}
-          onInputChange={(event: any, newInputValue) => {
-            setTeacherQuery(newInputValue);
-            getTeachersOptionsDelayed(newInputValue);
-          }}
-          fullWidth
-          renderInput={(params) => (
-            <TextField {...params} label="Преподаватель" />
-          )}
-        />
-        <Autocomplete //course
-          aria-required
-          options={courses.length ? courses.map((option) => option.name) : []}
-          onChange={(event: any, newValue: null | string) => {
-            if (newValue == null) {
-              setCourseId(null);
-            } else {
-              let found = courses.find((i) => i.name == newValue);
-              setCourseId(found ? found.id : null);
-            }
-          }}
-          inputValue={courseQuery}
-          onInputChange={(event: any, newInputValue) => {
-            setCourseQuery(newInputValue);
-            getCoursesOptionsDelayed(newInputValue);
-          }}
-          fullWidth
-          renderInput={(params) => <TextField {...params} label="Курс" />}
-        />
+            onChange={(event: any, newValue: null | string) => {
+              if (newValue == null) {
+                setTeacherId(null);
+              } else {
+                let found = foundTeachers.find(
+                  (i) => i.name + " " + i.surname == newValue
+                );
+                setTeacherId(found ? found.id : null);
+              }
+            }}
+            inputValue={teacherQuery}
+            onInputChange={(event: any, newInputValue) => {
+              setTeacherQuery(newInputValue);
+              getTeachersOptionsDelayed(newInputValue);
+            }}
+            fullWidth
+            renderInput={(params) => (
+              <TextField {...params} label="Преподаватель" />
+            )}
+          />
+        </div>
+        <div id="textField">
+          <Autocomplete //course
+            aria-required
+            options={courses.length ? courses.map((option) => option.name) : []}
+            onChange={(event: any, newValue: null | string) => {
+              if (newValue == null) {
+                setCourseId(null);
+              } else {
+                let found = courses.find((i) => i.name == newValue);
+                setCourseId(found ? found.id : null);
+              }
+            }}
+            inputValue={courseQuery}
+            onInputChange={(event: any, newInputValue) => {
+              setCourseQuery(newInputValue);
+              getCoursesOptionsDelayed(newInputValue);
+            }}
+            fullWidth
+            renderInput={(params) => <TextField {...params} label="Курс" />}
+          />
+        </div>
         <FormControlLabel
           control={
             <Checkbox
@@ -163,7 +178,6 @@ const CreateClassDialog = ({
         <TextField
           required
           type="numeric"
-          margin="dense"
           fullWidth
           variant="standard"
           label="Корпус"
@@ -175,7 +189,6 @@ const CreateClassDialog = ({
         <TextField
           required
           type="numeric"
-          margin="dense"
           fullWidth
           variant="standard"
           label="Аудитория"
@@ -200,6 +213,13 @@ const CreateClassDialog = ({
         <Button onClick={handleClose}>Отмена</Button>
         <Button type="submit">Сохранить</Button>
       </DialogActions>
+      <ConflictsDialog
+        open={openConflicts}
+        handleClose={() => {
+          setOpenConflicts(false);
+        }}
+        conflicts={conflicts}
+      />
     </Dialog>
   );
 };
