@@ -35,6 +35,7 @@ classController.post(
         number: number;
         timetableId: uuidv4;
         forBothWeeks: string;
+        teacherId: uuidv4;
       }
     >,
     res: express.Response,

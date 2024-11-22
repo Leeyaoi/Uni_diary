@@ -6,6 +6,9 @@ import GenericRepository from "./GenericRepository";
 import TimetableRepository from "./timetableRepository";
 import { Teacher } from "../dbModels/teacher";
 import { Course } from "../dbModels/course";
+import { Op } from "sequelize";
+import { Group } from "../dbModels/group";
+import { Profession } from "../dbModels/profession";
 
 export default class ClassRepository extends GenericRepository {
   private timetableRepo = new TimetableRepository();
@@ -39,15 +42,32 @@ export default class ClassRepository extends GenericRepository {
     building: number;
     hall: number;
     number: number;
+    teacherId: uuidv4;
     day: number;
   }): Promise<string> {
     const data = await this.model.findOne({
       where: {
-        building: newEntity.building,
-        hall: newEntity.hall,
         number: newEntity.number,
+        [Op.or]: [
+          {
+            building: newEntity.building,
+            hall: newEntity.hall,
+          },
+          {
+            teacherId: newEntity.teacherId,
+          },
+        ],
       },
-      include: [{ model: Timetable, where: { day: newEntity.day } }],
+      include: [
+        {
+          model: Timetable,
+          where: { day: newEntity.day },
+          include: [{ model: Group, include: [Profession] }],
+          order: [["day", "ASC"]],
+        },
+        Course,
+        Teacher,
+      ],
     });
     return JSON.stringify(data);
   }

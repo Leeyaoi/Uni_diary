@@ -7,6 +7,9 @@ const fetchTimetables = createAsyncThunk(
   "timetable/fetch",
   async ({ groupId, bottomWeek }: { groupId: string; bottomWeek: boolean }) => {
     try {
+      if (groupId == "") {
+        return [];
+      }
       const response = await HttpRequest<TimetableType[]>({
         uri: `/timetable/group/${groupId}/${bottomWeek}`,
         method: RESTMethod.Get,

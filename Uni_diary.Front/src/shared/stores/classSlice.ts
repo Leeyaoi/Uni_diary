@@ -101,17 +101,17 @@ const createClass = createAsyncThunk(
     timetableId: string;
   }) => {
     try {
-      const conflictResponse = await HttpRequest<ClassType[]>({
+      const conflictResponse = await HttpRequest<ClassType[] | null>({
         uri: `/class/findConflicts`,
         method: RESTMethod.Post,
         item: newClass,
       });
       if (conflictResponse.code === "error") {
-        return {} as PaginatedType<ClassType>;
+        return [];
       }
       if (
-        conflictResponse.data[0] != null &&
-        conflictResponse.data[1] != null
+        Array.isArray(conflictResponse.data) &&
+        (conflictResponse.data[0] != null || conflictResponse.data[1] != null)
       ) {
         return conflictResponse.data;
       }
@@ -121,11 +121,11 @@ const createClass = createAsyncThunk(
         item: { ...newClass },
       });
       if (response.code === "error") {
-        return {} as PaginatedType<ClassType>;
+        return [];
       }
-      return response.data;
+      return conflictResponse.data;
     } catch (error) {
-      return {} as PaginatedType<ClassType>;
+      return [];
     }
   }
 );
@@ -136,6 +136,7 @@ interface ClassState {
   teachersClasses: ClassType[][];
   fetchedClass: ClassType;
   selectedClass: ClassType;
+  conflicts: (ClassType | null)[];
 }
 
 const initialState: ClassState = {
@@ -144,6 +145,7 @@ const initialState: ClassState = {
   teachersClasses: [],
   fetchedClass: {} as ClassType,
   selectedClass: {} as ClassType,
+  conflicts: [],
 };
 
 export const classSlice = createSlice({
@@ -203,6 +205,7 @@ export const classSlice = createSlice({
       })
       .addCase(createClass.fulfilled, (state, action) => {
         state.loading = false;
+        state.conflicts = action.payload as (ClassType | null)[];
         state.error = null;
       })
       .addCase(createClass.rejected, (state, action) => {

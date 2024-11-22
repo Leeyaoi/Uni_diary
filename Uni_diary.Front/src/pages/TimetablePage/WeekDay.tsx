@@ -34,6 +34,7 @@ const WeekDay = ({
         if (found[0].fullGroup) {
           divs.push(
             <div
+              key={found[0].id}
               className="class"
               onClick={() => {
                 handleOpenEdit(timetable.id, i, found[0].id ?? "");
@@ -47,12 +48,14 @@ const WeekDay = ({
           divs.push(
             <div
               className="class"
+              key={found[0].id}
               onClick={() => {
                 handleOpenCreate(timetable.id, i);
               }}
             >
               <div
                 className="firstHalf"
+                key={found[0].id + "-1"}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleOpenEdit(timetable.id, i, found[0].id ?? "");
@@ -67,12 +70,14 @@ const WeekDay = ({
           divs.push(
             <div
               className="class"
+              key={found[0].id}
               onClick={() => {
                 handleOpenCreate(timetable.id, i);
               }}
             >
               <div
                 className="secondHalf"
+                key={found[0].id + "-2"}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleOpenEdit(timetable.id, i, found[0].id ?? "");
@@ -92,9 +97,10 @@ const WeekDay = ({
           secondHalf = found[0];
         }
         divs.push(
-          <div className="class">
+          <div className="class" key={found[0].id}>
             <div
               className="firstHalf"
+              key={found[0].id + "-1"}
               onClick={() => {
                 handleOpenEdit(timetable.id, i, firstHalf.id ?? "");
               }}
@@ -104,6 +110,7 @@ const WeekDay = ({
             </div>
             <div
               className="secondHalf"
+              key={found[0].id + "-2"}
               onClick={() => {
                 handleOpenEdit(timetable.id, i, secondHalf.id ?? "");
               }}
