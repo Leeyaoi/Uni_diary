@@ -5,19 +5,23 @@ import TimetableType from "../types/timetable";
 
 const fetchTimetables = createAsyncThunk(
   "timetable/fetch",
-  async ({ groupId, bottomWeek }: { groupId: string; bottomWeek: boolean }) => {
+  async ({ groupId }: { groupId: string }) => {
     try {
       if (groupId == "") {
         return [];
       }
-      const response = await HttpRequest<TimetableType[]>({
-        uri: `/timetable/group/${groupId}/${bottomWeek}`,
+      const responseUp = await HttpRequest<TimetableType[]>({
+        uri: `/timetable/group/${groupId}/false`,
         method: RESTMethod.Get,
       });
-      if (response.code === "error") {
+      const responseBottom = await HttpRequest<TimetableType[]>({
+        uri: `/timetable/group/${groupId}/true`,
+        method: RESTMethod.Get,
+      });
+      if (responseUp.code === "error" || responseBottom.code === "error") {
         return [];
       }
-      return response.data;
+      return [responseUp.data, responseBottom.data];
     } catch (error) {
       return [];
     }
@@ -27,13 +31,15 @@ const fetchTimetables = createAsyncThunk(
 interface TimetableState {
   error: string | null;
   loading: boolean;
-  Timetables: TimetableType[];
+  upTimetables: TimetableType[];
+  bottomTimetables: TimetableType[];
 }
 
 const initialState: TimetableState = {
   error: null,
   loading: false,
-  Timetables: [],
+  upTimetables: [],
+  bottomTimetables: [],
 };
 
 export const timetableSlice = createSlice({
@@ -49,7 +55,7 @@ export const timetableSlice = createSlice({
       })
       .addCase(fetchTimetables.fulfilled, (state, action) => {
         state.loading = false;
-        state.Timetables = action.payload;
+        [state.upTimetables, state.bottomTimetables] = action.payload;
         state.error = null;
       })
       .addCase(fetchTimetables.rejected, (state, action) => {

@@ -19,6 +19,7 @@ import TimetablePage from "./pages/TimetablePage/TimetablePage";
 import TeacherTimetablePage from "./pages/TeacherTimetablePage/TeacherTimetablePage";
 import AttendancePage from "./pages/AttendancePage/AttendancePage";
 import MarksPage from "./pages/MarksPage/MarksPage";
+import TimetablePdf from "./pages/TimetablePage/TimetablePdf/TimetablePdf";
 
 const App = () => {
   const [open, setOpen] = React.useState(false);
@@ -36,46 +37,57 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <Container className="container">
-        <Header setOpen={setOpen} open={open} />
-        <div id="content">
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/professions" element={<FacultyPage />} />
-            <Route path="/teachers" element={<TeacherPage />} />
-            <Route path="/admins" element={<AdminPage />} />
-            <Route path="/cources" element={<CoursePage />} />
-            <Route path="/timetable" element={<TimetablePage />} />
-            <Route path="/attendance" element={<AttendancePage />} />
-            <Route path="/marks" element={<MarksPage />} />
-            <Route
-              path="/teacher/timetable"
-              element={<TeacherTimetablePage />}
-            />
-            <Route
-              path="/profession/:professionId"
-              element={<ProfessionPage />}
-            />
-          </Routes>
-          <Drawer
-            variant="persistent"
-            anchor="left"
-            id="menu"
-            open={loggedIn && open}
-            onClose={toggleDrawer(false)}
-          >
-            <ListItem>
-              <ListItemButton id="closeDrawer" onClick={toggleDrawer(false)}>
-                <CloseIcon />
-              </ListItemButton>
-            </ListItem>
-            <Divider />
-            <DrawerMenuLogic setOpen={setOpen} />
-          </Drawer>
-        </div>
-        <Footer />
-      </Container>
+      <Routes>
+        <Route path="/timetablePdf" element={<TimetablePdf />} />
+        <Route
+          path="*"
+          element={
+            <Container className="container">
+              <Header setOpen={setOpen} open={open} />
+              <div id="content">
+                <Routes>
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/professions" element={<FacultyPage />} />
+                  <Route path="/teachers" element={<TeacherPage />} />
+                  <Route path="/admins" element={<AdminPage />} />
+                  <Route path="/cources" element={<CoursePage />} />
+                  <Route path="/timetable" element={<TimetablePage />} />
+                  <Route path="/attendance" element={<AttendancePage />} />
+                  <Route path="/marks" element={<MarksPage />} />
+                  <Route
+                    path="/teacher/timetable"
+                    element={<TeacherTimetablePage />}
+                  />
+                  <Route
+                    path="/profession/:professionId"
+                    element={<ProfessionPage />}
+                  />
+                </Routes>
+                <Drawer
+                  variant="persistent"
+                  anchor="left"
+                  id="menu"
+                  open={loggedIn && open}
+                  onClose={toggleDrawer(false)}
+                >
+                  <ListItem>
+                    <ListItemButton
+                      id="closeDrawer"
+                      onClick={toggleDrawer(false)}
+                    >
+                      <CloseIcon />
+                    </ListItemButton>
+                  </ListItem>
+                  <Divider />
+                  <DrawerMenuLogic setOpen={setOpen} />
+                </Drawer>
+              </div>
+              <Footer />
+            </Container>
+          }
+        />
+      </Routes>
     </BrowserRouter>
   );
 };
