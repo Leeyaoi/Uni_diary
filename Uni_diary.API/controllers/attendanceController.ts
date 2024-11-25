@@ -9,7 +9,8 @@ import { CreateAttendanceValidator } from "../validators/AttendanceValidators/Cr
 import GenericController from "./genericController";
 import { Student } from "../dbModels/student";
 import StudentRepository from "../repositories/studentRepository";
-import { where } from "sequelize";
+import { Model, where } from "sequelize";
+import { Class } from "../dbModels/class";
 
 const repo = new GenericRepository(Attendance);
 const studRepo = new StudentRepository();
@@ -50,6 +51,39 @@ attendanceController.get(
     const attendance = JSON.parse(
       await studRepo.getByPredicate({}, [
         { model: Attendance, where: { courseId, dateWhen } },
+      ])
+    );
+    res.send(attendance);
+  }
+);
+
+attendanceController.get(
+  "/group/:groupId",
+  async (req: express.Request, res: express.Response, next) => {
+    const groupId = req.params.groupId;
+    if (!validate(groupId)) {
+      res.sendStatus(400);
+      return;
+    }
+    const attendance = JSON.parse(
+      await studRepo.getByPredicate({ groupId }, [Attendance])
+    );
+    res.send(attendance);
+  }
+);
+
+attendanceController.get(
+  "/course/:courseId/group/:groupId",
+  async (req: express.Request, res: express.Response, next) => {
+    const courseId = req.params.courseId;
+    const groupId = req.params.groupId;
+    if (!validate(groupId) || !validate(courseId)) {
+      res.sendStatus(400);
+      return;
+    }
+    const attendance = JSON.parse(
+      await studRepo.getByPredicate({ groupId }, [
+        { model: Attendance, where: { courseId } },
       ])
     );
     res.send(attendance);

@@ -34,6 +34,7 @@ const AttendancePage = () => {
   const courseId = useAppSelector(
     (state) => state.class.selectedClass.course.id
   );
+  const lection = useAppSelector((state) => state.class.selectedClass.lection);
   const students = useAppSelector((state) => state.student.students);
   const AttendedStudents = useAppSelector(
     (state) => state.attendance.AttendedStudents
@@ -118,11 +119,22 @@ const AttendancePage = () => {
               dateWhen: date,
               courseId: courseId,
               students: personName,
+              lection: lection,
             })
           );
         }}
       >
         Сохранить
+      </Button>
+      <p></p>
+      <Button
+        id="button"
+        variant="contained"
+        onClick={() => {
+          window.open(window.location.href + "Pdf");
+        }}
+      >
+        Скачать PDF
       </Button>
       <Collapse in={open && loading == false && !error}>
         <Alert

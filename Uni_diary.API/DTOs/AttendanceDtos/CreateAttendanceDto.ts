@@ -4,4 +4,5 @@ export default class CreateAttendanceDto {
   dateWhen: Date;
   studentId: uuidv4;
   courseId: uuidv4;
+  lection: boolean;
 }

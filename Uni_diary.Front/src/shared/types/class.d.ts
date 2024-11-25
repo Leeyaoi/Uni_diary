@@ -1,4 +1,5 @@
 import CourseType from "./course";
+import GroupType from "./group";
 import TeacherType from "./teacher";
 import TimetableType from "./timetable";
 

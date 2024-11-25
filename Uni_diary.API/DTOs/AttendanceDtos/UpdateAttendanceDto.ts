@@ -4,4 +4,5 @@ export default class UpdateAttendanceDto {
   dateWhen: Date | undefined;
   studentId: uuidv4 | undefined;
   courseId: uuidv4 | undefined;
+  lection: boolean | undefined;
 }

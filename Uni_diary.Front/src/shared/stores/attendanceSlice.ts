@@ -10,10 +10,12 @@ const postAttendance = createAsyncThunk(
     dateWhen,
     students,
     courseId,
+    lection,
   }: {
     dateWhen: Dayjs;
     students: StudentType[];
     courseId: string;
+    lection: boolean;
   }) => {
     const date = dateWhen.toDate().toISOString().split("T")[0];
     try {
@@ -29,6 +31,7 @@ const postAttendance = createAsyncThunk(
             dateWhen: date,
             studentId: student.id,
             courseId,
+            lection,
           },
         });
         if (response.code === "error") {
@@ -49,6 +52,42 @@ const getAttendance = createAsyncThunk(
     try {
       const response = await HttpRequest({
         uri: `/attendance/group/${date}/${courseId}`,
+        method: RESTMethod.Get,
+      });
+      if (response.code === "error") {
+        return [];
+      }
+      return response.data;
+    } catch (error) {
+      return [];
+    }
+  }
+);
+
+const getAttendanceByGroup = createAsyncThunk(
+  "attendance/getByGroup",
+  async ({ groupId }: { groupId: string }) => {
+    try {
+      const response = await HttpRequest({
+        uri: `/attendance/group/${groupId}`,
+        method: RESTMethod.Get,
+      });
+      if (response.code === "error") {
+        return [];
+      }
+      return response.data;
+    } catch (error) {
+      return [];
+    }
+  }
+);
+
+const getAttendanceForTeacher = createAsyncThunk(
+  "attendance/getForTeacher",
+  async ({ groupId, courseId }: { groupId: string; courseId: string }) => {
+    try {
+      const response = await HttpRequest({
+        uri: `/attendance/course/${courseId}/group/${groupId}`,
         method: RESTMethod.Get,
       });
       if (response.code === "error") {
@@ -105,6 +144,34 @@ export const AttendanceSlice = createSlice({
       .addCase(getAttendance.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      //getAttendanceByGroup
+      .addCase(getAttendanceByGroup.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAttendanceByGroup.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.AttendedStudents = action.payload as StudentType[];
+      })
+      .addCase(getAttendanceByGroup.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      //getAttendanceForTeacher
+      .addCase(getAttendanceForTeacher.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAttendanceForTeacher.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.AttendedStudents = action.payload as StudentType[];
+      })
+      .addCase(getAttendanceForTeacher.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
@@ -114,4 +181,6 @@ export const attendanceActions = {
   ...AttendanceSlice.actions,
   postAttendance,
   getAttendance,
+  getAttendanceByGroup,
+  getAttendanceForTeacher,
 };

@@ -20,7 +20,9 @@ import TeacherTimetablePage from "./pages/TeacherTimetablePage/TeacherTimetableP
 import AttendancePage from "./pages/AttendancePage/AttendancePage";
 import MarksPage from "./pages/MarksPage/MarksPage";
 import TimetablePdf from "./pages/TimetablePage/TimetablePdf/TimetablePdf";
-import TeacherTimetablePdf from "./pages/TeacherTimetablePage/TeacherTimetablePdf/TeachertimetablePdf";
+import TeacherTimetablePdf from "./pages/TeacherTimetablePage/TeacherTimetablePdf/TeacherTimetablePdf";
+import AttendancePdf from "./pages/AttendancePage/AttendancePdf/AttendancePdf";
+import ProfessionAttendancePdf from "./pages/ProfessionPage/ProfessionAttendancePdf/ProfessionAttendancePdf";
 
 const App = () => {
   const [open, setOpen] = React.useState(false);
@@ -41,6 +43,11 @@ const App = () => {
       <Routes>
         <Route path="/timetablePdf" element={<TimetablePdf />} />
         <Route path="/teacher/timetablePdf" element={<TeacherTimetablePdf />} />
+        <Route path="/attendancePdf" element={<AttendancePdf />} />
+        <Route
+          path="/profession/attendancePdf/:groupId"
+          element={<ProfessionAttendancePdf />}
+        />
         <Route
           path="*"
           element={

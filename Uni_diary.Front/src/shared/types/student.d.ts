@@ -9,6 +9,7 @@ type StudentType = {
   budget: boolean;
   group: GroupType;
   user: { id: string; login: string; password: string };
+  attendances: { lection: boolean }[];
 };
 
 export default StudentType;
