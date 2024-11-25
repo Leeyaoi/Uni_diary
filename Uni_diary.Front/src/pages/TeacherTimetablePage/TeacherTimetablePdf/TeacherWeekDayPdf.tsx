@@ -24,8 +24,12 @@ const renderClass = (classes: ClassType[], styles: any, only: boolean) => {
               : "",
           ]}
         >
-          {cls.course.name} {cls.teacher.surname} {cls.hall}/{cls.building}{" "}
-          {cls.lection ? "(лек.)" : ""}
+          {cls.course.name}{" "}
+          {cls.timetable.group.profession.name +
+            "-" +
+            (cls.timetable.group.year % 100) +
+            cls.timetable.group.num}{" "}
+          {cls.hall}/{cls.building} {cls.lection ? "(лек.)" : ""}
         </Text>
       ))}
     </View>
@@ -33,12 +37,12 @@ const renderClass = (classes: ClassType[], styles: any, only: boolean) => {
 };
 
 // Function to render all classes for each timetable
-const renderClasses = (timetables: TimetableType[], styles: any) => {
+const renderClasses = (classes: ClassType[][], styles: any) => {
   const divs = [];
 
   for (let i = 1; i <= 5; i++) {
-    const found1 = timetables[0].classes.filter((cls) => cls.number === i);
-    const found2 = timetables[1].classes.filter((cls) => cls.number === i);
+    const found1 = classes[0].filter((cls) => cls.number === i);
+    const found2 = classes[1].filter((cls) => cls.number === i);
 
     if (!same(found1, found2)) {
       divs.push(
@@ -74,8 +78,8 @@ const same = (found1: ClassType[], found2: ClassType[]): boolean => {
       return true;
     }
     return (
-      `${found1[0].course.name} ${found1[0].teacher.surname} ${found1[0].hall}/${found1[0].building} ${found1[0].fullGroup} ${found1[0].firstHalf}` ==
-      `${found2[0].course.name} ${found2[0].teacher.surname} ${found2[0].hall}/${found2[0].building} ${found2[0].fullGroup} ${found2[0].firstHalf}`
+      `${found1[0].course.name}${found1[0].hall}/${found1[0].building} ${found1[0].timetable.group.id}` ==
+      `${found2[0].course.name}${found2[0].hall}/${found2[0].building} ${found2[0].timetable.group.id}`
     );
   } else {
     return same([found1[0]], [found2[0]]) && same([found1[1]], [found2[1]]);
@@ -83,23 +87,25 @@ const same = (found1: ClassType[], found2: ClassType[]): boolean => {
 };
 
 // Main component to render weekday content for PDF
-const WeekDayPdf = ({
-  timetables,
+const TeacherWeekDayPdf = ({
+  classes,
   styles,
+  day,
 }: {
-  timetables: TimetableType[];
+  classes: ClassType[][];
   styles: any;
+  day: number;
 }) => {
-  const dayName = weekDays[(timetables[0].day % 7) - 1];
+  const dayName = weekDays[day];
 
   return (
     <View style={styles.borderedView}>
       <Text style={styles.dayName} key={`${dayName}-name`}>
         {dayName}
       </Text>
-      <View key={timetables[0].day}>{renderClasses(timetables, styles)}</View>
+      <View key={day}>{renderClasses(classes, styles)}</View>
     </View>
   );
 };
 
-export default WeekDayPdf;
+export default TeacherWeekDayPdf;

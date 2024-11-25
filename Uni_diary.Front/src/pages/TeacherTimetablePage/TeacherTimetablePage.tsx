@@ -1,4 +1,4 @@
-import { Stack, Typography, Switch } from "@mui/material";
+import { Stack, Typography, Switch, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../shared/stores/store";
 import TeacherWeekDay from "./TeacherWeekDay";
@@ -9,9 +9,10 @@ import ClassType from "../../shared/types/class";
 
 const TeacherTimetablePage = () => {
   const dispatch = useAppDispatch();
-  const teachersClasses = useAppSelector(
-    (state) => state.class.teachersClasses
-  );
+  const teachersClasses = useAppSelector((state) => [
+    state.class.upTeachersClasses,
+    state.class.bottomTeachersClasses,
+  ]);
   const teacherId = useAppSelector((state) => state.user.currentUser?.id);
 
   const [bottomWeek, setBottomWeek] = useState(false);
@@ -34,10 +35,9 @@ const TeacherTimetablePage = () => {
     dispatch(
       classActions.fetchTeachersClasses({
         teacherId: teacherId ?? "",
-        bottomWeek: bottomWeek,
       })
     );
-  }, [bottomWeek]);
+  }, []);
 
   return (
     <div id="timetable">
@@ -46,9 +46,18 @@ const TeacherTimetablePage = () => {
         <Switch checked={bottomWeek} onChange={handleChange} />
         <Typography>Нижняя неделя</Typography>
       </Stack>
+      <Button
+        id="button"
+        variant="contained"
+        onClick={() => {
+          window.open(window.location.href + "Pdf");
+        }}
+      >
+        Скачать PDF
+      </Button>
       <Stack spacing={2}>
-        {Array.isArray(teachersClasses)
-          ? teachersClasses.map((value, index) => (
+        {Array.isArray(teachersClasses[bottomWeek ? 1 : 0])
+          ? teachersClasses[bottomWeek ? 1 : 0].map((value, index) => (
               <TeacherWeekDay
                 classes={value}
                 day={index}

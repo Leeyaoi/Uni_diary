@@ -14,6 +14,7 @@ type ClassType = {
   teacher: TeacherType;
   course: CourseType;
   timetable: TimetableType;
+  lection: boolean;
 };
 
 export default ClassType;

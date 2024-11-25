@@ -41,7 +41,7 @@ const WeekDay = ({
               }}
             >
               {found[0].course.name} {found[0].teacher.surname} {found[0].hall}/
-              {found[0].building}
+              {found[0].building} {found[0].lection ? "(лек.)" : ""}
             </div>
           );
         } else if (found[0].firstHalf) {
@@ -62,7 +62,8 @@ const WeekDay = ({
                 }}
               >
                 {found[0].course.name} {found[0].teacher.surname}{" "}
-                {found[0].hall}/{found[0].building}
+                {found[0].hall}/{found[0].building}{" "}
+                {found[0].lection ? "(лек.)" : ""}
               </div>
             </div>
           );
@@ -84,7 +85,8 @@ const WeekDay = ({
                 }}
               >
                 {found[0].course.name} {found[0].teacher.surname}{" "}
-                {found[0].hall}/{found[0].building}
+                {found[0].hall}/{found[0].building}{" "}
+                {found[0].lection ? "(лек.)" : ""}
               </div>
             </div>
           );
@@ -106,7 +108,8 @@ const WeekDay = ({
               }}
             >
               {firstHalf.course.name} {firstHalf.teacher.surname}{" "}
-              {firstHalf.hall}/{firstHalf.building}
+              {firstHalf.hall}/{firstHalf.building}{" "}
+              {found[0].lection ? "(лек.)" : ""}
             </div>
             <div
               className="secondHalf"
@@ -116,7 +119,8 @@ const WeekDay = ({
               }}
             >
               {secondHalf.course.name} {secondHalf.teacher.surname}{" "}
-              {secondHalf.hall}/{secondHalf.building}
+              {secondHalf.hall}/{secondHalf.building}{" "}
+              {found[0].lection ? "(лек.)" : ""}
             </div>
           </div>
         );

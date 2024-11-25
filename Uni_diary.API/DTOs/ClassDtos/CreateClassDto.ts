@@ -10,5 +10,6 @@ export default class CreateClassDto {
   teacherId: uuidv4;
   courseId: uuidv4;
   timetableId: uuidv4;
+  lection: boolean;
   id?: any;
 }

@@ -5,12 +5,12 @@ import {
   Page,
   StyleSheet,
   Font,
-  Text,
 } from "@react-pdf/renderer";
 import React, { useEffect } from "react";
 import { store } from "../../../shared/stores/store";
-import WeekDayPdf from "./WeekDayPdf";
+//import WeekDayPdf from "./WeekDayPdf";
 import { groupActions } from "../../../shared/stores/groupSlice";
+import TeacherWeekDayPdf from "./TeacherWeekDayPdf";
 
 Font.register({
   family: "Times New Roman",
@@ -78,39 +78,24 @@ const styles = StyleSheet.create({
   },
 });
 
-const TimetablePdf = () => {
-  const timetables = [
-    store.getState().timetable.upTimetables,
-    store.getState().timetable.bottomTimetables,
+const TeacherTimetablePdf = () => {
+  const classes = [
+    store.getState().class.upTeachersClasses,
+    store.getState().class.bottomTeachersClasses,
   ];
-
-  const group = store.getState().group.fetchedGroup;
-
-  useEffect(() => {
-    if (timetables[0]) {
-      store.dispatch(groupActions.getGroupById(timetables[0][0].group.id));
-    }
-  }, [timetables]);
 
   const MyPdf = () => {
     return (
       <Document>
         <Page size={[595, 990]} style={styles.page}>
-          <Text
-            style={[styles.dayName, { textAlign: "left", marginBottom: 10 }]}
-          >
-            Расписание группы{" "}
-            {group && group.profession
-              ? group.profession.name + "-" + (group.year % 100) + group.num
-              : ""}
-          </Text>
           <View>
-            {timetables.length > 1 && timetables[1]
-              ? timetables[1].map((value, index) => (
-                  <WeekDayPdf
-                    timetables={[timetables[0][index], timetables[1][index]]}
+            {classes.length > 1 && classes[0]
+              ? classes[0].map((value, index) => (
+                  <TeacherWeekDayPdf
+                    classes={[classes[0][index], classes[1][index]]}
                     styles={styles}
-                    key={timetables[0][index].id}
+                    day={index}
+                    key={index}
                   />
                 ))
               : ""}
@@ -127,4 +112,4 @@ const TimetablePdf = () => {
   );
 };
 
-export default TimetablePdf;
+export default TeacherTimetablePdf;
