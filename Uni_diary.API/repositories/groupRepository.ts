@@ -3,6 +3,7 @@ import { v4 as uuidv4, validate } from "uuid";
 import GenericRepository from "./GenericRepository";
 import { WhereOptions } from "sequelize";
 import TimetableRepository from "./timetableRepository";
+import { Profession } from "../dbModels/profession";
 
 export default class GroupRepository extends GenericRepository {
   private timetableRepo = new TimetableRepository();
@@ -25,6 +26,15 @@ export default class GroupRepository extends GenericRepository {
       params
     );
     return data;
+  }
+
+  //GET by id
+  async getById(id: uuidv4): Promise<string> {
+    const data = await this.model.findOne({
+      where: { id: id },
+      include: [Profession],
+    });
+    return JSON.stringify(data);
   }
 
   //POST

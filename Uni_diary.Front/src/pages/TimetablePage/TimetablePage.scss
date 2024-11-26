@@ -1,6 +1,10 @@
 #timetable{
     width: 100%;
     margin-top: 1rem;
+
+    & > #button{
+        margin-bottom: 1rem;
+    }
 }
 
 .weekDay{
@@ -35,4 +39,8 @@
 
 #textField{
     margin-top: 0.5rem;
+}
+
+#TimetablePdf{
+    visibility: hidden;
 }

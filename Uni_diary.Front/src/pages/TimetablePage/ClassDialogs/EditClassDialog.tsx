@@ -45,6 +45,7 @@ const EditClassDialog = ({
   const [firstHalf, setFirstHalf] = useState(false);
   const [building, setBuilding] = useState(1);
   const [hall, setHall] = useState(0);
+  const [lection, setLection] = useState(false);
 
   const [currentTeacherName, setCurrentTeacherName] = useState("");
   const [currentCourseName, setCurrentCourseName] = useState("");
@@ -78,6 +79,7 @@ const EditClassDialog = ({
           setCourseId(item.course.id);
           setCourseQuery(item.course.name);
           setCurrentCourseName(item.course.name);
+          setLection(item.lection);
         }
       });
     }
@@ -103,6 +105,7 @@ const EditClassDialog = ({
               timetableId: timetableId,
               courseId: courseId ?? "",
               id: id,
+              lection: lection,
             })
           );
           handleClose();
@@ -183,6 +186,17 @@ const EditClassDialog = ({
             />
           }
           label="Первая поддгруппа"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={lection}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setLection(event.target.checked);
+              }}
+            />
+          }
+          label="Лекция"
         />
         <TextField
           required

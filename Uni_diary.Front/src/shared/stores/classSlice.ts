@@ -2,28 +2,25 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { HttpRequest } from "../../api/GenericApi";
 import { RESTMethod } from "../types/RESTMethodEnum";
 import ClassType from "../types/class";
-import PaginatedType from "../types/paginatedModel";
 
 const fetchTeachersClasses = createAsyncThunk(
   "class/teacher",
-  async ({
-    teacherId,
-    bottomWeek,
-  }: {
-    teacherId: string;
-    bottomWeek: boolean;
-  }) => {
+  async ({ teacherId }: { teacherId: string }) => {
     try {
-      const response = await HttpRequest<ClassType[][]>({
-        uri: `/class/teacher/${teacherId}/${bottomWeek}`,
+      const responseUp = await HttpRequest<ClassType[][]>({
+        uri: `/class/teacher/${teacherId}/false`,
         method: RESTMethod.Get,
       });
-      if (response.code === "error") {
-        return [] as ClassType[][];
+      const responseBottom = await HttpRequest<ClassType[][]>({
+        uri: `/class/teacher/${teacherId}/true`,
+        method: RESTMethod.Get,
+      });
+      if (responseUp.code === "error" || responseBottom.code === "error") {
+        return [];
       }
-      return response.data;
+      return [responseUp.data, responseBottom.data];
     } catch (error) {
-      return [] as ClassType[][];
+      return [];
     }
   }
 );
@@ -70,6 +67,7 @@ const updateClass = createAsyncThunk(
     courseId: string;
     timetableId: string;
     id: string;
+    lection: boolean;
   }) => {
     try {
       const response = await HttpRequest<ClassType>({
@@ -99,6 +97,7 @@ const createClass = createAsyncThunk(
     teacherId: string;
     courseId: string;
     timetableId: string;
+    lection: boolean;
   }) => {
     try {
       const conflictResponse = await HttpRequest<ClassType[] | null>({
@@ -133,7 +132,8 @@ const createClass = createAsyncThunk(
 interface ClassState {
   error: string | null;
   loading: boolean;
-  teachersClasses: ClassType[][];
+  upTeachersClasses: ClassType[][];
+  bottomTeachersClasses: ClassType[][];
   fetchedClass: ClassType;
   selectedClass: ClassType;
   conflicts: (ClassType | null)[];
@@ -142,7 +142,8 @@ interface ClassState {
 const initialState: ClassState = {
   error: null,
   loading: false,
-  teachersClasses: [],
+  upTeachersClasses: [],
+  bottomTeachersClasses: [],
   fetchedClass: {} as ClassType,
   selectedClass: {} as ClassType,
   conflicts: [],
@@ -220,7 +221,7 @@ export const classSlice = createSlice({
       .addCase(fetchTeachersClasses.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.teachersClasses = action.payload;
+        [state.upTeachersClasses, state.bottomTeachersClasses] = action.payload;
       })
       .addCase(fetchTeachersClasses.rejected, (state, action) => {
         state.loading = false;

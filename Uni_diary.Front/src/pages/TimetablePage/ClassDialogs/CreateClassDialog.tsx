@@ -44,6 +44,7 @@ const CreateClassDialog = ({
   const [forBothWeeks, setForBothWeeks] = useState(false);
   const [building, setBuilding] = useState(1);
   const [hall, setHall] = useState(0);
+  const [lection, setLection] = useState(false);
 
   const getTeachersOptionsDelayed = useCallback(
     debounce(async (newValue: string) => {
@@ -93,6 +94,7 @@ const CreateClassDialog = ({
               teacherId: teacherId ?? "",
               timetableId: timetableId,
               courseId: courseId ?? "",
+              lection: lection,
             })
           );
         },
@@ -174,6 +176,17 @@ const CreateClassDialog = ({
             />
           }
           label="Первая поддгруппа"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={lection}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setLection(event.target.checked);
+              }}
+            />
+          }
+          label="Лекция"
         />
         <TextField
           required

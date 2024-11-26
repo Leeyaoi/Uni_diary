@@ -37,7 +37,7 @@ const TeacherWeekDay = ({
               }}
             >
               {found[0].course.name} {groupName} {found[0].hall}/
-              {found[0].building}
+              {found[0].building} {found[0].lection ? "(лек.)" : ""}
             </div>
           );
           //if first half
@@ -52,7 +52,7 @@ const TeacherWeekDay = ({
                 }}
               >
                 {found[0].course.name} {groupName} {found[0].hall}/
-                {found[0].building}
+                {found[0].building} {found[0].lection ? "(лек.)" : ""}
               </div>
             </div>
           );
@@ -68,7 +68,7 @@ const TeacherWeekDay = ({
                 }}
               >
                 {found[0].course.name} {groupName} {found[0].hall}/
-                {found[0].building}
+                {found[0].building} {found[0].lection ? "(лек.)" : ""}
               </div>
             </div>
           );

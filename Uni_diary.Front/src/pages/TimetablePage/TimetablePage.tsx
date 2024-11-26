@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import "./TimetablePage.scss";
 import {
   Autocomplete,
+  Button,
   debounce,
   Stack,
   Switch,
@@ -19,7 +20,10 @@ import DeleteClassDialog from "./ClassDialogs/DeleteClassDialog";
 const TimetablePage = () => {
   const dispatch = useAppDispatch();
   const foundGroups = useAppSelector((state) => state.group.foundGroups);
-  const timetables = useAppSelector((state) => state.timetable.Timetables);
+  const timetables = useAppSelector((state) => [
+    state.timetable.upTimetables,
+    state.timetable.bottomTimetables,
+  ]);
 
   const [classId, setClassId] = useState("");
   const [timetableId, setTimetableId] = useState("");
@@ -69,10 +73,9 @@ const TimetablePage = () => {
     dispatch(
       timetableActions.fetchTimetables({
         groupId: groupId ?? "",
-        bottomWeek: bottomWeek,
       })
     );
-  }, [bottomWeek, groupId, openCreate, openEdit, openDelete]);
+  }, [groupId, openCreate, openEdit, openDelete]);
 
   return (
     <div id="timetable">
@@ -113,15 +116,27 @@ const TimetablePage = () => {
         <Switch checked={bottomWeek} onChange={handleChange} />
         <Typography>Нижняя неделя</Typography>
       </Stack>
+      <Button
+        id="button"
+        disabled={!timetables[bottomWeek ? 1 : 0]}
+        variant="contained"
+        onClick={() => {
+          window.open(window.location.href + "Pdf");
+        }}
+      >
+        Скачать PDF
+      </Button>
       <Stack spacing={2}>
-        {timetables.map((value) => (
-          <WeekDay
-            timetable={value}
-            handleOpenCreate={handleOpenCreate}
-            handleOpenEdit={handleOpenEdit}
-            key={value.id}
-          />
-        ))}
+        {timetables[bottomWeek ? 1 : 0]
+          ? timetables[bottomWeek ? 1 : 0].map((value) => (
+              <WeekDay
+                timetable={value}
+                handleOpenCreate={handleOpenCreate}
+                handleOpenEdit={handleOpenEdit}
+                key={value.id}
+              />
+            ))
+          : ""}
       </Stack>
       <CreateClassDialog
         open={openCreate}

@@ -15,6 +15,10 @@ export const Class = sequelize.define("class", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  lection: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+  },
   fullGroup: {
     type: DataTypes.BOOLEAN,
     allowNull: false,

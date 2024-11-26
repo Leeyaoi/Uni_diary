@@ -192,6 +192,21 @@ const ProfessionPage = () => {
       >
         Добавить студента
       </Button>
+      <Button
+        id="add-student"
+        variant="contained"
+        disabled={groupId == ""}
+        onClick={() => {
+          window.open(
+            window.location.href.replace(
+              professionId ?? "",
+              "attendancePdf/" + groupId
+            )
+          );
+        }}
+      >
+        Скачать PDF
+      </Button>
       <StudentDataGrid
         students={students}
         limit={limit}

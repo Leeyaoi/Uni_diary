@@ -1,4 +1,5 @@
 import CourseType from "./course";
+import GroupType from "./group";
 import TeacherType from "./teacher";
 import TimetableType from "./timetable";
 
@@ -14,6 +15,7 @@ type ClassType = {
   teacher: TeacherType;
   course: CourseType;
   timetable: TimetableType;
+  lection: boolean;
 };
 
 export default ClassType;

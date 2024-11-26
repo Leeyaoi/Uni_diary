@@ -22,6 +22,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "./MarksPage.scss";
 import { MarkActions } from "../../shared/stores/markSlice";
 import MarkType from "../../shared/types/mark";
+import { GroupCourseActions } from "../../shared/stores/groupCourseSlice";
 
 const MarksPage = () => {
   const navigate = useNavigate();
@@ -123,6 +124,21 @@ const MarksPage = () => {
         }}
       >
         Сохранить
+      </Button>
+      <p></p>
+      <Button
+        id="button"
+        variant="contained"
+        onClick={async () => {
+          await dispatch(
+            GroupCourseActions.setSelectedGroupCourse({ groupId, courseId })
+          );
+          window.open(
+            window.location.href.replace("marks", "cources/marksPdf")
+          );
+        }}
+      >
+        Скачать PDF
       </Button>
       <Collapse in={open && loading == false && !error}>
         <Alert

@@ -11,4 +11,8 @@ export const Attendance = sequelize.define("attendance", {
     type: DataTypes.DATEONLY,
     allowNull: false,
   },
+  lection: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+  },
 });

@@ -9,4 +9,5 @@ export default class UpdateClassDto {
   teacherId: uuidv4 | undefined;
   courseId: uuidv4 | undefined;
   timetableId: uuidv4 | undefined;
+  lection: boolean | undefined;
 }

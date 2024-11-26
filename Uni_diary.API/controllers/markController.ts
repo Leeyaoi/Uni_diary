@@ -7,8 +7,10 @@ import GenericRepository from "../repositories/GenericRepository";
 import { CreateMarkValidator } from "../validators/MarkValidators/CreateMarkValidator";
 import { UpdateMarkValidator } from "../validators/MarkValidators/UpdateMarkValidator";
 import GenericController from "./genericController";
+import StudentRepository from "../repositories/studentRepository";
 
 const repo = new GenericRepository(Mark);
+const studRepo = new StudentRepository();
 
 const markController = new GenericController<CreateMarkDto, UpdateMarkDto>(
   CreateMarkValidator,
@@ -48,6 +50,24 @@ markController.get(
       await repo.getByPredicate({ courseId, dateWhen }, [])
     ) as any[];
     res.send(marks);
+  }
+);
+
+markController.get(
+  "/course/:courseId/group/:groupId",
+  async (req: express.Request, res: express.Response, next) => {
+    const courseId = req.params.courseId;
+    const groupId = req.params.groupId;
+    if (!validate(courseId) || !validate(groupId)) {
+      res.sendStatus(400);
+      return;
+    }
+    let studentsStr = await studRepo.getByPredicate({ groupId }, [Mark]);
+    const students = JSON.parse(studentsStr) as any[];
+    students.forEach(
+      (s) => (s.marks = s.marks.filter((m) => m.courseId == courseId))
+    );
+    res.send(JSON.stringify(students));
   }
 );
 
