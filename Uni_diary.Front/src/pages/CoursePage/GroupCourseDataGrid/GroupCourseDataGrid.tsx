@@ -17,6 +17,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import GroupCourseType from "../../../shared/types/groupCourse";
+import { useAppDispatch } from "../../../shared/stores/store";
+import { GroupCourseActions } from "../../../shared/stores/groupCourseSlice";
 
 interface Props {
   groups: PaginatedType<GroupCourseType>;
@@ -37,6 +39,8 @@ const GroupCourseDataGrid = ({
   handleEdit,
   handleDelete,
 }: Props) => {
+  const dispatch = useAppDispatch();
+
   const columns: GridColDef<GroupCourseType[][number]>[] = [
     {
       field: "name",
@@ -88,7 +92,13 @@ const GroupCourseDataGrid = ({
             variant="contained"
             id="actionButton"
             onClick={() => {
-              // navigate(`/profession/${params.id}`);
+              dispatch(
+                GroupCourseActions.setSelectedGroupCourse({
+                  groupId: params.row.group.id,
+                  courseId: params.row.courseId,
+                })
+              );
+              window.open(window.location.href + "/marksPdf");
             }}
           >
             <VisibilityIcon />

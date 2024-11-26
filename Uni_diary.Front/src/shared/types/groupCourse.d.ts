@@ -8,6 +8,7 @@ type GroupCourseType = {
   group: GroupType;
   course: CourseType;
   hours: number;
+  courseId: string;
 };
 
 export default GroupCourseType;

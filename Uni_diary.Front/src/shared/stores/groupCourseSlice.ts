@@ -122,6 +122,7 @@ interface GroupCourseState {
   loading: boolean;
   GroupCourses: PaginatedType<GroupCourseType>;
   fetchedGroupCourse: GroupCourseType;
+  selectedGroupCourse: { groupId: string; courseId: string };
 }
 
 const initialState: GroupCourseState = {
@@ -129,12 +130,20 @@ const initialState: GroupCourseState = {
   loading: false,
   GroupCourses: {} as PaginatedType<GroupCourseType>,
   fetchedGroupCourse: {} as GroupCourseType,
+  selectedGroupCourse: {} as { groupId: string; courseId: string },
 };
 
 export const groupCourseSlice = createSlice({
   name: "groupCourse",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedGroupCourse: (
+      state,
+      action: PayloadAction<{ groupId: string; courseId: string }>
+    ) => {
+      state.selectedGroupCourse = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       //fetchGroupCourses
