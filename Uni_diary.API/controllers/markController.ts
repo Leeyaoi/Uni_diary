@@ -8,9 +8,11 @@ import { CreateMarkValidator } from "../validators/MarkValidators/CreateMarkVali
 import { UpdateMarkValidator } from "../validators/MarkValidators/UpdateMarkValidator";
 import GenericController from "./genericController";
 import StudentRepository from "../repositories/studentRepository";
+import groupCourseRepository from "../repositories/groupCourseRepository";
 
 const repo = new GenericRepository(Mark);
 const studRepo = new StudentRepository();
+const groupCourseRepo = new groupCourseRepository();
 
 const markController = new GenericController<CreateMarkDto, UpdateMarkDto>(
   CreateMarkValidator,
@@ -68,6 +70,28 @@ markController.get(
       (s) => (s.marks = s.marks.filter((m) => m.courseId == courseId))
     );
     res.send(JSON.stringify(students));
+  }
+);
+
+markController.get(
+  "/student/:studentId",
+  async (req: express.Request, res: express.Response, next) => {
+    const studentId = req.params.studentId;
+    if (!validate(studentId)) {
+      res.sendStatus(400);
+      return;
+    }
+    const groupId = JSON.parse(await studRepo.getById(studentId)).groupId;
+    const cources = JSON.parse(
+      await groupCourseRepo.getByPredicate({ groupId }, [])
+    );
+    let marks = "[";
+    for (const c of cources) {
+      marks +=
+        (await repo.getByPredicate({ studentId, courseId: c.courseId }, [])) +
+        ", ";
+    }
+    res.send(marks + "]");
   }
 );
 
