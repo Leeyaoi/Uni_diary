@@ -3,6 +3,7 @@ import { useAppSelector } from "../../shared/stores/store";
 import { userTypeEnum } from "../../shared/types/userTypeEnum";
 import AdminDrawerMenu from "./AdminDrawerMenu";
 import TeacherDrawerMenu from "./TeacherDrawerMenu";
+import StudentDrawerMenu from "./StudentDrawerMenu";
 
 const DrawerMenuLogic = ({
   setOpen,
@@ -14,7 +15,7 @@ const DrawerMenuLogic = ({
     case userTypeEnum.admin:
       return <AdminDrawerMenu setOpen={setOpen} />;
     case userTypeEnum.student:
-      return <></>;
+      return <StudentDrawerMenu setOpen={setOpen} />;
     case userTypeEnum.teacher:
       return <TeacherDrawerMenu setOpen={setOpen} />;
     default:
