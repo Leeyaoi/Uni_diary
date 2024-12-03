@@ -9,6 +9,8 @@ import { UpdateMarkValidator } from "../validators/MarkValidators/UpdateMarkVali
 import GenericController from "./genericController";
 import StudentRepository from "../repositories/studentRepository";
 import groupCourseRepository from "../repositories/groupCourseRepository";
+import { Course } from "../dbModels/course";
+import { Model, where } from "sequelize";
 
 const repo = new GenericRepository(Mark);
 const studRepo = new StudentRepository();
@@ -82,16 +84,20 @@ markController.get(
       return;
     }
     const groupId = JSON.parse(await studRepo.getById(studentId)).groupId;
-    const cources = JSON.parse(
-      await groupCourseRepo.getByPredicate({ groupId }, [])
+    const cources = await groupCourseRepo.getByPredicate(
+      { groupId },
+      [
+        {
+          model: Course,
+          include: {
+            model: Mark,
+            where: { studentId },
+          },
+        },
+      ],
+      [[{ model: Course }, { model: Mark }, "dateWhen", "ASC"]]
     );
-    let marks = "[";
-    for (const c of cources) {
-      marks +=
-        (await repo.getByPredicate({ studentId, courseId: c.courseId }, [])) +
-        ", ";
-    }
-    res.send(marks + "]");
+    res.send(cources);
   }
 );
 

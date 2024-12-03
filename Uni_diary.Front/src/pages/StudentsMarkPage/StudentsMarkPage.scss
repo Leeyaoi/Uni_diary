@@ -1,0 +1,29 @@
+#courseMarksPage{
+    border: 1px solid #000;
+    margin: auto;
+    margin-top: 1rem;
+    width: 90%;
+}
+
+#courseMarks{
+
+    & * {
+        border-top: none;
+        border: 1px solid #000;
+        padding: 0.5rem;
+    }
+}
+
+#marks{
+    border: 0;
+    width: 80%;
+    padding: 0;
+}
+
+#marksHeader{
+    width: 78%;
+}
+
+#courseName, #averMark{
+    width: 11%;
+}

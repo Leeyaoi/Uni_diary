@@ -24,19 +24,19 @@ const StudentDrawerMenu = ({
           <ListItemText primary={"Расписание"} />
         </ListItemButton>
       </ListItem>
-      <ListItem key={"timetable"} disablePadding>
+      <ListItem key={"marks"} disablePadding>
         <ListItemButton
           onClick={() => {
-            handleClick("/teacher/timetable");
+            handleClick("/student/marks");
           }}
         >
           <ListItemText primary={"Оценки"} />
         </ListItemButton>
       </ListItem>
-      <ListItem key={"timetable"} disablePadding>
+      <ListItem key={"attendance"} disablePadding>
         <ListItemButton
           onClick={() => {
-            handleClick("/teacher/timetable");
+            handleClick("/student/marks");
           }}
         >
           <ListItemText primary={"Посещаемость"} />
