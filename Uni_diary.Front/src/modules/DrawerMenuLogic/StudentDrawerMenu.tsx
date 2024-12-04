@@ -36,7 +36,7 @@ const StudentDrawerMenu = ({
       <ListItem key={"attendance"} disablePadding>
         <ListItemButton
           onClick={() => {
-            handleClick("/student/marks");
+            handleClick("/student/attendance");
           }}
         >
           <ListItemText primary={"Посещаемость"} />
