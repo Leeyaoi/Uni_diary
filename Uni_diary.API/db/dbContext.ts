@@ -40,6 +40,8 @@ export const DbSynchronize = (force = false): Promise<Sequelize> => {
   Course.hasMany(Mark);
   Course.hasMany(Class);
 
+  Mark.belongsTo(Course);
+
   Timetable.hasMany(Class);
   Timetable.belongsTo(Group);
 

@@ -7,13 +7,13 @@ import GenericRepository from "../repositories/GenericRepository";
 import { UpdateAdminValidator } from "../validators/AdminValidators/UpdateAdminValidator";
 import { CreateAttendanceValidator } from "../validators/AttendanceValidators/CreateAttendanceValidator";
 import GenericController from "./genericController";
-import { Student } from "../dbModels/student";
 import StudentRepository from "../repositories/studentRepository";
-import { Model, where } from "sequelize";
-import { Class } from "../dbModels/class";
+import groupCourseRepository from "../repositories/groupCourseRepository";
+import { Course } from "../dbModels/course";
 
 const repo = new GenericRepository(Attendance);
 const studRepo = new StudentRepository();
+const groupCourseRepo = new groupCourseRepository();
 
 const attendanceController = new GenericController<
   CreateAttendanceDto,
@@ -87,6 +87,32 @@ attendanceController.get(
       ])
     );
     res.send(attendance);
+  }
+);
+
+attendanceController.get(
+  "/student/:studentId",
+  async (req: express.Request, res: express.Response, next) => {
+    const studentId = req.params.studentId;
+    if (!validate(studentId)) {
+      res.sendStatus(400);
+      return;
+    }
+    const groupId = JSON.parse(await studRepo.getById(studentId)).groupId;
+    const cources = await groupCourseRepo.getByPredicate(
+      { groupId },
+      [
+        {
+          model: Course,
+          include: {
+            model: Attendance,
+            where: { studentId },
+          },
+        },
+      ],
+      [[{ model: Course }, { model: Attendance }, "dateWhen", "ASC"]]
+    );
+    res.send(cources);
   }
 );
 

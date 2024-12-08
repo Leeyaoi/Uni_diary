@@ -3,6 +3,7 @@ import { HttpRequest } from "../../api/GenericApi";
 import { RESTMethod } from "../types/RESTMethodEnum";
 import { Dayjs } from "dayjs";
 import StudentType from "../types/student";
+import GroupCourseType from "../types/groupCourse";
 
 const postAttendance = createAsyncThunk(
   "attendance/post",
@@ -100,16 +101,36 @@ const getAttendanceForTeacher = createAsyncThunk(
   }
 );
 
+const getAttendanceByStudent = createAsyncThunk(
+  "Attendance/getByStudent",
+  async (studentId: string) => {
+    try {
+      const response = await HttpRequest({
+        uri: `/attendance/student/${studentId}`,
+        method: RESTMethod.Get,
+      });
+      if (response.code === "error") {
+        return [];
+      }
+      return response.data;
+    } catch (error) {
+      return [];
+    }
+  }
+);
+
 interface AttendanceState {
   error: string | null;
   loading: boolean;
   AttendedStudents: StudentType[];
+  studentsAttendance: GroupCourseType[];
 }
 
 const initialState: AttendanceState = {
   error: null,
   loading: false,
   AttendedStudents: [],
+  studentsAttendance: [],
 };
 
 export const AttendanceSlice = createSlice({
@@ -172,6 +193,20 @@ export const AttendanceSlice = createSlice({
       .addCase(getAttendanceForTeacher.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      //getAttendanceByStudent
+      .addCase(getAttendanceByStudent.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAttendanceByStudent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.studentsAttendance = action.payload as GroupCourseType[];
+      })
+      .addCase(getAttendanceByStudent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
@@ -183,4 +218,5 @@ export const attendanceActions = {
   getAttendance,
   getAttendanceByGroup,
   getAttendanceForTeacher,
+  getAttendanceByStudent,
 };

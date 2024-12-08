@@ -8,9 +8,13 @@ import { CreateMarkValidator } from "../validators/MarkValidators/CreateMarkVali
 import { UpdateMarkValidator } from "../validators/MarkValidators/UpdateMarkValidator";
 import GenericController from "./genericController";
 import StudentRepository from "../repositories/studentRepository";
+import groupCourseRepository from "../repositories/groupCourseRepository";
+import { Course } from "../dbModels/course";
+import { Model, where } from "sequelize";
 
 const repo = new GenericRepository(Mark);
 const studRepo = new StudentRepository();
+const groupCourseRepo = new groupCourseRepository();
 
 const markController = new GenericController<CreateMarkDto, UpdateMarkDto>(
   CreateMarkValidator,
@@ -68,6 +72,32 @@ markController.get(
       (s) => (s.marks = s.marks.filter((m) => m.courseId == courseId))
     );
     res.send(JSON.stringify(students));
+  }
+);
+
+markController.get(
+  "/student/:studentId",
+  async (req: express.Request, res: express.Response, next) => {
+    const studentId = req.params.studentId;
+    if (!validate(studentId)) {
+      res.sendStatus(400);
+      return;
+    }
+    const groupId = JSON.parse(await studRepo.getById(studentId)).groupId;
+    const cources = await groupCourseRepo.getByPredicate(
+      { groupId },
+      [
+        {
+          model: Course,
+          include: {
+            model: Mark,
+            where: { studentId },
+          },
+        },
+      ],
+      [[{ model: Course }, { model: Mark }, "dateWhen", "ASC"]]
+    );
+    res.send(cources);
   }
 );
 

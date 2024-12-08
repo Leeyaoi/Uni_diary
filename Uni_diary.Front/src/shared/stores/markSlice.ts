@@ -4,6 +4,7 @@ import { RESTMethod } from "../types/RESTMethodEnum";
 import { Dayjs } from "dayjs";
 import MarkType from "../types/mark";
 import StudentType from "../types/student";
+import GroupCourseType from "../types/groupCourse";
 
 const postMark = createAsyncThunk(
   "Mark/post",
@@ -81,11 +82,30 @@ const getMarkByCourse = createAsyncThunk(
   }
 );
 
+const getMarkByStudent = createAsyncThunk(
+  "Mark/getByStudent",
+  async (studentId: string) => {
+    try {
+      const response = await HttpRequest({
+        uri: `/mark/student/${studentId}`,
+        method: RESTMethod.Get,
+      });
+      if (response.code === "error") {
+        return [];
+      }
+      return response.data;
+    } catch (error) {
+      return [];
+    }
+  }
+);
+
 interface MarkState {
   error: string | null;
   loading: boolean;
   fetchedMarks: MarkType[];
   studentsWithMarks: StudentType[];
+  studentsMarks: GroupCourseType[];
 }
 
 const initialState: MarkState = {
@@ -93,6 +113,7 @@ const initialState: MarkState = {
   loading: false,
   fetchedMarks: [],
   studentsWithMarks: [],
+  studentsMarks: [],
 };
 
 export const MarkSlice = createSlice({
@@ -141,6 +162,20 @@ export const MarkSlice = createSlice({
       .addCase(getMarkByCourse.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      //getMarkByStudent
+      .addCase(getMarkByStudent.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getMarkByStudent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.studentsMarks = action.payload as GroupCourseType[];
+      })
+      .addCase(getMarkByStudent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
@@ -151,4 +186,5 @@ export const MarkActions = {
   postMark,
   getMark,
   getMarkByCourse,
+  getMarkByStudent,
 };

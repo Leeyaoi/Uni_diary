@@ -16,6 +16,7 @@ import WeekDay from "./WeekDay";
 import CreateClassDialog from "./ClassDialogs/CreateClassDialog";
 import EditClassDialog from "./ClassDialogs/EditClassDialog";
 import DeleteClassDialog from "./ClassDialogs/DeleteClassDialog";
+import { userTypeEnum } from "../../shared/types/userTypeEnum";
 
 const TimetablePage = () => {
   const dispatch = useAppDispatch();
@@ -24,11 +25,17 @@ const TimetablePage = () => {
     state.timetable.upTimetables,
     state.timetable.bottomTimetables,
   ]);
+  const [user, type] = useAppSelector((state) => [
+    state.user.currentUser,
+    state.user.userType,
+  ]) as any;
 
   const [classId, setClassId] = useState("");
   const [timetableId, setTimetableId] = useState("");
   const [number, setNumber] = useState(1);
-  const [groupId, setGroupId] = useState<string | null>(null);
+  const [groupId, setGroupId] = useState<string | null>(
+    type == userTypeEnum.student ? user.group.id : null
+  );
   const [query, setQuery] = useState("");
   const [bottomWeek, setBottomWeek] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
@@ -81,6 +88,7 @@ const TimetablePage = () => {
     <div id="timetable">
       <Autocomplete
         aria-required
+        hidden={type == userTypeEnum.student}
         options={
           foundGroups && foundGroups.length
             ? foundGroups.map(
