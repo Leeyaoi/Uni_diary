@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../shared/stores/store";
 import { MarkActions } from "../../shared/stores/markSlice";
-import { Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { userTypeEnum } from "../../shared/types/userTypeEnum";
 import CourseMarks from "./CourseMarks";
 import "./StudentsMarkPage.scss";
@@ -22,6 +22,16 @@ const StudentsMarkPage = () => {
 
   return (
     <div id="attendance">
+      <Button
+        sx={{ marginTop: "1rem" }}
+        id="button"
+        variant="contained"
+        onClick={() => {
+          window.open(window.location.href + "Pdf");
+        }}
+      >
+        Скачать PDF
+      </Button>
       <Stack spacing={0} id="courseMarksPage">
         <Stack direction={"row"} id="courseMarks">
           <div id="courseName">Предмет</div>

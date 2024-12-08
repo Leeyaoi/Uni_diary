@@ -26,6 +26,8 @@ import ProfessionAttendancePdf from "./pages/ProfessionPage/ProfessionAttendance
 import MarksPdf from "./pages/MarksPage/MarksPdf/MarksPdf";
 import StudentsMarkPage from "./pages/StudentsMarkPage/StudentsMarkPage";
 import StudentsAttendance from "./pages/StudentsAttendance/StudentsAttendance";
+import StudentAttendancePdf from "./pages/StudentsAttendance/StudentAttendancePdf/StudentAttendancePdf";
+import StudentsMarkPdf from "./pages/StudentsMarkPage/StudentsMarkPdf/StudentsMarkPdf";
 
 const App = () => {
   const [open, setOpen] = React.useState(false);
@@ -52,6 +54,11 @@ const App = () => {
           element={<ProfessionAttendancePdf />}
         />
         <Route path="/cources/marksPdf" element={<MarksPdf />} />
+        <Route path="/student/marksPdf" element={<StudentsMarkPdf />} />
+        <Route
+          path="/student/attendancePdf"
+          element={<StudentAttendancePdf />}
+        />
         <Route
           path="*"
           element={

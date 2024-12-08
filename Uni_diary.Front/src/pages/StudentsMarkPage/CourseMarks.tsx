@@ -14,7 +14,10 @@ const CourseMarks = ({ course }: { course: CourseType }) => {
         ))}
       </Stack>
       <div id="averMark">
-        {course.marks.reduce((sum, m) => sum + m.mark, 0) / course.marks.length}
+        {course.marks.length
+          ? course.marks.reduce((sum, m) => sum + m.mark, 0) /
+            course.marks.length
+          : 0}
       </div>
     </Stack>
   );
