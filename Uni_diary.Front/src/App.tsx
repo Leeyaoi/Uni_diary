@@ -29,6 +29,7 @@ import StudentsAttendance from "./pages/StudentsAttendance/StudentsAttendance";
 import StudentAttendancePdf from "./pages/StudentsAttendance/StudentAttendancePdf/StudentAttendancePdf";
 import StudentsMarkPdf from "./pages/StudentsMarkPage/StudentsMarkPdf/StudentsMarkPdf";
 import RequireAuth from "./pages/RequireAuth";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const App = () => {
   const [open, setOpen] = React.useState(false);
@@ -207,6 +208,7 @@ const App = () => {
                       </RequireAuth>
                     }
                   />
+                  <Route path="*" element={<NotFoundPage />} />
                 </Routes>
                 <Drawer
                   variant="persistent"
