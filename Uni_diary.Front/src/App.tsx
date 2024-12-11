@@ -28,6 +28,7 @@ import StudentsMarkPage from "./pages/StudentsMarkPage/StudentsMarkPage";
 import StudentsAttendance from "./pages/StudentsAttendance/StudentsAttendance";
 import StudentAttendancePdf from "./pages/StudentsAttendance/StudentAttendancePdf/StudentAttendancePdf";
 import StudentsMarkPdf from "./pages/StudentsMarkPage/StudentsMarkPdf/StudentsMarkPdf";
+import RequireAuth from "./pages/RequireAuth";
 
 const App = () => {
   const [open, setOpen] = React.useState(false);
@@ -46,18 +47,61 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/timetablePdf" element={<TimetablePdf />} />
-        <Route path="/teacher/timetablePdf" element={<TeacherTimetablePdf />} />
-        <Route path="/attendancePdf" element={<AttendancePdf />} />
+        <Route
+          path="/timetablePdf"
+          element={
+            <RequireAuth>
+              <TimetablePdf />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/teacher/timetablePdf"
+          element={
+            <RequireAuth>
+              <TeacherTimetablePdf />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/attendancePdf"
+          element={
+            <RequireAuth>
+              <AttendancePdf />
+            </RequireAuth>
+          }
+        />
         <Route
           path="/profession/attendancePdf/:groupId"
-          element={<ProfessionAttendancePdf />}
+          element={
+            <RequireAuth>
+              <ProfessionAttendancePdf />
+            </RequireAuth>
+          }
         />
-        <Route path="/cources/marksPdf" element={<MarksPdf />} />
-        <Route path="/student/marksPdf" element={<StudentsMarkPdf />} />
+        <Route
+          path="/cources/marksPdf"
+          element={
+            <RequireAuth>
+              <MarksPdf />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/student/marksPdf"
+          element={
+            <RequireAuth>
+              <StudentsMarkPdf />
+            </RequireAuth>
+          }
+        />
         <Route
           path="/student/attendancePdf"
-          element={<StudentAttendancePdf />}
+          element={
+            <RequireAuth>
+              <StudentAttendancePdf />
+            </RequireAuth>
+          }
         />
         <Route
           path="*"
@@ -67,26 +111,101 @@ const App = () => {
               <div id="content">
                 <Routes>
                   <Route path="/login" element={<LoginPage />} />
-                  <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="/professions" element={<FacultyPage />} />
-                  <Route path="/teachers" element={<TeacherPage />} />
-                  <Route path="/admins" element={<AdminPage />} />
-                  <Route path="/cources" element={<CoursePage />} />
-                  <Route path="/timetable" element={<TimetablePage />} />
-                  <Route path="/attendance" element={<AttendancePage />} />
-                  <Route path="/marks" element={<MarksPage />} />
-                  <Route path="/student/marks" element={<StudentsMarkPage />} />
+                  <Route
+                    path="/profile"
+                    element={
+                      <RequireAuth>
+                        <ProfilePage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="/professions"
+                    element={
+                      <RequireAuth>
+                        <FacultyPage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="/teachers"
+                    element={
+                      <RequireAuth>
+                        <TeacherPage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="/admins"
+                    element={
+                      <RequireAuth>
+                        <AdminPage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="/cources"
+                    element={
+                      <RequireAuth>
+                        <CoursePage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="/timetable"
+                    element={
+                      <RequireAuth>
+                        <TimetablePage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="/attendance"
+                    element={
+                      <RequireAuth>
+                        <AttendancePage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="/marks"
+                    element={
+                      <RequireAuth>
+                        <MarksPage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="/student/marks"
+                    element={
+                      <RequireAuth>
+                        <StudentsMarkPage />
+                      </RequireAuth>
+                    }
+                  />
                   <Route
                     path="/student/attendance"
-                    element={<StudentsAttendance />}
+                    element={
+                      <RequireAuth>
+                        <StudentsAttendance />
+                      </RequireAuth>
+                    }
                   />
                   <Route
                     path="/teacher/timetable"
-                    element={<TeacherTimetablePage />}
+                    element={
+                      <RequireAuth>
+                        <TeacherTimetablePage />
+                      </RequireAuth>
+                    }
                   />
                   <Route
                     path="/profession/:professionId"
-                    element={<ProfessionPage />}
+                    element={
+                      <RequireAuth>
+                        <ProfessionPage />
+                      </RequireAuth>
+                    }
                   />
                 </Routes>
                 <Drawer

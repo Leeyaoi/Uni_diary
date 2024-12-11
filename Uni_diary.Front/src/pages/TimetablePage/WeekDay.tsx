@@ -24,6 +24,7 @@ const WeekDay = ({
       if (found.length == 0) {
         divs.push(
           <div
+            key={i}
             className="class"
             onClick={() => {
               handleOpenCreate(timetable.id, i);

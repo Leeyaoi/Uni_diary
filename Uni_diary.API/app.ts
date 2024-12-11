@@ -3,6 +3,7 @@ import { DbSynchronize } from "./db/dbContext";
 import * as fs from "fs";
 import router from "./routes";
 import * as https from "https";
+import * as jwt from "jsonwebtoken";
 var privateKey = fs.readFileSync("../certs/cert.key", "utf8");
 var certificate = fs.readFileSync("../certs/cert.crt", "utf8");
 import * as cors from "cors";
@@ -16,6 +17,28 @@ app.use(
     origin: "*",
   })
 );
+
+app.use((req, res, next) => {
+  if (req.originalUrl == "/user/auth") {
+    next();
+    return;
+  }
+
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.API_SECRET, (err, auth) => {
+    if (err) return res.sendStatus(403);
+    req.auth = auth;
+    next();
+  });
+
+  const { exp } = jwt.decode(token) as jwt.JwtPayload;
+  if (exp == undefined || Date.now() >= exp * 1000) {
+    return res.sendStatus(403);
+  }
+});
 
 app.use("/", router);
 

@@ -44,7 +44,14 @@ const StudentsAttendance = () => {
                 <div id="courseName">{value.course.name}</div>
                 <div id="marksHeader">
                   {Array.isArray(value.course.attendances)
-                    ? value.course.attendances.map((a) => <>{a.dateWhen}</>)
+                    ? value.course.attendances.map((a, i) => (
+                        <span
+                          style={{ border: "none", margin: 0, padding: 0 }}
+                          key={i}
+                        >
+                          {a.dateWhen}{" "}
+                        </span>
+                      ))
                     : ""}
                 </div>
                 <div id="averMark">
