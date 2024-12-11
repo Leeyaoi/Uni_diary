@@ -72,6 +72,7 @@ const MarksPdf = () => {
     const studentsWithMarks = store.getState().mark.studentsWithMarks;
     const group = store.getState().group.fetchedGroup;
     const course = store.getState().course.fetchedCourse;
+    const date = new Date();
 
     useEffect(() => {
       store.dispatch(groupActions.getGroupById(selectedGroupCourse.groupId));
@@ -90,7 +91,8 @@ const MarksPdf = () => {
       <Document>
         <Page size={[595, 990]} style={styles.page}>
           <Text>
-            Отчет об отметках{" "}
+            Отчет об отметках за {date.getDate()}.{date.getMonth()}.
+            {date.getFullYear()}
             {group && group.profession
               ? `${group.profession.name}-${group.year % 100}${group.num}`
               : ""}{" "}

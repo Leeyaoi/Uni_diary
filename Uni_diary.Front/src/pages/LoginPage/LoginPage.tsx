@@ -1,18 +1,27 @@
 import { Button, Container, TextField } from "@mui/material";
 import React, { useEffect } from "react";
-import Header from "../../modules/Header/Header";
-import Footer from "../../modules/Footer/Footer";
 import "./LoginPage.scss";
 import { useAppDispatch, useAppSelector } from "../../shared/stores/store";
 import { useNavigate } from "react-router-dom";
 import { userActions } from "../../shared/stores/userSlice";
+import Cookies from "universal-cookie";
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
-  let user = useAppSelector((state) => state.user.currentUser);
+  let [user, loading] = useAppSelector((state) => [
+    state.user.currentUser,
+    state.user.loading,
+  ]);
+  const cookies = new Cookies();
 
   useEffect(() => {
-    if (user) {
+    if (!user && cookies.get("accessToken")) {
+      dispatch(userActions.userLoginByToken());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user && cookies.get("accessToken") && !loading) {
       navigate("/profile");
     }
   }, [useAppSelector((state) => state.user.currentUser)]);

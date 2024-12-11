@@ -1,7 +1,7 @@
 import * as express from "express";
+import * as jwt from "jsonwebtoken";
 import createHttpError = require("http-errors");
 import { v4 as uuidv4 } from "uuid";
-import { User } from "../dbModels/user";
 import CreateUserDto from "../DTOs/UserDtos/CreateUserDto";
 import UpdateUserDto from "../DTOs/UserDtos/UpdateUserDto";
 import { CreateUserValidator } from "../validators/UserValidators/CreateUserValidator";
@@ -45,16 +45,171 @@ userController.post(
       ...req.body,
     };
 
-    const data = await repo.getByPredicate(newModel, [
-      { model: Student, include: { model: Group, include: Profession } },
-      Teacher,
-      Admin,
-    ]);
-    if (data == "[]") {
+    const data = JSON.parse(
+      await repo.getByPredicate(newModel, [
+        { model: Student, include: { model: Group, include: Profession } },
+        Teacher,
+        Admin,
+      ])
+    );
+
+    if (data.length == 0) {
       next(createHttpError(404, "NotFound"));
       return;
     }
-    res.send(data);
+
+    let type;
+    if (data[0].student) {
+      type = "student";
+    }
+    if (data[0].admin) {
+      type = "admin";
+    }
+    if (data[0].teacher) {
+      type = "teacher";
+    }
+
+    const accessToken = jwt.sign(
+      { _id: data[0].id, type: type },
+      process.env.API_SECRET,
+      {
+        expiresIn: "15m",
+      }
+    );
+
+    const refreshToken = jwt.sign(
+      { _id: data[0].id, type: "refresh" },
+      process.env.API_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    res.send(JSON.stringify({ ...data[0], accessToken, refreshToken }));
+  }
+);
+
+//login
+userController.get(
+  "/login",
+  urlencodedParser,
+  async (
+    req: express.Request<{}, {}, CreateUserDto>,
+    res: express.Response,
+    next
+  ) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    const { id } = jwt.decode(token) as jwt.JwtPayload;
+
+    const data = JSON.parse(
+      await repo.getByPredicate(
+        {
+          id,
+        },
+        [
+          { model: Student, include: { model: Group, include: Profession } },
+          Teacher,
+          Admin,
+        ]
+      )
+    );
+
+    if (data.length == 0) {
+      next(createHttpError(404, "NotFound"));
+      return;
+    }
+
+    let type;
+    if (data[0].student) {
+      type = "student";
+    }
+    if (data[0].admin) {
+      type = "admin";
+    }
+    if (data[0].teacher) {
+      type = "teacher";
+    }
+
+    const accessToken = jwt.sign(
+      { id: data[0].id, type: type },
+      process.env.API_SECRET,
+      {
+        expiresIn: "15m",
+      }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: data[0].id, type: "refresh" },
+      process.env.API_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    res.send(JSON.stringify({ ...data[0], accessToken, refreshToken }));
+  }
+);
+
+//refreshToken
+userController.get(
+  "/refreshToken",
+  urlencodedParser,
+  async (
+    req: express.Request<{}, {}, CreateUserDto>,
+    res: express.Response,
+    next
+  ) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    const { id } = jwt.decode(token) as jwt.JwtPayload;
+
+    const data = JSON.parse(
+      await repo.getByPredicate(
+        {
+          id,
+        },
+        [
+          { model: Student, include: { model: Group, include: Profession } },
+          Teacher,
+          Admin,
+        ]
+      )
+    );
+
+    if (data.length == 0) {
+      next(createHttpError(404, "NotFound"));
+      return;
+    }
+
+    let type;
+    if (data[0].student) {
+      type = "student";
+    }
+    if (data[0].admin) {
+      type = "admin";
+    }
+    if (data[0].teacher) {
+      type = "teacher";
+    }
+
+    const accessToken = jwt.sign(
+      { id: data[0].id, type: type },
+      process.env.API_SECRET,
+      {
+        expiresIn: "15m",
+      }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: data[0].id, type: "refresh" },
+      process.env.API_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    res.send(JSON.stringify({ ...data[0], accessToken, refreshToken }));
   }
 );
 

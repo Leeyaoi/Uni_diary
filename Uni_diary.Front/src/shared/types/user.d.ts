@@ -10,6 +10,8 @@ type UserType = {
   admin: AdminType | null;
   student: StudentType | null;
   teacher: TeacherType | null;
+  accessToken: string;
+  refreshToken: string;
 };
 
 export default UserType;

@@ -66,10 +66,14 @@ const StudentAttendancePdf = () => {
   const user = store.getState().user.currentUser;
 
   const MyPdf = () => {
+    const date = new Date();
     return (
       <Document>
         <Page size={[595, 990]} style={styles.page}>
-          <Text>Отчет о посещаемости студента с фамилией {user?.surname}</Text>
+          <Text>
+            Отчет о посещаемости студента с фамилией {user?.surname} за{" "}
+            {date.getDate()}.{date.getMonth()}.{date.getFullYear()}
+          </Text>
           <View style={styles.header}>
             <Text style={styles.col1}>Предмет</Text>
             <Text style={styles.col2}>Даты пропусков</Text>

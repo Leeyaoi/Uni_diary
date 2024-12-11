@@ -14,6 +14,12 @@ module.exports = {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".css", ".scss"],
+    fallback: {
+      crypto: require.resolve("crypto-browserify"),
+      vm: require.resolve("vm-browserify"),
+      stream: require.resolve("stream-browserify"),
+      util: require.resolve("util/"),
+    },
   },
   module: {
     rules: [
@@ -48,6 +54,9 @@ module.exports = {
       "process.env.NODE_ENV": JSON.stringify(
         isDevelopment ? "development" : "production"
       ),
+    }),
+    new webpack.ProvidePlugin({
+      process: "process/browser.js",
     }),
   ].filter(Boolean),
 
