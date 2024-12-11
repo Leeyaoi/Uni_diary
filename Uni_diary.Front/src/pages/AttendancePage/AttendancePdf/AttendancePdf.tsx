@@ -75,13 +75,15 @@ const AttendancePdf = () => {
   }, []);
 
   const MyPdf = () => {
+    const date = new Date();
     return (
       <Document>
         <Page size={[595, 990]} style={styles.page}>
           <Text>
             Отчет о посещаемости группы {group.profession.name}-
             {group.year % 100}
-            {group.num} на предмете {courseName}*
+            {group.num} на предмете {courseName}* за {date.getDate()}.
+            {date.getMonth()}.{date.getFullYear()}
           </Text>
           <View style={styles.header}>
             <Text style={styles.col1}>Студент</Text>
