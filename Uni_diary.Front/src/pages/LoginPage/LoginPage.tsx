@@ -4,24 +4,23 @@ import "./LoginPage.scss";
 import { useAppDispatch, useAppSelector } from "../../shared/stores/store";
 import { useNavigate } from "react-router-dom";
 import { userActions } from "../../shared/stores/userSlice";
-import Cookies from "universal-cookie";
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
-  let [user, loading] = useAppSelector((state) => [
+  let [user, loading, token] = useAppSelector((state) => [
     state.user.currentUser,
     state.user.loading,
+    state.user.accessToken,
   ]);
-  const cookies = new Cookies();
 
   useEffect(() => {
-    if (!user && cookies.get("accessToken")) {
+    if (!user && token) {
       dispatch(userActions.userLoginByToken());
     }
   }, []);
 
   useEffect(() => {
-    if (user && cookies.get("accessToken") && !loading) {
+    if (user && token && !loading) {
       navigate("/profile");
     }
   }, [useAppSelector((state) => state.user.currentUser)]);

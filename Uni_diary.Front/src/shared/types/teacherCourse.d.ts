@@ -1,4 +1,4 @@
-import CourseType from "./Course";
+import CourseType from "./course";
 import TeacherType from "./teacher";
 
 declare module "TeacherCourseType";
