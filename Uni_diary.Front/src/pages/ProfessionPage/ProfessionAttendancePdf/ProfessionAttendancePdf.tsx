@@ -92,7 +92,7 @@ const ProfessionAttendancePdf = () => {
           <Text>
             Отчет о посещаемости группы {group.profession.name}-
             {group.year % 100}
-            {group.num} за {date.getDate()}.{date.getMonth()}.
+            {group.num} за {date.getDate()}.{date.getMonth() + 1}.
             {date.getFullYear()}
           </Text>
           <View style={styles.header}>

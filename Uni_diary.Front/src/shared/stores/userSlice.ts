@@ -6,7 +6,6 @@ import AdminType from "../types/admin";
 import TeacherType from "../types/teacher";
 import StudentType from "../types/student";
 import { userTypeEnum } from "../types/userTypeEnum";
-import Cookies from "universal-cookie";
 
 const userLogin = createAsyncThunk<
   UserType | null,
@@ -63,6 +62,8 @@ interface UserState {
   loading: boolean;
   userType: userTypeEnum | null;
   loggedIn: boolean;
+  accessToken: string | null;
+  refreshToken: string | null;
 }
 
 const initialState: UserState = {
@@ -71,6 +72,8 @@ const initialState: UserState = {
   loading: false,
   userType: null,
   loggedIn: false,
+  accessToken: null,
+  refreshToken: null,
 };
 
 export const userSlice = createSlice({
@@ -78,12 +81,11 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<UserType | null>) => {
-      const cookies = new Cookies();
       if (action.payload == null) {
         state.currentUser = null;
         state.userType = null;
-        cookies.set("accessToken", null, { path: "/" });
-        cookies.set("refreshToken", null, { path: "/" });
+        state.accessToken = null;
+        state.refreshToken = null;
         return;
       }
 
@@ -92,8 +94,8 @@ export const userSlice = createSlice({
       state.loggedIn = true;
 
       if (accessToken && refreshToken) {
-        cookies.set("accessToken", accessToken, { path: "/" });
-        cookies.set("refreshToken", refreshToken, { path: "/" });
+        state.accessToken = accessToken;
+        state.refreshToken = refreshToken;
       }
 
       if (admin) {
@@ -112,13 +114,12 @@ export const userSlice = createSlice({
       }
     },
     clearUser: (state) => {
-      const cookies = new Cookies();
       state.userType = null;
       state.currentUser = null;
       state.error = null;
       state.loggedIn = false;
-      cookies.set("accessToken", null, { path: "/" });
-      cookies.set("refreshToken", null, { path: "/" });
+      state.accessToken = null;
+      state.refreshToken = null;
     },
   },
   extraReducers: (builder) => {
@@ -156,12 +157,8 @@ export const userSlice = createSlice({
       })
       .addCase(refreshToken.fulfilled, (state, action) => {
         state.loading = false;
-        new Cookies().set("accessToken", action.payload?.accessToken, {
-          path: "/",
-        });
-        new Cookies().set("refreshToken", action.payload?.refreshToken, {
-          path: "/",
-        });
+        state.accessToken = action.payload?.accessToken ?? null;
+        state.refreshToken = action.payload?.refreshToken ?? null;
       })
       .addCase(refreshToken.rejected, (state, action) => {
         state.loading = false;

@@ -2,6 +2,7 @@ import { client } from "./client";
 import { AxiosError, AxiosResponse } from "axios";
 import qs from "qs";
 import { RESTMethod } from "../shared/types/RESTMethodEnum";
+import { store } from "../shared/stores/store";
 
 interface Props {
   uri: string;
@@ -28,20 +29,33 @@ export const HttpRequest = async <V, E = AxiosError>({
   item = {},
   id = "",
 }: Props): Promise<BaseResponse<V, E>> => {
+  const accessToken = store.getState().user.accessToken;
+  const refreshToken = store.getState().user.refreshToken;
+
+  let headers = {
+    Authorization: accessToken ? `Bearer ${accessToken}` : null,
+  };
+
+  if (!accessToken) {
+    headers.Authorization = `Bearer ${refreshToken}`;
+  }
+
   let res: AxiosResponse<V>;
   try {
     switch (method) {
       case RESTMethod.Get:
-        res = await client.get<V>(uri);
+        res = await client.get<V>(uri, { headers });
         break;
       case RESTMethod.Post:
-        res = await client.post<V>(uri, qs.stringify(item));
+        res = await client.post<V>(uri, qs.stringify(item), { headers });
         break;
       case RESTMethod.Delete:
-        res = await client.delete<V>(uri + "/" + id);
+        res = await client.delete<V>(uri + "/" + id, { headers });
         break;
       case RESTMethod.Put:
-        res = await client.put<V>(uri + "/" + id, qs.stringify(item));
+        res = await client.put<V>(uri + "/" + id, qs.stringify(item), {
+          headers,
+        });
         break;
       default:
         throw "Bad request";
